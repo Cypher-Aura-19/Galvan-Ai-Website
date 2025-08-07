@@ -52,6 +52,7 @@ export default function Home() {
           <div id="brands"><Brands /></div>
           {/* <Milestones /> */}
           <div id="services"><Services /></div>
+          <div id="testimonials"><Testimonials /></div>
           <div className="w-full py-16 md:py-24" id="projects">
             <div className="text-center mb-16 md:mb-24 px-4 md:px-8 font-barlow">
               <h1
@@ -71,7 +72,7 @@ export default function Home() {
             </div>
             <Timeline />
           </div>
-          <div id="testimonials"><Testimonials /></div>
+          
           <div id="team"><Teams /></div>
           <div id="blogs"><Blogs /></div>
           <div id="contact"><Contact /></div>

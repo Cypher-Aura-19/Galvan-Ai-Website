@@ -1,65 +1,103 @@
-"use client";
-
-import React from "react";
+"use client"
+import React, { useEffect, useRef } from "react";
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTheme } from "@/components/theme-provider";
+
+const milestones = [
+  { label: "PROJECTS DELIVERED", value: 50, suffix: "+" },
+  { label: "GLOBAL CLIENTS", value: 25, suffix: "+" },
+  { label: "YEARS OF COMBINED EXPERIENCE", value: 7, suffix: "+" },
+  { label: "CLIENT'S SATISFACTION RATE", value: 98, suffix: "%" },
+];
 
 export default function MilestonesSection() {
   const { theme } = useTheme();
-  const milestones = [
-    { label: "PROJECTS DELIVERED", value: 50, suffix: "+" },
-    { label: "GLOBAL CLIENTS", value: 25, suffix: "+" },
-    { label: "YEARS OF COMBINED EXPERIENCE", value: 7, suffix: "+" },
-    { label: "CLIENT'S SATISFACTION RATE", value: 98, suffix: "%" },
-  ];
+  const isDark = theme === "dark";
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const milestoneRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const isLight = theme === "light";
-  const sectionBg = isLight ? "bg-white" : "bg-black";
-  const textMain = "text-white";
-  const textSub = "text-white/70";
-  const btnBg = isLight ? "bg-black text-white hover:bg-zinc-800" : "bg-white text-black hover:bg-gray-300";
-  const borderColor = isLight ? "border-zinc-200" : "border-zinc-800";
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Create scroll trigger for the milestones section
+    ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top 80%",
+      end: "bottom 20%",
+      onEnter: () => {
+        // Animate each milestone number
+        milestoneRefs.current.forEach((ref, index) => {
+          if (ref) {
+            const milestone = milestones[index];
+            const targetValue = milestone.value;
+            
+            gsap.fromTo(ref, 
+              { textContent: 0 },
+              {
+                textContent: targetValue,
+                duration: 2,
+                ease: "power2.out",
+                snap: { textContent: 1 },
+                onUpdate: function() {
+                  ref.textContent = Math.floor(this.targets()[0].textContent) + milestone.suffix;
+                }
+              }
+            );
+          }
+        });
+      },
+      onEnterBack: () => {
+        // Reset animation when scrolling back up
+        milestoneRefs.current.forEach((ref, index) => {
+          if (ref) {
+            const milestone = milestones[index];
+            gsap.set(ref, { textContent: milestone.value + milestone.suffix });
+          }
+        });
+      }
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, []);
 
   return (
-    <section className={`w-full ${sectionBg} ${textMain} py-10 sm:py-14 md:py-16 transition-colors duration-300`}>
-      {/* ─────── Heading Row ─────── */}
-      <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:justify-between md:items-start gap-8 md:gap-0">
-        {/* LEFT: Heading flush to left */}
-        <div className="flex-1">
-          <h2 className="font-extrabold uppercase leading-[1.1] font-barlow text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white">
-            WE TURN IDEAS <br /> INTO VISUAL <br /> MASTERPIECES
+    <section
+      ref={sectionRef}
+      className={`w-full py-10 sm:py-16 lg:py-20 font-sans transition-colors duration-300 ${isDark ? "bg-black text-white" : "bg-white text-black"}`}
+    >
+      <div className="milestones-row max-w-[1700px] mx-auto px-4 flex flex-col md:flex-row gap-8 md:gap-0 items-start justify-between">
+        <div className="milestones-heading flex-1">
+          <h2 className={`font-barlow font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight ${isDark ? "text-white" : "text-black"}`}>
+            WE POWER YOUR <br /> GROWTH WITH <br /> CUSTOM AI SOLUTIONS
           </h2>
         </div>
-        {/* RIGHT: Copy + Button flush to right */}
-        <div className="max-w-md flex flex-col items-start md:items-end mt-6 md:mt-0">
-          <p className="font-sans font-normal leading-relaxed text-left md:text-right mb-6 text-lg sm:text-xl text-white/70">
-            Whether it's an engaging explainer video, a vibrant social media campaign, or captivating motion graphics, we bring creativity and expertise to every project.
+        <div className="milestones-copy max-w-md flex flex-col items-end mt-6 md:mt-0">
+          <p className={`mb-6 text-base sm:text-lg text-right ${isDark ? "text-white/80" : "text-black/80"}`}>
+            Whether it’s a smart AI agent, a powerful automation tool, or a full-scale SaaS platform, we build with precision. Our solutions help businesses move faster, work smarter, and scale with confidence.
           </p>
-          <button className={`self-start md:self-end font-bold uppercase text-base sm:text-lg tracking-wide px-5 py-2.5 rounded font-barlow ${btnBg}`}>
+          <button
+            className={`uppercase font-semibold rounded-lg px-8 py-3 text-base tracking-wide transition-colors duration-200 ${isDark ? "bg-white text-black hover:bg-white/90" : "bg-black text-white hover:bg-black/90"}`}
+          >
             KNOW MORE ABOUT US
           </button>
         </div>
       </div>
-
-      {/* ─────── Milestones Grid ─────── */}
-      <div className={`max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12 pt-10 sm:pt-12 border-t ${borderColor} grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-6 sm:gap-y-10 sm:gap-x-8`}> 
-        {milestones.map(({ label, value, suffix }, idx) => {
-          const alignmentClasses = [
-            'text-center md:text-left justify-self-center md:justify-self-start',
-            'text-center justify-self-center',
-            'text-center justify-self-center',
-            'text-center md:text-right justify-self-center md:justify-self-end'
-          ];
-          const alignClass = alignmentClasses[idx] || 'text-center justify-self-center';
-          return (
-            <div key={label} className={alignClass}>
-              <div className="uppercase font-sans font-bold tracking-widest mb-2 text-base sm:text-lg text-white/70">{label}</div>
-              <div className="font-extrabold font-barlow leading-none text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white">
-                {value}{suffix}
-              </div>
+      <div className="milestones-grid max-w-[1700px] mx-auto mt-10 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 px-4">
+        {milestones.map(({ label, value, suffix }, index) => (
+          <div className="milestone flex flex-col items-center" key={label}>
+            <div className={`milestone-label uppercase tracking-wider mb-2 text-xs sm:text-sm font-medium ${isDark ? "text-white/70" : "text-black/70"}`}>{label}</div>
+            <div
+              ref={el => { milestoneRefs.current[index] = el; }}
+              className={`milestone-value font-extrabold text-2xl sm:text-3xl md:text-4xl text-center ${isDark ? "text-white" : "text-black"}`}
+            >
+              0{suffix}
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </section>
   );
-}
+} 

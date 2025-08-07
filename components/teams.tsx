@@ -812,7 +812,10 @@ export default function TeamSection() {
           ref={(el) => { if (el) nameElementsRef.current[0] = el; }}
         >
           <div className="name-mask">
-          <h1 ref={(el) => { if (el) nameHeadingsRef.current[0] = el; }}>The Squad</h1>
+          <h1 ref={(el) => { if (el) nameHeadingsRef.current[0] = el; }}
+            className={`font-barlow font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'}`}
+            style={{ fontFamily: 'Barlow Condensed', fontWeight: 800 }}
+          >The Squad</h1>
           </div>
         </div>
         {teamMembers.map((member, index) => (
@@ -821,7 +824,10 @@ export default function TeamSection() {
             className="name"
             ref={(el) => { if (el) nameElementsRef.current[index + 1] = el; }}
           >
-            <h1 ref={(el) => { if (el) nameHeadingsRef.current[index + 1] = el; }}>
+            <h1 ref={(el) => { if (el) nameHeadingsRef.current[index + 1] = el; }}
+              className={`font-barlow font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'}`}
+              style={{ fontFamily: 'Barlow Condensed', fontWeight: 800 }}
+            >
               {member.name}
             </h1>
           </div>

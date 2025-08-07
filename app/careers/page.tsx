@@ -50,21 +50,15 @@ const CareersPage: React.FC<{ jobs: Job[]; onViewJob: (job: Job) => void; isDark
         }`}></div>
         
         <div className="max-w-lg relative z-10">
-          <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-bold leading-none mb-8 lg:mb-12 tracking-tight ${
-            isDark ? 'text-white' : 'text-gray-900'
-          }`}>
+          <h1 className={`font-barlow font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight mb-8 lg:mb-12 tracking-tight ${isDark ? 'text-white' : 'text-black'}`}>
             Join our
             <br />
-            <span className={`bg-gradient-to-r bg-clip-text text-transparent ${
-              isDark ? 'from-white to-gray-300' : 'from-gray-900 to-gray-600'
-            }`}>
+            <span className={`font-barlow bg-gradient-to-r bg-clip-text text-transparent ${isDark ? 'from-white to-gray-300' : 'from-black to-gray-600'}`}>
               ranks
             </span>
           </h1>
           
-          <p className={`text-lg lg:text-xl leading-relaxed font-light ${
-            isDark ? 'text-gray-300' : 'text-gray-600'
-          }`}>
+          <p className={`font-sans text-lg lg:text-xl leading-relaxed font-light ${isDark ? 'text-white/80' : 'text-black/80'}`}>
             This is where you get the chance to become one of our people. Check out our openings and don't be a stranger.
           </p>
           
@@ -104,9 +98,7 @@ const CareersPage: React.FC<{ jobs: Job[]; onViewJob: (job: Job) => void; isDark
                 </div>
                 
                 <div className="mb-6 lg:mb-8">
-                  <h2 className={`text-xl lg:text-3xl font-bold mb-3 lg:mb-4 transition-colors duration-300 ${
-                    isDark ? 'text-white group-hover:text-gray-100' : 'text-gray-900 group-hover:text-gray-800'
-                  }`}>
+                  <h2 className={`font-barlow font-extrabold text-xl lg:text-3xl mb-3 lg:mb-4 transition-colors duration-300 ${isDark ? 'text-white group-hover:text-gray-100' : 'text-black group-hover:text-gray-800'}`}>
                     {job.title}
                   </h2>
                   <div className={`text-xs lg:text-sm font-semibold uppercase tracking-wider inline-block px-4 py-2 lg:px-6 lg:py-3 rounded-full backdrop-blur-sm border ${
@@ -119,9 +111,7 @@ const CareersPage: React.FC<{ jobs: Job[]; onViewJob: (job: Job) => void; isDark
                 </div>
                 
                 <div className="mb-8 lg:mb-12">
-                  <p className={`leading-relaxed text-sm lg:text-base font-light ${
-                    isDark ? 'text-gray-300' : 'text-gray-600'
-                  }`}>
+                  <p className={`font-sans leading-relaxed text-sm lg:text-base font-light ${isDark ? 'text-white/80' : 'text-black/80'}`}>
                     {job.description}
                   </p>
                 </div>
@@ -179,18 +169,12 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
               <div className="relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-center">
                   <div className="lg:col-span-2">
-                    <h1 className={`text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-tight mb-4 lg:mb-6 ${
-                      isDark ? 'text-white' : 'text-gray-900'
-                    }`}>
-                      <span className={`bg-gradient-to-r bg-clip-text text-transparent ${
-                        isDark ? 'from-white to-gray-300' : 'from-gray-900 to-gray-600'
-                      }`}>
+                    <h1 className={`font-barlow font-extrabold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-tight tracking-tight mb-4 lg:mb-6 ${isDark ? 'text-white' : 'text-black'}`}>
+                      <span className={`font-barlow bg-gradient-to-r bg-clip-text text-transparent ${isDark ? 'from-white to-gray-300' : 'from-black to-gray-600'}`}>
                         {job.title}
                       </span>
                     </h1>
-                    <p className={`text-base lg:text-lg leading-relaxed font-light mb-4 lg:mb-6 ${
-                      isDark ? 'text-gray-300' : 'text-gray-600'
-                    }`}>
+                    <p className={`font-sans text-base lg:text-lg leading-relaxed font-light mb-4 lg:mb-6 ${isDark ? 'text-white/80' : 'text-black/80'}`}>
                       {job.description}
                     </p>
                     <div className={`w-24 h-px ${
@@ -266,20 +250,14 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
               <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-8 ${
                 isDark ? 'bg-black/80 border-white/20' : 'bg-white/80 border-gray-200'
               }`}>
-                <h2 className={`text-xl lg:text-2xl font-bold mb-4 lg:mb-6 flex items-center gap-3 ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className={`font-barlow font-extrabold text-xl lg:text-2xl mb-4 lg:mb-6 flex items-center gap-3 ${isDark ? 'text-white' : 'text-black'}`}>
                   <div className={`w-3 h-3 rounded-full ${isDark ? 'bg-white' : 'bg-gray-900'}`}></div>
                   Key responsibilities
                 </h2>
                 <ul className="space-y-3 lg:space-y-4">
                   {job.responsibilities.map((responsibility, index) => (
-                    <li key={index} className={`leading-relaxed flex items-start gap-3 text-sm lg:text-base ${
-                      isDark ? 'text-gray-300' : 'text-gray-600'
-                    }`}>
-                      <div className={`w-2 h-2 rounded-full mt-3 flex-shrink-0 ${
-                        isDark ? 'bg-gray-400' : 'bg-gray-500'
-                      }`}></div>
+                    <li key={index} className={`font-sans leading-relaxed flex items-start gap-3 text-sm lg:text-base ${isDark ? 'text-white/80' : 'text-black/80'}`}>
+                      <div className={`w-2 h-2 rounded-full mt-3 flex-shrink-0 ${isDark ? 'bg-gray-400' : 'bg-gray-500'}`}></div>
                       <span className="font-light">{responsibility}</span>
                     </li>
                   ))}
@@ -289,9 +267,7 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
               <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-8 ${
                 isDark ? 'bg-black/80 border-white/20' : 'bg-white/80 border-gray-200'
               }`}>
-                <h2 className={`text-xl lg:text-2xl font-bold mb-4 lg:mb-6 flex items-center gap-3 ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className={`font-barlow font-extrabold text-xl lg:text-2xl mb-4 lg:mb-6 flex items-center gap-3 ${isDark ? 'text-white' : 'text-black'}`}>
                   <div className={`w-3 h-3 rounded-full ${isDark ? 'bg-white' : 'bg-gray-900'}`}></div>
                   What we offer
                 </h2>
@@ -315,9 +291,7 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
               <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-8 ${
                 isDark ? 'bg-black/80 border-white/20' : 'bg-white/80 border-gray-200'
               }`}>
-                <h2 className={`text-xl lg:text-2xl font-bold mb-4 lg:mb-6 flex items-center gap-3 ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className={`font-barlow font-extrabold text-xl lg:text-2xl mb-4 lg:mb-6 flex items-center gap-3 ${isDark ? 'text-white' : 'text-black'}`}>
                   <div className={`w-3 h-3 rounded-full ${isDark ? 'bg-white' : 'bg-gray-900'}`}></div>
                   Requirements
                 </h2>
@@ -338,9 +312,7 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
               <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-8 ${
                 isDark ? 'bg-black/80 border-white/20' : 'bg-white/80 border-gray-200'
               }`}>
-                <h2 className={`text-xl lg:text-2xl font-bold mb-4 lg:mb-6 flex items-center gap-3 ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className={`font-barlow font-extrabold text-xl lg:text-2xl mb-4 lg:mb-6 flex items-center gap-3 ${isDark ? 'text-white' : 'text-black'}`}>
                   <div className={`w-3 h-3 rounded-full ${isDark ? 'bg-white' : 'bg-gray-900'}`}></div>
                   Application process
                 </h2>
@@ -371,14 +343,10 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
                 isDark ? 'bg-gradient-to-br from-white/5 to-transparent' : 'bg-gradient-to-br from-gray-100/50 to-transparent'
               }`}></div>
               <div className="relative z-10">
-                <h3 className={`text-2xl lg:text-3xl font-bold mb-4 lg:mb-5 ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h3 className={`font-barlow font-extrabold text-2xl lg:text-3xl mb-4 lg:mb-5 ${isDark ? 'text-white' : 'text-black'}`}>
                   Ready to join our team?
                 </h3>
-                <p className={`text-base lg:text-lg mb-6 lg:mb-8 font-light ${
-                  isDark ? 'text-gray-300' : 'text-gray-600'
-                }`}>
+                <p className={`font-sans text-base lg:text-lg mb-6 lg:mb-8 font-light ${isDark ? 'text-white/80' : 'text-black/80'}`}>
                   Take the next step in your career and become part of our innovative team.
                 </p>
                 <button 

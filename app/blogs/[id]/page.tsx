@@ -171,7 +171,7 @@ export default function BlogDetailPage() {
               ))}
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight max-w-4xl text-black dark:text-white">
-              {post.title}
+              <span className="font-barlow font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight text-black dark:text-white">{post.title}</span>
             </h1>
             <div className="flex items-center gap-6 text-zinc-700 dark:text-white/80">
               <div className="flex items-center gap-2">
@@ -235,35 +235,35 @@ export default function BlogDetailPage() {
             {/* Article Body */}
             <Card className="bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md mb-8">
               <CardContent className="p-8">
-                <div className="prose prose-lg max-w-none text-zinc-800 dark:prose-invert dark:text-white">
-                  <p className="text-xl text-zinc-700 dark:text-gray-300 leading-relaxed mb-6 font-light">
+                <div className="prose prose-lg max-w-none font-sans text-black dark:text-white">
+                  <p className="font-sans text-xl text-black dark:text-white leading-relaxed mb-6 font-light">
                     {post.excerpt}
                   </p>
-                  <h2 className="text-2xl font-bold text-black dark:text-white mb-4 mt-8">Introduction</h2>
-                  <p className="text-zinc-700 dark:text-gray-300 leading-relaxed mb-6">
+                  <h2 className="font-barlow font-extrabold text-2xl mb-4 mt-8 text-black dark:text-white">Introduction</h2>
+                  <p className="font-sans text-black dark:text-white leading-relaxed mb-6">
                     {post.intro}
                   </p>
-                  <h2 className="text-2xl font-bold text-black dark:text-white mb-4 mt-8">Key Concepts</h2>
+                  <h2 className="font-barlow font-extrabold text-2xl mb-4 mt-8 text-black dark:text-white">Key Concepts</h2>
                   <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-lg p-6 mb-6">
-                    <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-3">Important Note</h3>
-                    <ul className="list-disc list-inside text-zinc-700 dark:text-gray-300 space-y-2 mb-0">
+                    <h3 className="font-barlow font-extrabold text-lg mb-3 text-blue-700 dark:text-blue-400">Important Note</h3>
+                    <ul className="font-sans list-disc list-inside text-black dark:text-white space-y-2 mb-0">
                       {post.keyConcepts?.map((concept: string, i: number) => (
                         <li key={i}>{concept}</li>
                       ))}
                     </ul>
                   </div>
-                  <h2 className="text-2xl font-bold text-black dark:text-white mb-4 mt-8">Implementation</h2>
-                  <p className="text-zinc-700 dark:text-gray-300 leading-relaxed mb-6">
+                  <h2 className="font-barlow font-extrabold text-2xl mb-4 mt-8 text-black dark:text-white">Implementation</h2>
+                  <p className="font-sans text-black dark:text-white leading-relaxed mb-6">
                     {post.implementation}
                   </p>
-                  <h2 className="text-2xl font-bold text-black dark:text-white mb-4 mt-8">Best Practices</h2>
-                  <ul className="list-disc list-inside text-zinc-700 dark:text-gray-300 space-y-2 mb-6">
+                  <h2 className="font-barlow font-extrabold text-2xl mb-4 mt-8 text-black dark:text-white">Best Practices</h2>
+                  <ul className="font-sans list-disc list-inside text-black dark:text-white space-y-2 mb-6">
                     {post.bestPractices?.map((practice: string, i: number) => (
                       <li key={i}>{practice}</li>
                     ))}
                   </ul>
-                  <h2 className="text-2xl font-bold text-black dark:text-white mb-4 mt-8">Conclusion</h2>
-                  <p className="text-zinc-700 dark:text-gray-300 leading-relaxed mb-6">
+                  <h2 className="font-barlow font-extrabold text-2xl mb-4 mt-8 text-black dark:text-white">Conclusion</h2>
+                  <p className="font-sans text-black dark:text-white leading-relaxed mb-6">
                     {post.conclusion}
                   </p>
                 </div>
@@ -279,7 +279,7 @@ export default function BlogDetailPage() {
               {/* Table of Contents */}
               <Card className="bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md">
                 <CardContent className="p-6">
-                  <h3 className="font-bold text-black dark:text-white mb-4 flex items-center gap-2">
+                  <h3 className="font-barlow font-extrabold mb-4 flex items-center gap-2 text-black dark:text-white">
                     <Tag className="w-4 h-4" />
                     Table of Contents
                   </h3>
@@ -306,23 +306,23 @@ export default function BlogDetailPage() {
               {/* Article Stats */}
               <Card className="bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md">
                 <CardContent className="p-6">
-                  <h3 className="font-bold text-black dark:text-white mb-4 flex items-center gap-2">
+                  <h3 className="font-barlow font-extrabold mb-4 flex items-center gap-2 text-black dark:text-white">
                     <TrendingUp className="w-4 h-4" />
                     Article Stats
                   </h3>
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-zinc-600 dark:text-gray-400">Reading Time</span>
-                      <span className="text-black dark:text-white">{post.readTime}</span>
+                      <span className="font-sans text-black dark:text-white">Reading Time</span>
+                      <span className="font-sans text-black dark:text-white">{post.readTime}</span>
                     </div>
 
                     <div className="flex justify-between">
-                      <span className="text-zinc-600 dark:text-gray-400">Published</span>
-                      <span className="text-black dark:text-white">{post.publishDate}</span>
+                      <span className="font-sans text-black dark:text-white">Published</span>
+                      <span className="font-sans text-black dark:text-white">{post.publishDate}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-zinc-600 dark:text-gray-400">Category</span>
-                      <span className="text-black dark:text-white">{post.category}</span>
+                      <span className="font-sans text-black dark:text-white">Category</span>
+                      <span className="font-sans text-black dark:text-white">{post.category}</span>
                     </div>
                   </div>
                 </CardContent>
@@ -331,7 +331,7 @@ export default function BlogDetailPage() {
               {/* Tags */}
               <Card className="bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md">
                 <CardContent className="p-6">
-                  <h3 className="font-bold text-black dark:text-white mb-4 flex items-center gap-2">
+                  <h3 className="font-barlow font-extrabold mb-4 flex items-center gap-2 text-black dark:text-white">
                     <Tag className="w-4 h-4" />
                     Tags
                   </h3>
@@ -350,7 +350,7 @@ export default function BlogDetailPage() {
 
         {/* Related Posts */}
         <div className="mt-16">
-          <h2 className="text-3xl font-bold text-black dark:text-white mb-8">Related Articles</h2>
+          <h2 className="font-barlow font-extrabold text-3xl mb-8 text-black dark:text-white">Related Articles</h2>
           {relatedPosts.length === 0 ? (
             <div className="w-full max-w-[1700px] mx-auto flex items-center justify-center min-h-[200px]">
               <div className="bg-black border border-zinc-800 rounded-3xl shadow-2xl p-12 flex flex-col items-center w-full">
@@ -373,10 +373,10 @@ export default function BlogDetailPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-white/80 dark:from-black/60 to-transparent" />
                     </div>
                     <CardContent className="p-6">
-                      <h3 className="font-bold text-black dark:text-white mb-2 line-clamp-2 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
+                      <h3 className="font-barlow font-extrabold mb-2 line-clamp-2 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors text-black dark:text-white">
                         {relatedPost.title}
                       </h3>
-                      <p className="text-zinc-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                      <p className="font-sans text-black dark:text-white text-sm mb-4 line-clamp-2">
                         {relatedPost.excerpt}
                       </p>
                       <div className="flex items-center gap-4 text-xs text-zinc-500 dark:text-gray-500">

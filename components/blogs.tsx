@@ -174,8 +174,8 @@ export default function Component() {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <p className={`font-extrabold text-lg font-barlow text-white`}>{post.author.name}</p>
-                <p className={`text-sm font-medium font-sans text-white`}>{post.author.role}</p>
+                <p className={`font-extrabold text-lg font-barlow ${isDark ? "text-white" : "text-black"}`}>{post.author.name}</p>
+                <p className={`text-sm font-medium font-sans ${isDark ? "text-white" : "text-black/80"}`}>{post.author.role}</p>
                 <div className="flex space-x-1 mt-2">
                   {[...Array(3)].map((_, i) => (
                     <div key={i} className={`${isDark ? "bg-white" : "bg-black"} w-2 h-2 rounded-full`} />
@@ -184,9 +184,9 @@ export default function Component() {
               </div>
             </div>
             {/* Title */}
-            <h2 className={`text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight font-barlow text-white`}>{post.title}</h2>
+            <h2 className={`text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight font-barlow ${isDark ? "text-white" : "text-black"}`}>{post.title}</h2>
             {/* Excerpt */}
-            <p className={`text-base sm:text-xl leading-relaxed max-w-4xl font-sans text-white line-clamp-2`}>
+            <p className={`text-base sm:text-xl leading-relaxed max-w-4xl font-sans ${isDark ? "text-white" : "text-black/80"} line-clamp-2`}>
               {post.excerpt.length > 150 ? `${post.excerpt.substring(0, 150)}...` : post.excerpt}
             </p>
             {/* Meta Info and CTA */}
@@ -194,12 +194,12 @@ export default function Component() {
               <div className="flex items-center space-x-2 sm:space-x-6">
                 <div className={`flex items-center space-x-2 rounded-full px-3 py-1 sm:px-4 sm:py-2 border ${isDark ? "bg-black border-white" : "bg-white border-black"}`}>
                   <Clock className={`${isDark ? "text-white" : "text-black"} h-4 w-4`} />
-                  <span className={`font-medium font-sans text-white`}>{post.readTime}</span>
+                  <span className={`font-medium font-sans ${isDark ? "text-white" : "text-black/80"}`}>{post.readTime}</span>
                 </div>
 
                 <div className={`flex items-center space-x-2 rounded-full px-3 py-1 sm:px-4 sm:py-2 border ${isDark ? "bg-black border-white" : "bg-white border-black"}`}>
                   <Calendar className={`${isDark ? "text-white" : "text-black"} h-4 w-4`} />
-                  <span className={`font-medium font-sans text-white`}>{post.publishDate}</span>
+                  <span className={`font-medium font-sans ${isDark ? "text-white" : "text-black/80"}`}>{post.publishDate}</span>
                 </div>
               </div>
               <Link href={`/blogs/${post._id || post.id}`}>
@@ -219,19 +219,19 @@ export default function Component() {
 
   if (loading) {
     return (
-      <section className="w-full min-h-screen bg-black text-white flex items-center justify-center">
-        <div className="text-xl text-white">Loading blogs...</div>
+      <section className={`w-full min-h-screen flex items-center justify-center ${isDark ? "bg-black text-white" : "bg-white text-black"}`}>
+        <div className={`text-xl ${isDark ? "text-white" : "text-black"}`}>Loading blogs...</div>
       </section>
     );
   }
 
   if (!posts.length) {
     return (
-      <section className="w-full min-h-screen bg-black text-white flex items-center justify-center">
+      <section className={`w-full min-h-screen flex items-center justify-center ${isDark ? "bg-black text-white" : "bg-white text-black"}`}>
         <div className="w-full max-w-[1700px] mx-auto flex items-center justify-center min-h-[400px]">
-          <div className="bg-black border border-zinc-800 rounded-3xl shadow-2xl p-16 flex flex-col items-center w-full">
-            <h2 className="text-4xl font-extrabold mb-3 text-center text-white tracking-tight">No Blogs Yet</h2>
-            <p className="text-zinc-400 text-xl text-center max-w-2xl mb-2">Start by adding your first blog post! Your blogs will appear here in this beautiful, modern showcase.</p>
+          <div className={`rounded-3xl shadow-2xl p-16 flex flex-col items-center w-full border ${isDark ? "bg-black border-zinc-800" : "bg-white border-zinc-300"}`}>
+            <h2 className={`text-4xl font-extrabold mb-3 text-center tracking-tight ${isDark ? "text-white" : "text-black"}`}>No Blogs Yet</h2>
+            <p className={`text-xl text-center max-w-2xl mb-2 ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>Start by adding your first blog post! Your blogs will appear here in this beautiful, modern showcase.</p>
           </div>
         </div>
       </section>
@@ -251,7 +251,7 @@ export default function Component() {
               Stories & Insights
             </Badge>
           </div>
-          <h1 className={`font-extrabold mb-2 sm:mb-4 font-barlow text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white`}>Discover Amazing Stories</h1>
+          <h1 className={`font-extrabold mb-2 sm:mb-4 font-barlow text-3xl sm:text-4xl md:text-5xl lg:text-6xl ${isDark ? "text-white" : "text-black"}`}>Discover Amazing Stories</h1>
           <p className={`${isDark ? "text-white/70" : "text-black/70"} text-base sm:text-xl max-w-2xl mx-auto font-sans`}>
             Explore insights, journeys, and perspectives from our community
           </p>
@@ -262,7 +262,7 @@ export default function Component() {
           <div className="blogs-fade lg:col-span-1 space-y-8 sm:space-y-12 self-center w-full">
             {/* Categories */}
             <div className={`rounded-2xl p-4 sm:p-6 border-2 ${isDark ? "bg-black border-white" : "bg-white border-black"}`}>
-              <h3 className={`text-lg sm:text-xl font-bold mb-2 sm:mb-4 font-barlow text-white`}>Categories</h3>
+              <h3 className={`text-lg sm:text-xl font-bold mb-2 sm:mb-4 font-barlow ${isDark ? "text-white" : "text-black"}`}>Categories</h3>
               <div className="space-y-4 sm:space-y-6">
                 {categories.map((category) => (
                   <Button
@@ -270,8 +270,12 @@ export default function Component() {
                     variant="ghost"
                     className={`w-full justify-between text-left h-auto p-3 sm:p-4 rounded-xl transition-all duration-300 border text-base sm:text-lg font-sans font-medium ${
                       selectedCategory === category.id
-                        ? "bg-black text-white border-black"
-                        : "text-white/70 hover:text-white/70 hover:bg-white/5 border-white/20 hover:border-white/40"
+                        ? isDark
+                          ? "bg-white text-black border-black"
+                          : "bg-black text-white border-black"
+                        : isDark
+                        ? "text-white/70 hover:text-white/70 hover:bg-white/5 border-white/20 hover:border-white/40"
+                        : "text-black/70 hover:text-black/70 hover:bg-black/5 border-black/20 hover:border-black/40"
                     }`}
                     onClick={() => handleCategoryChange(category.id)}
                   >
@@ -279,8 +283,12 @@ export default function Component() {
                     <Badge
                       className={`border px-2 sm:px-3 py-1 font-sans text-xs sm:text-base ${
                         selectedCategory === category.id
-                          ? "bg-white text-black border-white"
-                          : "bg-black text-white border-white"
+                          ? isDark
+                            ? "bg-white text-black border-white"
+                            : "bg-black text-white border-black"
+                          : isDark
+                          ? "bg-black text-white border-white"
+                          : "bg-white text-black border-black"
                       }`}
                     >
                       {category.count}
@@ -296,7 +304,7 @@ export default function Component() {
             <div className="blogs-fade">
               <div className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-8 gap-4 sm:gap-0">
                 <div className="flex items-center space-x-2 sm:space-x-4">
-                  <h2 className={`font-bold font-barlow text-2xl sm:text-3xl text-white`}>Featured Story</h2>
+                  <h2 className={`font-bold font-barlow text-2xl sm:text-3xl ${isDark ? "text-white" : "text-black"}`}>Featured Story</h2>
                   <Badge className={`${isDark ? "bg-black border-white text-white" : "bg-white border-black text-black"} border px-2 sm:px-4 py-1 sm:py-2 font-sans`}>Editor's Choice</Badge>
                 </div>
                 {/* Navigation Controls */}
@@ -330,7 +338,7 @@ export default function Component() {
             </div>
             {/* Navigation Info */}
             <div className={`blogs-fade flex items-center justify-center space-x-4 sm:space-x-6 ${isDark ? "text-white/50" : "text-black/50"}`}>
-              <span className="text-xs sm:text-sm font-sans text-white">Use navigation to explore more stories</span>
+              <span className="text-xs sm:text-sm font-sans text-white dark:text-black">Use navigation to explore more stories</span>
               <div className="flex space-x-1 sm:space-x-2">
                 {filteredPosts.map((_, index) => (
                   <div

@@ -4,12 +4,9 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import MilestonesSection from './milestones';
-import { useTheme } from './theme-provider';
 
 const ScrollAnimation = () => {
   const lenisRef = useRef(null);
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -310,6 +307,21 @@ const ScrollAnimation = () => {
             gsap.set(innerCard, {
               rotationY: rotationY,
             });
+
+            // Stop floating animation when cards are fully positioned
+            const cardWrapper = document.querySelector(`${cardId} .card-wrapper`);
+            if (cardProgress >= 1) {
+              gsap.set(cardWrapper, {
+                animation: 'none',
+                transform: 'translate(-50%, -50%)'
+              });
+            } else {
+              // Re-enable floating animation when cards are not fully positioned
+              gsap.set(cardWrapper, {
+                animation: 'floating 2s infinite ease-in-out',
+                animationDelay: `${index * 0.2}s`
+              });
+            }
           });
         },
       });
@@ -329,13 +341,13 @@ const ScrollAnimation = () => {
         @import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 
         :root {
-          --dark: ${isDark ? '#000' : '#fff'};
-          --light: ${isDark ? '#f9f4eb' : '#000'};
-          --light2: ${isDark ? '#f0ece5' : '#111'};
-          --accent-1: ${isDark ? '#1a1a1a' : '#f8f9fa'};
-          --accent-2: ${isDark ? '#2d2d2d' : '#e9ecef'};
-          --accent-3: ${isDark ? '#404040' : '#dee2e6'};
-          --accent-4: ${isDark ? '#525252' : '#ced4da'};
+          --dark: #000;
+          --light: #f9f4eb;
+          --light2: #f0ece5;
+          --accent-1: #000;
+          --accent-2: #000;
+          --accent-3: #000;
+          --accent-4: #000;
         }
 
         * {
@@ -385,8 +397,8 @@ const ScrollAnimation = () => {
         }
 
         .logo span {
-          background-color: var(--light);
-          color: var(--dark);
+          background-color: var(--dark);
+          color: var(--light);
         }
 
         .menu-btn span {
@@ -403,7 +415,7 @@ const ScrollAnimation = () => {
         }
 
         .hero {
-          background-color: ${isDark ? '#000' : '#fff'};
+          background-color: transparent;
           color: var(--light);
         }
 
@@ -412,7 +424,7 @@ const ScrollAnimation = () => {
           display: flex;
           justify-content: center;
           align-items: center;
-          background-color: ${isDark ? '#000' : '#fff'};
+          background-color: transparent;
           color: var(--light);
         }
 
@@ -433,7 +445,7 @@ const ScrollAnimation = () => {
           aspect-ratio: 5/7;
           padding: 1rem;
           border-radius: 0.75rem;
-          border: 2px solid ${isDark ? 'white' : 'black'};
+          border: 2px solid white;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
@@ -449,27 +461,27 @@ const ScrollAnimation = () => {
 
         .hero-cards .card span {
           font-size: 0.8rem;
-          color: ${isDark ? 'white' : 'black'};
+          color: white;
         }
 
         .hero-cards .card#hero-card-1 {
-          background-color: ${isDark ? '#000' : '#fff'};
+          background-color: var(--accent-1);
           transform-origin: top right;
           z-index: 3;
         }
 
         .hero-cards .card#hero-card-2 {
-          background-color: ${isDark ? '#000' : '#fff'};
+          background-color: var(--accent-2);
           z-index: 2;
         }
 
         .hero-cards .card#hero-card-3 {
-          background-color: ${isDark ? '#000' : '#fff'};
+          background-color: var(--accent-3);
           z-index: 1;
         }
 
         .hero-cards .card#hero-card-4 {
-          background-color: ${isDark ? '#000' : '#fff'};
+          background-color: var(--accent-4);
           transform-origin: top left;
           z-index: 0;
         }
@@ -497,7 +509,7 @@ const ScrollAnimation = () => {
           display: flex;
           justify-content: center;
           z-index: -1;
-          background-color: ${isDark ? '#000' : '#fff'};
+          
         }
 
         .cards-container {
@@ -526,6 +538,35 @@ const ScrollAnimation = () => {
           transform: translate(-50%, -50%);
           width: 100%;
           height: 100%;
+          animation: floating 2s infinite ease-in-out;
+        }
+
+        @keyframes floating {
+          0% {
+            transform: translate(-50%, -50%);
+          }
+          50% {
+            transform: translate(-50%, -55%);
+          }
+          100% {
+            transform: translate(-50%, -50%);
+          }
+        }
+
+        #card-1 .card-wrapper {
+          animation-delay: 0;
+        }
+
+        #card-2 .card-wrapper {
+          animation-delay: 0.2s;
+        }
+
+        #card-3 .card-wrapper {
+          animation-delay: 0.4s;
+        }
+
+        #card-4 .card-wrapper {
+          animation-delay: 0.6s;
         }
 
         .flip-card-inner {
@@ -543,7 +584,7 @@ const ScrollAnimation = () => {
           border-radius: 1rem;
           backface-visibility: hidden;
           overflow: hidden;
-          color: ${isDark ? 'white' : 'black'};
+          color: white;
         }
 
         .flip-card-front {
@@ -552,23 +593,23 @@ const ScrollAnimation = () => {
           flex-direction: column;
           justify-content: space-between;
           align-items: center;
-          border: 2px solid ${isDark ? 'white' : 'black'};
+          border: 2px solid white;
         }
 
         #card-1 .flip-card-front {
-          background-color: ${isDark ? '#000' : '#fff'};
+          background-color: var(--accent-1);
         }
 
         #card-2 .flip-card-front {
-          background-color: ${isDark ? '#000' : '#fff'};
+          background-color: var(--accent-2);
         }
 
         #card-3 .flip-card-front {
-          background-color: ${isDark ? '#000' : '#fff'};
+          background-color: var(--accent-3);
         }
 
         #card-4 .flip-card-front {
-          background-color: ${isDark ? '#000' : '#fff'};
+          background-color: var(--accent-4);
         }
 
         .flip-card-back {
@@ -577,8 +618,8 @@ const ScrollAnimation = () => {
           flex-direction: column;
           justify-content: space-between;
           gap: 2rem;
-          background-color: ${isDark ? '#000' : '#fff'};
-          border: 2px solid ${isDark ? 'white' : 'black'};
+          background-color: #000;
+          border: 2px solid white;
           transform: rotateY(180deg);
         }
 
@@ -596,16 +637,16 @@ const ScrollAnimation = () => {
           justify-content: center;
           align-items: center;
           font-size: 1rem;
-          color: ${isDark ? 'white' : 'black'};
+          color: white;
           border-radius: 0.25rem;
-          border: 1px solid ${isDark ? 'white' : 'black'};
+          border: 1px solid white;
           background: none;
         }
         .scroll-animation-root .card-copy p:first-child {
           background: none;
           color: white;
-          font-weight: 800;
-          font-size: 1.4rem;
+          font-weight: 900;
+          font-size: 1.2rem;
           border: none;
         }
 
@@ -639,18 +680,18 @@ const ScrollAnimation = () => {
 
         @media (max-width: 1000px) {
           .hero-cards {
-            width: calc(100% - 2rem);
-            gap: 1rem;
+            width: calc(100% - 4rem);
+            gap: 1.5rem;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
           }
 
           .hero-cards .card {
-            min-width: 120px;
+            min-width: 140px;
             padding: 1rem;
-            flex: 0 0 calc(50% - 0.5rem);
-            max-width: calc(50% - 0.5rem);
+            flex: 0 0 calc(50% - 0.75rem);
+            max-width: calc(50% - 0.75rem);
           }
 
           .hero-cards .card span {
@@ -693,22 +734,6 @@ const ScrollAnimation = () => {
 
           .mobile-cards .flip-card-back {
             transform: rotateY(0deg);
-          }
-
-          #mobile-card-1 .flip-card-front {
-            background-color: ${isDark ? '#000' : '#fff'};
-          }
-
-          #mobile-card-2 .flip-card-front {
-            background-color: ${isDark ? '#000' : '#fff'};
-          }
-
-          #mobile-card-3 .flip-card-front {
-            background-color: ${isDark ? '#000' : '#fff'};
-          }
-
-          #mobile-card-4 .flip-card-front {
-            background-color: ${isDark ? '#000' : '#fff'};
           }
         }
 
@@ -783,20 +808,20 @@ const ScrollAnimation = () => {
           font-size: 1.5rem;
           font-weight: 800;
           letter-spacing: 0.18em;
-          color: ${isDark ? '#fff' : 'black'};
+          color: #fff;
           margin-bottom: 1.2rem;
           text-transform: uppercase;
           line-height: 1.1;
-          text-shadow: ${isDark ? '0 2px 16px rgba(0,0,0,0.25), 0 1px 0 #222' : 'none'};
+          text-shadow: 0 2px 16px rgba(0,0,0,0.25), 0 1px 0 #222;
         }
         .scroll-animation-root .card-content p {
           font-size: 0.98rem;
           font-weight: 400;
-          color: ${isDark ? '#e0e0e0' : 'black'};
+          color: #e0e0e0;
           line-height: 1.6;
           letter-spacing: 0.01em;
           text-align: center;
-          text-shadow: ${isDark ? '0 1px 8px rgba(0,0,0,0.18)' : 'none'};
+          text-shadow: 0 1px 8px rgba(0,0,0,0.18);
         }
         .scroll-animation-root .hero-cards .card-content {
           min-height: 180px;
@@ -814,11 +839,16 @@ const ScrollAnimation = () => {
             font-size: 1.1rem;
           }
           .scroll-animation-root .card-content p {
-            font-size: 0.82rem;
+            font-size: 0.65rem;
+            text-align: center;
           }
           .scroll-animation-root .card-copy p {
-            font-size: 0.82rem;
-            color: ${isDark ? 'white' : 'black'};
+            font-size: 0.65rem;
+            text-align: center;
+          }
+          .scroll-animation-root .card-copy p:first-child {
+            font-size: 0.85rem;
+            text-align: center;
           }
         }
         @media (max-width: 480px) {
@@ -826,81 +856,106 @@ const ScrollAnimation = () => {
             font-size: 0.95rem;
           }
           .scroll-animation-root .card-content p {
-            font-size: 0.7rem;
+            font-size: 0.55rem;
+            text-align: center;
           }
           .scroll-animation-root .card-copy p {
+            font-size: 0.55rem;
+            text-align: center;
+          }
+          .scroll-animation-root .card-copy p:first-child {
             font-size: 0.7rem;
-            color: ${isDark ? 'white' : 'black'};
+            text-align: center;
+          }
+            
+        }
+
+        /* Override hero cards and flip cards to always have a solid background */
+        .hero-cards .card {
+          background: #fff !important;
+        }
+        :global(.dark) .hero-cards .card {
+          background: #000 !important;
+        }
+        .flip-card-front,
+        .flip-card-back {
+          background: #fff !important;
+        }
+        :global(.dark) .flip-card-front,
+        :global(.dark) .flip-card-back {
+          background: #000 !important;
+        }
+
+        /* Our Services heading style (matches contact.tsx heading) */
+        .services-header h1 {
+          font-family: 'Barlow', sans-serif !important;
+          font-size: 2rem !important; /* text-3xl */
+          font-weight: 800 !important; /* font-extrabold */
+          color: #000 !important;
+        }
+        @media (min-width: 640px) {
+          .services-header h1 {
+            font-size: 2.25rem !important; /* sm:text-4xl */
           }
         }
+        @media (min-width: 768px) {
+          .services-header h1 {
+            font-size: 3rem !important; /* md:text-5xl */
+          }
+        }
+        @media (min-width: 1024px) {
+          .services-header h1 {
+            font-size: 3.75rem !important; /* lg:text-6xl */
+          }
+        }
+        :global(.dark) .services-header h1 {
+          color: #fff !important;
+        }
+
+        /* Use font-sans for all other text in services.tsx */
+        .scroll-animation-root,
+        .scroll-animation-root *:not(h1):not(.font-barlow) {
+          font-family: 'Inter', 'DM Sans', 'DM Mono', system-ui, sans-serif !important;
+        }
+
+        /* Light theme: black for border, text, etc. */
         .hero-cards .card,
         .flip-card-front,
-        .mobile-cards .card .flip-card-front {
-          background-color: ${isDark ? '#000' : '#fff'};
-          color: ${isDark ? '#fff' : '#111'};
-          border: 2px solid ${isDark ? '#fff' : '#111'};
-          box-shadow: 0 4px 24px 0 ${isDark ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.08)'};
-          transition: background 0.3s, color 0.3s, border 0.3s;
+        .flip-card-back {
+          background: #fff !important;
+          color: #000 !important;
+          border: 2px solid #000 !important;
         }
-        .hero-cards .card {
-          min-width: 170px;
-          padding: 1.5rem;
+        .hero-cards .card *,
+        .flip-card-front *,
+        .flip-card-back * {
+          color: #000 !important;
         }
-        .flip-card-front {
-          padding: 1.5rem;
+        .flip-card-back p:not(:first-child) {
+          border: 1.5px solid #000 !important;
         }
-        .mobile-cards .card .flip-card-front {
-          min-width: 120px;
-          padding: 1.2rem;
+        .flip-card-back p:first-child {
+          border: none !important;
         }
-        .card-content h2 {
-          color: ${isDark ? '#fff' : '#111'};
-          font-size: 1.5rem;
-          font-weight: 800;
-          margin-bottom: 1.2rem;
+
+        /* Dark theme: white for border, text, etc. */
+        :global(.dark) .hero-cards .card,
+        :global(.dark) .flip-card-front,
+        :global(.dark) .flip-card-back {
+          background: #000 !important;
+          color: #fff !important;
+          border: 2px solid #fff !important;
         }
-        .card-content p {
-          color: ${isDark ? '#e0e0e0' : '#333'};
-          font-size: 1rem;
+        :global(.dark) .hero-cards .card *,
+        :global(.dark) .flip-card-front *,
+        :global(.dark) .flip-card-back * {
+          color: #fff !important;
         }
-        @media (max-width: 1000px) {
-          .hero-cards {
-            width: calc(100% - 2rem);
-            gap: 1rem;
-            flex-wrap: wrap;
-          }
-          .hero-cards .card {
-            min-width: 120px;
-            padding: 1rem;
-            flex: 0 0 calc(50% - 0.5rem);
-            max-width: calc(50% - 0.5rem);
-          }
-          .mobile-cards .card .flip-card-front {
-            min-width: 100px;
-            padding: 0.9rem;
-          }
+        :global(.dark) .flip-card-back p:not(:first-child) {
+          border: 1.5px solid #fff !important;
         }
-        @media (max-width: 600px) {
-          .hero-cards {
-            width: 100%;
-            gap: 0.5rem;
-          }
-          .hero-cards .card {
-            min-width: 80px;
-            padding: 0.6rem;
-            font-size: 0.9rem;
-          }
-          .mobile-cards .card .flip-card-front {
-            min-width: 70px;
-            padding: 0.5rem;
-            font-size: 0.9rem;
-          }
-          .card-content h2 {
-            font-size: 1.1rem;
-          }
-          .card-content p {
-            font-size: 0.85rem;
-          }
+        :global(.dark) .flip-card-back p:first-child {
+          border: none !important;
         }
       `}</style>
 
@@ -908,29 +963,29 @@ const ScrollAnimation = () => {
         <div className="hero-cards">
           <div className="card" id="hero-card-1">
             <div className="card-content">
-              <h2>PLAN</h2>
-              <p>We break down your vision, define workflows, align every step with growth-focused outcomes.</p>
+              <h2 className="font-barlow font-extrabold">PLAN</h2>
+              <p className="font-sans">We break down your vision, define workflows, and align every step with growth-focused outcomes.</p>
             </div>
           </div>
 
           <div className="card" id="hero-card-2">
             <div className="card-content">
-              <h2>DESIGN</h2>
-              <p>We design fast, functional UX that turns complex ideas into user-first, AI-ready interfaces.</p>
+              <h2 className="font-barlow font-extrabold">DESIGN</h2>
+              <p className="font-sans">We design fast and functional UX that turns complex ideas into user-first and AI-ready interfaces.</p>
             </div>
           </div>
 
           <div className="card" id="hero-card-3">
             <div className="card-content">
-              <h2>DEVELOP</h2>
-              <p>We build AI-powered platforms with clean, scalable code built for performance and results.</p>
+              <h2 className="font-barlow font-extrabold">DEVELOP</h2>
+              <p className="font-sans">We build AI-powered platforms with clean, scalable code built for performance and results.</p>
             </div>
           </div>
 
           <div className="card" id="hero-card-4">
             <div className="card-content">
-              <h2>LAUNCH</h2>
-              <p>We deploy, monitor, and support your product to deliver real-world impact from day one.</p>
+              <h2 className="font-barlow font-extrabold">LAUNCH</h2>
+              <p className="font-sans">We deploy, monitor, and support your product to deliver real-world impact from day one.</p>
             </div>
           </div>
         </div>
@@ -950,19 +1005,19 @@ const ScrollAnimation = () => {
                 <div className="flip-card-inner">
                   <div className="flip-card-front">
                     <div className="card-content">
-                      <h2>PLAN</h2>
-                      <p>We break down your vision, define workflows, and align every step with growth-focused outcomes.</p>
+                      <h2 className="font-barlow font-extrabold">PLAN</h2>
+                      <p className="font-sans">We break down your vision, define workflows, and align every step with growth-focused outcomes.</p>
                     </div>
                   </div>
                   <div className="flip-card-back">
                     <div className="card-title"><h2></h2></div>
                     <div className="card-copy">
-                      <p>AI SaaS Platforms</p>
-                      <p>AI platforms built from scratch</p>
-                      <p>Multi-tenant systems with control</p>
-                      <p>Dashboards that cut manual work</p>
-                      <p>Billing, auth, and API ready</p>
-                      <p>Scalable, compliant, deployment-ready</p>
+                      <p className="font-barlow font-extrabold">AI SaaS Platforms</p>
+                      <p className="font-sans">AI platforms built from scratch</p>
+                      <p className="font-sans">Multi-tenant systems with control</p>
+                      <p className="font-sans">Dashboards that cut manual work</p>
+                      <p className="font-sans">Billing, auth, and API ready</p>
+                      <p className="font-sans">Scalable, compliant, deployment-ready</p>
                     </div>
                     <div className="card-title"><h2></h2></div>
                   </div>
@@ -975,19 +1030,19 @@ const ScrollAnimation = () => {
                 <div className="flip-card-inner">
                   <div className="flip-card-front">
                     <div className="card-content">
-                      <h2>DESIGN</h2>
-                      <p>We design fast, functional UX that turns complex ideas into user-first, AI-ready interfaces.</p>
+                      <h2 className="font-barlow font-extrabold">DESIGN</h2>
+                      <p className="font-sans">We design fast, functional UX that turns complex ideas into user-first, AI-ready interfaces.</p>
                     </div>
                   </div>
                   <div className="flip-card-back">
                     <div className="card-title"><h2></h2></div>
                     <div className="card-copy">
-                      <p>Automation & AI Agents</p>
-                      <p>AI agents for daily tasks</p>
-                      <p>Auto-handle email and CRM</p>
-                      <p>Form parsing and document reading</p>
-                      <p>Trigger-based workflow automation</p>
-                      <p>Trained on your business data</p>
+                      <p className="font-barlow font-extrabold">Automation & AI Agents</p>
+                      <p className="font-sans">AI agents for daily tasks</p>
+                      <p className="font-sans">Auto-handle email and CRM</p>
+                      <p className="font-sans">Form parsing and document reading</p>
+                      <p className="font-sans">Trigger-based workflow automation</p>
+                      <p className="font-sans">Trained on your business data</p>
                     </div>
                     <div className="card-title"><h2></h2></div>
                   </div>
@@ -1000,19 +1055,19 @@ const ScrollAnimation = () => {
                 <div className="flip-card-inner">
                   <div className="flip-card-front">
                     <div className="card-content">
-                      <h2>DEVELOP</h2>
-                      <p>We build AI-powered platforms with clean, scalable code built for performance and results.</p>
+                      <h2 className="font-barlow font-extrabold">DEVELOP</h2>
+                      <p className="font-sans">We build AI-powered platforms with clean, scalable code built for performance and results.</p>
                     </div>
                   </div>
                   <div className="flip-card-back">
                     <div className="card-title"><h2></h2></div>
                     <div className="card-copy">
-                      <p>Conversational AI</p>
-                      <p>Custom chatbots for support</p>
-                      <p>Voice assistants for interaction</p>
-                      <p>Lead capture and follow-up</p>
-                      <p>Website and WhatsApp ready</p>
-                      <p>Natural language routing flows</p>
+                      <p className="font-barlow font-extrabold">Conversational AI</p>
+                      <p className="font-sans">Custom chatbots for support</p>
+                      <p className="font-sans">Voice assistants for interaction</p>
+                      <p className="font-sans">Lead capture and follow-up</p>
+                      <p className="font-sans">Website and WhatsApp ready</p>
+                      <p className="font-sans">Natural language routing flows</p>
                     </div>
                     <div className="card-title"><h2></h2></div>
                   </div>
@@ -1025,19 +1080,19 @@ const ScrollAnimation = () => {
                 <div className="flip-card-inner">
                   <div className="flip-card-front">
                     <div className="card-content">
-                      <h2>LAUNCH</h2>
-                      <p>We deploy, monitor, and support your product to deliver real-world impact from day one.</p>
+                      <h2 className="font-barlow font-extrabold">LAUNCH</h2>
+                      <p className="font-sans">We deploy, monitor, and support your product to deliver real-world impact from day one.</p>
                     </div>
                   </div>
                   <div className="flip-card-back">
                     <div className="card-title"><h2></h2></div>
                     <div className="card-copy">
-                      <p>Analytics & Vision Intelligence</p>
-                      <p>Dashboards with live insights</p>
-                      <p>Predictive trends and alerts</p>
-                      <p>Image and video recognition</p>
-                      <p>Object tracking and activity tagging</p>
-                      <p>AI search for visual data</p>
+                      <p className="font-barlow font-extrabold">Analytics & Vision Intelligence</p>
+                      <p className="font-sans">Dashboards with live insights</p>
+                      <p className="font-sans">Predictive trends and alerts</p>
+                      <p className="font-sans">Image and video recognition</p>
+                      <p className="font-sans">Object tracking and activity tagging</p>
+                      <p className="font-sans">AI search for visual data</p>
                     </div>
                     <div className="card-title"><h2></h2></div>
                   </div>
@@ -1055,19 +1110,19 @@ const ScrollAnimation = () => {
               <div className="flip-card-inner">
                 <div className="flip-card-front">
                   <div className="card-content">
-                    <h2>PLAN</h2>
-                    <p>We break down your vision, define workflows, and align every step with growth-focused outcomes.</p>
+                    <h2 className="font-barlow font-extrabold">PLAN</h2>
+                    <p className="font-sans">We break down your vision, define workflows, and align every step with growth-focused outcomes.</p>
                   </div>
                 </div>
                 <div className="flip-card-back">
                   <div className="card-title"><h2></h2></div>
                   <div className="card-copy">
-                    <p>AI SaaS Platforms</p>
-                    <p>AI platforms built from scratch</p>
-                    <p>Multi-tenant systems with control</p>
-                    <p>Dashboards that cut manual work</p>
-                    <p>Billing, auth, and API ready</p>
-                    <p>Scalable, compliant, deployment-ready</p>
+                    <p className="font-barlow font-extrabold">AI SaaS Platforms</p>
+                    <p className="font-sans">AI platforms built from scratch</p>
+                    <p className="font-sans">Multi-tenant systems with control</p>
+                    <p className="font-sans">Dashboards that cut manual work</p>
+                    <p className="font-sans">Billing, auth, and API ready</p>
+                    <p className="font-sans">Scalable, compliant, deployment-ready</p>
                   </div>
                   <div className="card-title"><h2></h2></div>
                 </div>
@@ -1080,19 +1135,19 @@ const ScrollAnimation = () => {
               <div className="flip-card-inner">
                 <div className="flip-card-front">
                   <div className="card-content">
-                    <h2>DESIGN</h2>
-                    <p>We design fast, functional UX that turns complex ideas into user-first, AI-ready interfaces.</p>
+                    <h2 className="font-barlow font-extrabold">DESIGN</h2>
+                    <p className="font-sans">We design fast, functional UX that turns complex ideas into user-first, AI-ready interfaces.</p>
                   </div>
                 </div>
                 <div className="flip-card-back">
                   <div className="card-title"><h2></h2></div>
                   <div className="card-copy">
-                    <p>Automation & AI Agents</p>
-                    <p>AI agents for daily tasks</p>
-                    <p>Auto-handle email and CRM</p>
-                    <p>Form parsing and document reading</p>
-                    <p>Trigger-based workflow automation</p>
-                    <p>Trained on your business data</p>
+                    <p className="font-barlow font-extrabold">Automation & AI Agents</p>
+                    <p className="font-sans">AI agents for daily tasks</p>
+                    <p className="font-sans">Auto-handle email and CRM</p>
+                    <p className="font-sans">Form parsing and document reading</p>
+                    <p className="font-sans">Trigger-based workflow automation</p>
+                    <p className="font-sans">Trained on your business data</p>
                   </div>
                   <div className="card-title"><h2></h2></div>
                 </div>
@@ -1105,19 +1160,19 @@ const ScrollAnimation = () => {
               <div className="flip-card-inner">
                 <div className="flip-card-front">
                   <div className="card-content">
-                    <h2>DEVELOP</h2>
-                    <p>We build AI-powered platforms with clean, scalable code built for performance and results.</p>
+                    <h2 className="font-barlow font-extrabold">DEVELOP</h2>
+                    <p className="font-sans">We build AI-powered platforms with clean, scalable code built for performance and results.</p>
                   </div>
                 </div>
                 <div className="flip-card-back">
                   <div className="card-title"><h2></h2></div>
                   <div className="card-copy">
-                    <p>Conversational AI</p>
-                    <p>Custom chatbots for support</p>
-                    <p>Voice assistants for interaction</p>
-                    <p>Lead capture and follow-up</p>
-                    <p>Website and WhatsApp ready</p>
-                    <p>Natural language routing flows</p>
+                    <p className="font-barlow font-extrabold">Conversational AI</p>
+                    <p className="font-sans">Custom chatbots for support</p>
+                    <p className="font-sans">Voice assistants for interaction</p>
+                    <p className="font-sans">Lead capture and follow-up</p>
+                    <p className="font-sans">Website and WhatsApp ready</p>
+                    <p className="font-sans">Natural language routing flows</p>
                   </div>
                   <div className="card-title"><h2></h2></div>
                 </div>
@@ -1130,19 +1185,19 @@ const ScrollAnimation = () => {
               <div className="flip-card-inner">
                 <div className="flip-card-front">
                   <div className="card-content">
-                    <h2>LAUNCH</h2>
-                    <p>We deploy, monitor, and support your product to deliver real-world impact from day one.</p>
+                    <h2 className="font-barlow font-extrabold">LAUNCH</h2>
+                    <p className="font-sans">We deploy, monitor, and support your product to deliver real-world impact from day one.</p>
                   </div>
                 </div>
                 <div className="flip-card-back">
                   <div className="card-title"><h2></h2></div>
                   <div className="card-copy">
-                    <p>Analytics & Vision Intelligence</p>
-                    <p>Dashboards with live insights</p>
-                    <p>Predictive trends and alerts</p>
-                    <p>Image and video recognition</p>
-                    <p>Object tracking and activity tagging</p>
-                    <p>AI search for visual data</p>
+                    <p className="font-barlow font-extrabold">Analytics & Vision Intelligence</p>
+                    <p className="font-sans">Dashboards with live insights</p>
+                    <p className="font-sans">Predictive trends and alerts</p>
+                    <p className="font-sans">Image and video recognition</p>
+                    <p className="font-sans">Object tracking and activity tagging</p>
+                    <p className="font-sans">AI search for visual data</p>
                   </div>
                   <div className="card-title"><h2></h2></div>
                 </div>
@@ -1157,4 +1212,4 @@ const ScrollAnimation = () => {
   );
 };
 
-export default ScrollAnimation;
+export default ScrollAnimation; 

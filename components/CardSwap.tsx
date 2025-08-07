@@ -11,6 +11,7 @@ import React, {
   useRef,
 } from "react";
 import gsap from "gsap";
+import { useTheme } from "./theme-provider";
 
 export interface CardSwapProps {
   width?: number | string;
@@ -30,13 +31,18 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ customClass, ...rest }, ref) => (
-    <div
-      ref={ref}
-      {...rest}
-      className={`absolute top-1/2 left-1/2 rounded-xl border border-white bg-black [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden] ${customClass ?? ""} ${rest.className ?? ""}`.trim()}
-    />
-  )
+  ({ customClass, ...rest }, ref) => {
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
+    
+    return (
+      <div
+        ref={ref}
+        {...rest}
+        className={`absolute top-1/2 left-1/2 rounded-xl border ${isDark ? 'border-white' : 'border-black'} ${isDark ? 'bg-black' : 'bg-white'} [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden] ${customClass ?? ""} ${rest.className ?? ""}`.trim()}
+      />
+    );
+  }
 );
 Card.displayName = "Card";
 

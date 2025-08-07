@@ -95,8 +95,8 @@ export default function Component() {
       <section className={`w-full min-h-screen flex items-center justify-center ${isDark ? "bg-black text-white" : "bg-white text-black"}`}>
         <div className="w-full max-w-[1700px] mx-auto flex items-center justify-center min-h-[400px] px-4">
           <div className={`${isDark ? "bg-black border-zinc-800" : "bg-white border-zinc-200"} border rounded-2xl sm:rounded-3xl shadow-2xl p-8 sm:p-16 flex flex-col items-center w-full`}>
-            <h2 className={`text-2xl sm:text-4xl font-extrabold mb-3 text-center tracking-tight text-white`}>No Testimonials Yet</h2>
-            <p className={`text-zinc-400 text-base sm:text-xl text-center max-w-2xl mb-2`}>Be the first to leave feedback! Your testimonial will appear here in this beautiful, modern showcase.</p>
+            <h2 className={`text-2xl sm:text-4xl font-extrabold mb-3 text-center tracking-tight ${isDark ? 'text-white' : 'text-black'}`}>No Testimonials Yet</h2>
+            <p className={`text-base sm:text-xl text-center max-w-2xl mb-2 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>Be the first to leave feedback! Your testimonial will appear here in this beautiful, modern showcase.</p>
           </div>
         </div>
       </section>
@@ -112,15 +112,15 @@ export default function Component() {
           <Sparkles className={`h-5 w-5 sm:h-6 sm:w-6 ${isDark ? "text-white" : "text-black"} mr-2`} />
           <Badge
             variant="outline"
-            className={`border-white/30 text-white bg-white/10 font-sans`}
+            className={`font-sans ${isDark ? 'border-white/30 text-white bg-white/10' : 'border-black/30 text-black bg-black/10'}`}
           >
             Testimonials
           </Badge>
         </div>
-        <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold font-barlow mb-3 sm:mb-4 text-white`}>
+        <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold font-barlow mb-3 sm:mb-4 ${isDark ? 'text-white' : 'text-black'}`}>
           Loved by developers worldwide
         </h1>
-        <p className={`text-gray-300 text-base sm:text-lg lg:text-xl max-w-3xl mx-auto`}>
+        <p className={`text-base sm:text-lg lg:text-xl max-w-3xl mx-auto ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
           Join thousands of developers who trust our platform to build amazing products
         </p>
       </div>
@@ -158,10 +158,10 @@ export default function Component() {
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <p className={`text-sm sm:text-base font-semibold font-barlow truncate text-white`}>
+                    <p className={`text-sm sm:text-base font-semibold font-barlow truncate ${isDark ? 'text-white' : 'text-black'}`}>
                       {testimonial.name}
                     </p>
-                    <p className={`text-xs sm:text-sm truncate font-sans text-gray-400`}>
+                    <p className={`text-xs sm:text-sm truncate font-sans ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                       {testimonial.role} at {testimonial.company}
                     </p>
                     <div className="flex items-center mt-1 sm:mt-2">
@@ -189,7 +189,7 @@ export default function Component() {
                 </div>
               </Button>
             </DialogTrigger>
-            <DialogContent className={`${isDark ? "bg-black border-white text-white" : "bg-white border-black text-black"} max-w-6xl max-h-[80vh] overflow-y-auto`}>
+            <DialogContent className={`${isDark ? 'bg-black border-white text-white' : 'bg-white border-black text-black'} max-w-6xl max-h-[80vh] overflow-y-auto`}>
               <DialogHeader>
                 <DialogTitle className={`text-xl sm:text-2xl font-bold font-barlow text-white`}>
                   All Testimonials
@@ -216,10 +216,10 @@ export default function Component() {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className={`font-semibold font-barlow text-sm sm:text-base text-white`}>
+                          <p className={`font-semibold font-barlow text-sm sm:text-base ${isDark ? 'text-white' : 'text-black'}`}>
                             {testimonial.name}
                           </p>
-                          <p className={`text-xs sm:text-sm font-sans text-gray-400`}>
+                          <p className={`text-xs sm:text-sm font-sans ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                             {testimonial.role} at {testimonial.company}
                           </p>
                         </div>
@@ -227,10 +227,10 @@ export default function Component() {
                       <div className="flex items-center mb-2 sm:mb-3">
                         {renderStars(testimonial.rating)}
                       </div>
-                      <h3 className={`font-extrabold mb-2 font-barlow text-sm sm:text-base text-white`}>
+                      <h3 className={`font-extrabold mb-2 font-barlow text-sm sm:text-base ${isDark ? 'text-white' : 'text-black'}`}>
                         {testimonial.title}
                       </h3>
-                      <p className={`text-white text-xs sm:text-sm font-sans`}>
+                      <p className={`text-xs sm:text-sm font-sans ${isDark ? 'text-white' : 'text-black'}`}>
                         {testimonial.content}
                       </p>
                     </CardContent>
@@ -243,7 +243,7 @@ export default function Component() {
 
         {/* Main testimonial content */}
         <div className="testimonials-fade lg:col-span-2 order-2 lg:order-2">
-          <Card className={`${isDark ? "bg-black border-white/20" : "bg-white border-black/20"} shadow-xl h-full`}>
+          <Card className={`${isDark ? 'bg-black border-white/20' : 'bg-white border-black/20'} shadow-xl h-full`}>
             <CardContent className="p-6 sm:p-10 md:p-16 h-full flex flex-col justify-center">
               <div className="space-y-6 sm:space-y-8 lg:space-y-10">
                 <div className="flex items-center justify-between">
@@ -254,16 +254,16 @@ export default function Component() {
                 </div>
 
                 <div className="space-y-6 sm:space-y-8">
-                  <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold font-barlow leading-tight text-white`}>
+                  <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold font-barlow leading-tight ${isDark ? 'text-white' : 'text-black'}`}>
                     {selectedTestimonial?.title}
                   </h2>
 
-                  <p className={`text-gray-200 text-lg sm:text-xl md:text-2xl leading-relaxed font-light font-sans`}>
+                  <p className={`text-lg sm:text-xl md:text-2xl leading-relaxed font-light font-sans ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
                     {selectedTestimonial?.content}
                   </p>
 
                   {selectedTestimonial?.longContent && (
-                    <p className={`text-white leading-relaxed text-base sm:text-lg md:text-xl font-sans`}>
+                    <p className={`leading-relaxed text-base sm:text-lg md:text-xl font-sans ${isDark ? 'text-white' : 'text-black'}`}>
                       {selectedTestimonial.longContent}
                     </p>
                   )}
@@ -283,15 +283,15 @@ export default function Component() {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className={`font-semibold text-lg sm:text-xl font-barlow text-white`}>
+                    <p className={`font-semibold text-lg sm:text-xl font-barlow ${isDark ? 'text-white' : 'text-black'}`}>
                       {selectedTestimonial?.name}
                     </p>
-                    <p className={`text-base sm:text-lg font-sans text-gray-400`}>
+                    <p className={`text-base sm:text-lg font-sans ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                       {selectedTestimonial?.role} at {selectedTestimonial?.company}
                     </p>
                   </div>
                   {selectedTestimonial?.featured && (
-                    <Badge className={`border-white/30 text-white bg-white/10 font-sans`}>
+                    <Badge className={`font-sans ${isDark ? 'border-white/30 text-white bg-white/10' : 'border-black/30 text-black bg-black/10'}`}>
                       Featured
                     </Badge>
                   )}

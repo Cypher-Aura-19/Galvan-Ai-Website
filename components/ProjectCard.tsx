@@ -128,18 +128,18 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isImageLeft }
       <div className={`${isImageLeft ? 'lg:order-2 lg:pl-8 xl:pl-16' : 'lg:order-1 lg:pr-8 xl:pr-16'} space-y-8 md:space-y-10 lg:space-y-12 max-w-3xl mx-auto lg:max-w-none`}>
         {/* Header */}
         <div className="space-y-6 md:space-y-8">
-          <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold font-barlow text-white leading-tight tracking-tight">{project.hero.subtitle || 'Untitled Project'}</h3>
+          <h3 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold font-barlow leading-tight tracking-tight ${isLight ? 'text-zinc-900' : 'text-white'}`}>{project.hero.subtitle || 'Untitled Project'}</h3>
           
-          <p className="text-lg sm:text-xl text-white leading-relaxed font-sans">
+          <p className={`text-lg sm:text-xl leading-relaxed font-sans ${isLight ? 'text-zinc-700' : 'text-white'}`}>
             {getShortDescription()}
           </p>
         </div>
 
         {/* Technologies Grid */}
         <div className="space-y-4 md:space-y-6">
-          <div className={`flex items-center space-x-2 ${textTertiary} font-sans`}>
+          <div className={`flex items-center space-x-2 ${isLight ? 'text-zinc-500' : 'text-gray-400'} font-sans`}>
             <Tag className="w-4 h-4 md:w-5 md:h-5" />
-            <span className="font-bold text-xl sm:text-2xl font-barlow text-white">Technologies</span>
+            <span className={`font-bold text-xl sm:text-2xl font-barlow ${isLight ? 'text-zinc-900' : 'text-white'}`}>Technologies</span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3">
             {project.technologies.map((tech: string, techIndex: number) => (
@@ -149,9 +149,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isImageLeft }
                 style={{ animationDelay: `${techIndex * 100}ms` }}
               >
                 <div className="relative z-10">
-                  <span className="font-medium text-base md:text-lg font-sans text-white block text-center">
-                    {tech}
-                  </span>
+                  <span className={`font-medium text-base md:text-lg font-sans block text-center ${isLight ? 'text-zinc-900' : 'text-white'}`}>{tech}</span>
                 </div>
                 {/* Hover Glow Effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover/tech:opacity-100 transition-opacity duration-300" />
@@ -164,7 +162,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isImageLeft }
         <div className="flex flex-col sm:flex-row gap-4 md:gap-6 lg:gap-8 pt-6 md:pt-8">
           <a 
             href={`/projects/${project.id}`}
-            className={`group/btn inline-flex items-center justify-center px-4 py-2 md:px-6 md:py-3 rounded-lg md:rounded-xl bg-black text-white font-barlow font-bold text-base md:text-lg hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-white/30 relative overflow-hidden`}
+            className={`group/btn inline-flex items-center justify-center px-4 py-2 md:px-6 md:py-3 rounded-lg md:rounded-xl ${isLight ? 'bg-zinc-900 text-white hover:bg-white hover:text-zinc-900 border-zinc-900' : 'bg-black text-white hover:bg-white hover:text-black border-white'} font-barlow font-bold text-base md:text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-white/30 relative overflow-hidden`}
           >
             <span className="relative z-10 flex items-center font-barlow font-bold">
               <ExternalLink className="w-4 h-4 md:w-5 md:h-5 mr-2" />
