@@ -82,7 +82,7 @@ const Newsletter: React.FC<NewsletterProps> = () => {
         {/* Left Content */}
         <div className={`flex-1 flex flex-col items-start justify-center text-left space-y-6 sm:space-y-8 lg:pr-16 w-full ${isDark ? "" : ""}`}>
           <h1 className={`newsletter-fade text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight font-barlow ${isDark ? "text-white" : "text-black"}`}>
-            <span className="font-extrabold text-[#156af2] font-barlow">Unlock the powered</span> <span className="font-extrabold text-yellow-400 font-barlow">future with ai solutions</span>
+            <span className="font-extrabold bg-gradient-to-r from-blue-800 via-blue-600 to-blue-500 bg-clip-text text-transparent font-barlow">Unlock the powered</span> <span className="font-extrabold bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-300 bg-clip-text text-transparent font-barlow">future with ai solutions</span>
           </h1>
           <p className={`newsletter-fade text-lg sm:text-xl max-w-2xl font-sans ${isDark ? "text-white" : "text-black/80"}`}>
             Join our newsletter for exclusive updates, expert insights, and the latest in AI innovation—delivered straight to your inbox.

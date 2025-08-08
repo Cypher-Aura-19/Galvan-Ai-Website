@@ -10,12 +10,9 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  // Detect system theme on first load
+  // Always default to dark theme on refresh
   const getSystemTheme = (): Theme => {
-    if (typeof window !== "undefined" && window.matchMedia) {
-      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    }
-    return "light";
+    return "dark";
   };
 
   const [theme, setTheme] = useState<Theme>(getSystemTheme);

@@ -18,6 +18,7 @@ type Socials = {
 type TeamMember = {
   name: string;
   img: string;
+  avatar: string;
   role: string;
   about: string;
   background: string;
@@ -60,8 +61,8 @@ export default function TeamSection() {
           avatar: t.avatar || '',
           role: t.role,
           about: t.bio || '',
-          background: t.background || '',
-          interests: t.interests || '',
+          background: Array.isArray(t.background) ? t.background.join(', ') : (t.background || ''),
+          interests: Array.isArray(t.interests) ? t.interests.join(', ') : (t.interests || ''),
           skills: t.skills || [],
           quote: t.quote || '',
           socials: {

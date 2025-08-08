@@ -24,18 +24,18 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
               <Shield className="w-12 h-12 text-white" />
             </div>
             <div>
-              <h1 className="text-5xl font-bold text-white mb-2">Privacy Policy</h1>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight font-barlow text-white mb-2">Privacy Policy</h1>
               <div className="flex items-center gap-3 text-gray-400">
                 <Calendar className="w-5 h-5" />
-                <span className="text-lg">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                <span className="text-lg">Last updated: August 8, 2025</span>
               </div>
             </div>
           </div>
           
           <div className="bg-gray-900 border border-gray-700 rounded-xl p-6">
             <p className="text-xl text-gray-300 leading-relaxed">
-              At Galvan AI, we are committed to protecting your privacy and ensuring the security of your personal information. 
-              This comprehensive privacy policy outlines how we collect, use, process, and safeguard your data when you use our AI-powered software solutions.
+              At Galvan AI, we respect your privacy and are committed to protecting your personal information. 
+              This Privacy Policy explains the limited circumstances in which we collect information, how we use it, and how we safeguard it.
             </p>
           </div>
         </div>
@@ -54,14 +54,12 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
                     'Introduction',
                     'Information We Collect',
                     'How We Use Your Information',
-                    'Information Sharing',
+                    'Cookies and Tracking Technologies',
+                    'Data Sharing',
                     'Data Security',
-                    'Your Rights and Choices',
-                    'Cookies and Tracking',
-                    'International Transfers',
+                    'Your Rights',
                     'Data Retention',
-                    'Children\'s Privacy',
-                    'Policy Changes',
+                    'Changes to This Policy',
                     'Contact Information'
                   ].map((item, index) => (
                     <a
@@ -80,214 +78,194 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             <div className="lg:col-span-3">
               <div className="space-y-12">
                 <section id="section-1" className="bg-gray-900 border border-gray-700 rounded-xl p-8">
-                  <h2 className="text-3xl font-bold mb-6 text-white flex items-center gap-3">
+                  <h2 className="text-xl sm:text-2xl font-light font-barlow mb-6 text-white flex items-center gap-3">
                     <span className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">1</span>
                     Introduction
                   </h2>
                   <div className="space-y-4 text-gray-300 leading-relaxed">
                     <p className="text-lg">
-                      Galvan AI ("we," "our," or "us") is committed to protecting your privacy and maintaining the highest standards of data protection. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered software solutions and services (the "Service").
-                    </p>
-                    <p>
-                      By accessing or using our Service, you acknowledge that you have read, understood, and agree to be bound by the terms of this Privacy Policy. If you do not agree with our practices, please do not use our Service.
+                      Galvan AI ("we," "our," or "us") provides SaaS development and software services. We collect very limited information, only when necessary to respond to your requests or provide you with our services.
                     </p>
                     <div className="bg-black border border-gray-600 rounded-lg p-4 mt-6">
-                      <p className="text-white font-medium mb-2">Key Principles:</p>
+                      <p className="text-white font-medium mb-2">Key Points:</p>
                       <ul className="space-y-1 text-sm">
-                        <li>• Transparency in data collection and usage</li>
-                        <li>• Minimal data collection - only what's necessary</li>
-                        <li>• Strong security measures and encryption</li>
-                        <li>• User control over personal information</li>
-                        <li>• Compliance with global privacy regulations</li>
+                        <li>• We only collect personal data you voluntarily provide.</li>
+                        <li>• We do not sell your data.</li>
+                        <li>• No data is ever used to train AI models.</li>
+                        <li>• We follow applicable data protection laws.</li>
                       </ul>
                     </div>
                   </div>
                 </section>
 
                 <section id="section-2" className="bg-gray-900 border border-gray-700 rounded-xl p-8">
-                  <h2 className="text-3xl font-bold mb-6 text-white flex items-center gap-3">
+                  <h2 className="text-xl sm:text-2xl font-light font-barlow mb-6 text-white flex items-center gap-3">
                     <span className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">2</span>
                     Information We Collect
                   </h2>
                   <div className="space-y-6">
+                    <p className="text-lg text-gray-300">
+                      We only collect information in the following situations:
+                    </p>
+                    
                     <div className="bg-black border border-gray-600 rounded-lg p-6">
-                      <h3 className="text-xl font-semibold mb-4 text-white">2.1 Personal Information</h3>
-                      <p className="text-gray-300 mb-4">We collect personal information that you voluntarily provide to us:</p>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <h4 className="font-medium text-white mb-2">Account Information:</h4>
-                          <ul className="text-sm text-gray-300 space-y-1">
-                            <li>• Full name and email address</li>
-                            <li>• Company name and job title</li>
-                            <li>• Phone number (optional)</li>
-                            <li>• Profile picture (optional)</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-white mb-2">Billing Information:</h4>
-                          <ul className="text-sm text-gray-300 space-y-1">
-                            <li>• Payment method details</li>
-                            <li>• Billing address</li>
-                            <li>• Tax identification numbers</li>
-                            <li>• Transaction history</li>
-                          </ul>
-                        </div>
-                      </div>
+                      <h3 className="text-xl font-semibold mb-4 text-white">2.1 Career Applications</h3>
+                      <p className="text-gray-300">
+                        Name, email, phone number, résumé, and other details you provide when applying for a role.
+                      </p>
                     </div>
                     
                     <div className="bg-black border border-gray-600 rounded-lg p-6">
-                      <h3 className="text-xl font-semibold mb-4 text-white">2.2 Usage and Technical Information</h3>
-                      <p className="text-gray-300 mb-4">We automatically collect information about your use of our Service:</p>
-                      <div className="grid md:grid-cols-3 gap-4">
-                        <div>
-                          <h4 className="font-medium text-white mb-2">API Usage:</h4>
-                          <ul className="text-sm text-gray-300 space-y-1">
-                            <li>• Request logs and responses</li>
-                            <li>• Usage patterns and frequency</li>
-                            <li>• Error logs and debugging data</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-white mb-2">Device Information:</h4>
-                          <ul className="text-sm text-gray-300 space-y-1">
-                            <li>• IP address and location</li>
-                            <li>• Browser type and version</li>
-                            <li>• Operating system details</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-white mb-2">Performance Data:</h4>
-                          <ul className="text-sm text-gray-300 space-y-1">
-                            <li>• Response times and latency</li>
-                            <li>• Feature usage analytics</li>
-                            <li>• System performance metrics</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-black border border-gray-600 rounded-lg p-6">
-                      <h3 className="text-xl font-semibold mb-4 text-white">2.3 AI Training and Processing Data</h3>
-                      <p className="text-gray-300 mb-4">
-                        To improve our AI models and provide better services, we may collect and process:
+                      <h3 className="text-xl font-semibold mb-4 text-white">2.2 Newsletter Subscription</h3>
+                      <p className="text-gray-300">
+                        Email address you submit when signing up for our newsletter.
                       </p>
-                      <ul className="text-gray-300 space-y-2">
-                        <li>• Code snippets and programming queries (anonymized and aggregated)</li>
-                        <li>• Documentation and technical content submitted for processing</li>
-                        <li>• User feedback and ratings on AI-generated content</li>
-                        <li>• Model interaction patterns and preferences</li>
-                      </ul>
-                      <div className="bg-gray-800 border border-gray-600 rounded-lg p-4 mt-4">
-                        <p className="text-white font-medium mb-2">🔒 Data Protection Notice:</p>
-                        <p className="text-sm text-gray-300">
-                          All training data is anonymized, encrypted, and processed in compliance with privacy regulations. 
-                          We never use your proprietary code or sensitive business information for model training without explicit consent.
-                        </p>
-                      </div>
+                    </div>
+                    
+                    <div className="bg-black border border-gray-600 rounded-lg p-6">
+                      <h3 className="text-xl font-semibold mb-4 text-white">2.3 Contact Requests</h3>
+                      <p className="text-gray-300">
+                        Name, company name, and description of your request when you ask for a call, a quote, or send us a message.
+                      </p>
+                    </div>
+                    
+                    <div className="bg-black border border-gray-600 rounded-lg p-6">
+                      <h3 className="text-xl font-semibold mb-4 text-white">2.4 Basic Website Data</h3>
+                      <p className="text-gray-300">
+                        Standard information automatically collected when you visit our website, including IP address, browser type, operating system, referring URL, and pages viewed.
+                      </p>
+                    </div>
+                    
+                    <div className="bg-gray-800 border border-gray-600 rounded-lg p-4">
+                      <p className="text-white font-medium">Note: None of the above information is used for AI training.</p>
                     </div>
                   </div>
                 </section>
 
-                {/* Continue with other sections... */}
                 <section id="section-3" className="bg-gray-900 border border-gray-700 rounded-xl p-8">
-                  <h2 className="text-3xl font-bold mb-6 text-white flex items-center gap-3">
+                  <h2 className="text-xl sm:text-2xl font-light font-barlow mb-6 text-white flex items-center gap-3">
                     <span className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">3</span>
                     How We Use Your Information
                   </h2>
                   <div className="space-y-6">
                     <p className="text-lg text-gray-300">
-                      We use the collected information for legitimate business purposes to provide, maintain, and improve our AI services:
+                      We use the collected information to:
                     </p>
-                    
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="bg-black border border-gray-600 rounded-lg p-6">
-                        <h3 className="text-xl font-semibold mb-4 text-white">Service Operations</h3>
-                        <ul className="text-gray-300 space-y-2">
-                          <li>• Providing AI-powered software solutions</li>
-                          <li>• Processing API requests and responses</li>
-                          <li>• Managing user accounts and subscriptions</li>
-                          <li>• Delivering customer support and assistance</li>
-                          <li>• Processing payments and billing</li>
-                        </ul>
-                      </div>
-                      
-                      <div className="bg-black border border-gray-600 rounded-lg p-6">
-                        <h3 className="text-xl font-semibold mb-4 text-white">Service Improvement</h3>
-                        <ul className="text-gray-300 space-y-2">
-                          <li>• Enhancing AI model accuracy and performance</li>
-                          <li>• Developing new features and capabilities</li>
-                          <li>• Analyzing usage patterns and user behavior</li>
-                          <li>• Conducting research and development</li>
-                          <li>• Personalizing user experience</li>
-                        </ul>
-                      </div>
-                      
-                      <div className="bg-black border border-gray-600 rounded-lg p-6">
-                        <h3 className="text-xl font-semibold mb-4 text-white">Security & Compliance</h3>
-                        <ul className="text-gray-300 space-y-2">
-                          <li>• Detecting and preventing fraud</li>
-                          <li>• Ensuring system security and integrity</li>
-                          <li>• Complying with legal obligations</li>
-                          <li>• Monitoring for abuse and violations</li>
-                          <li>• Maintaining audit trails</li>
-                        </ul>
-                      </div>
-                      
-                      <div className="bg-black border border-gray-600 rounded-lg p-6">
-                        <h3 className="text-xl font-semibold mb-4 text-white">Communication</h3>
-                        <ul className="text-gray-300 space-y-2">
-                          <li>• Sending service updates and notifications</li>
-                          <li>• Providing technical support</li>
-                          <li>• Sharing product announcements</li>
-                          <li>• Conducting user surveys and feedback</li>
-                          <li>• Marketing communications (with consent)</li>
-                        </ul>
-                      </div>
+                    <div className="bg-black border border-gray-600 rounded-lg p-6">
+                      <ul className="text-gray-300 space-y-2">
+                        <li>• Respond to inquiries and requests</li>
+                        <li>• Provide requested services or information</li>
+                        <li>• Process and evaluate career applications</li>
+                        <li>• Send newsletters (only if you subscribed)</li>
+                        <li>• Maintain and improve our website</li>
+                      </ul>
                     </div>
                   </div>
                 </section>
 
-                {/* Contact Section */}
-                <section id="section-12" className="bg-gray-900 border border-gray-700 rounded-xl p-8">
-                  <h2 className="text-3xl font-bold mb-6 text-white flex items-center gap-3">
-                    <span className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">12</span>
-                    Contact Information
+                <section id="section-4" className="bg-gray-900 border border-gray-700 rounded-xl p-8">
+                  <h2 className="text-xl sm:text-2xl font-light font-barlow mb-6 text-white flex items-center gap-3">
+                    <span className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">4</span>
+                    Cookies and Tracking Technologies
+                  </h2>
+                  <div className="space-y-4 text-gray-300 leading-relaxed">
+                    <p className="text-lg">
+                      Our website may use cookies and analytics tools to improve your experience and track website performance. These tools collect general, non-identifiable information. You can disable cookies in your browser settings.
+                    </p>
+                  </div>
+                </section>
+
+                <section id="section-5" className="bg-gray-900 border border-gray-700 rounded-xl p-8">
+                  <h2 className="text-xl sm:text-2xl font-light font-barlow mb-6 text-white flex items-center gap-3">
+                    <span className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">5</span>
+                    Data Sharing
                   </h2>
                   <div className="space-y-6">
                     <p className="text-lg text-gray-300">
-                      If you have any questions, concerns, or requests regarding this Privacy Policy or our privacy practices, please don't hesitate to contact us:
+                      We may share your information only:
                     </p>
-                    
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="bg-black border border-gray-600 rounded-lg p-6">
-                        <h3 className="text-xl font-semibold mb-4 text-white">Privacy Team</h3>
-                        <div className="space-y-3 text-gray-300">
-                          <p><strong className="text-white">Email:</strong> privacy@galvanai.com</p>
-                          <p><strong className="text-white">Phone:</strong> +1 (555) 123-4567</p>
-                          <p><strong className="text-white">Response Time:</strong> Within 48 hours</p>
-                        </div>
-                      </div>
-                      
-                      <div className="bg-black border border-gray-600 rounded-lg p-6">
-                        <h3 className="text-xl font-semibold mb-4 text-white">Mailing Address</h3>
-                        <div className="text-gray-300">
-                          <p><strong className="text-white">Galvan AI Privacy Department</strong></p>
-                          <p>123 Innovation Drive, Suite 400</p>
-                          <p>San Francisco, CA 94105</p>
-                          <p>United States</p>
-                        </div>
-                      </div>
-                    </div>
-                    
                     <div className="bg-black border border-gray-600 rounded-lg p-6">
-                      <h3 className="text-xl font-semibold mb-4 text-white">Data Protection Officer</h3>
-                      <p className="text-gray-300 mb-4">
-                        For EU residents and GDPR-related inquiries, you can contact our Data Protection Officer:
-                      </p>
-                      <p className="text-gray-300">
-                        <strong className="text-white">Email:</strong> dpo@galvanai.com<br />
-                        <strong className="text-white">Subject Line:</strong> GDPR Inquiry - [Your Request Type]
-                      </p>
+                      <ul className="text-gray-300 space-y-2">
+                        <li>• With service providers who help us operate our website or communications (under confidentiality agreements)</li>
+                        <li>• If required by law or legal process</li>
+                        <li>• To protect our legal rights and safety</li>
+                        <li>• In the event of a company merger, acquisition, or sale of assets (with notice)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+
+                <section id="section-6" className="bg-gray-900 border border-gray-700 rounded-xl p-8">
+                  <h2 className="text-xl sm:text-2xl font-light font-barlow mb-6 text-white flex items-center gap-3">
+                    <span className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">6</span>
+                    Data Security
+                  </h2>
+                  <div className="space-y-4 text-gray-300 leading-relaxed">
+                    <p className="text-lg">
+                      We use industry-standard measures to protect your data, including encryption, secure servers, and restricted access. However, no system is completely secure, and we cannot guarantee absolute protection.
+                    </p>
+                  </div>
+                </section>
+
+                <section id="section-7" className="bg-gray-900 border border-gray-700 rounded-xl p-8">
+                  <h2 className="text-xl sm:text-2xl font-light font-barlow mb-6 text-white flex items-center gap-3">
+                    <span className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">7</span>
+                    Your Rights
+                  </h2>
+                  <div className="space-y-6">
+                    <p className="text-lg text-gray-300">
+                      Depending on your location, you may have the right to:
+                    </p>
+                    <div className="bg-black border border-gray-600 rounded-lg p-6">
+                      <ul className="text-gray-300 space-y-2">
+                        <li>• Access the personal data we hold about you</li>
+                        <li>• Request corrections or updates</li>
+                        <li>• Request deletion of your data</li>
+                        <li>• Withdraw consent for communications</li>
+                      </ul>
+                    </div>
+                    <p className="text-gray-300">
+                      To exercise these rights, contact us using the details below.
+                    </p>
+                  </div>
+                </section>
+
+                <section id="section-8" className="bg-gray-900 border border-gray-700 rounded-xl p-8">
+                  <h2 className="text-xl sm:text-2xl font-light font-barlow mb-6 text-white flex items-center gap-3">
+                    <span className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">8</span>
+                    Data Retention
+                  </h2>
+                  <div className="space-y-4 text-gray-300 leading-relaxed">
+                    <p className="text-lg">
+                      We keep your information only as long as needed for the purposes described in this policy or as required by law. Data that is no longer needed will be securely deleted or anonymized.
+                    </p>
+                  </div>
+                </section>
+
+                <section id="section-9" className="bg-gray-900 border border-gray-700 rounded-xl p-8">
+                  <h2 className="text-xl sm:text-2xl font-light font-barlow mb-6 text-white flex items-center gap-3">
+                    <span className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">9</span>
+                    Changes to This Policy
+                  </h2>
+                  <div className="space-y-4 text-gray-300 leading-relaxed">
+                    <p className="text-lg">
+                      We may update this Privacy Policy from time to time. Updates will be posted on this page with a new "Last Updated" date. Continued use of our website after changes are posted means you accept the updated policy.
+                    </p>
+                  </div>
+                </section>
+
+                <section id="section-10" className="bg-gray-900 border border-gray-700 rounded-xl p-8">
+                  <h2 className="text-xl sm:text-2xl font-light font-barlow mb-6 text-white flex items-center gap-3">
+                    <span className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">10</span>
+                    Contact Information
+                  </h2>
+                  <div className="space-y-6">
+                    <div className="bg-black border border-gray-600 rounded-lg p-6">
+                      <h3 className="text-xl font-semibold mb-4 text-white">Privacy Team</h3>
+                      <div className="space-y-3 text-gray-300">
+                        <p><strong className="text-white">📧 Email:</strong> privacy@galvanai.com</p>
+                        <p><strong className="text-white">📍 Address:</strong> Galvan AI, 123 Innovation Drive, Suite 403, San Francisco, CA 94105, USA</p>
+                      </div>
                     </div>
                   </div>
                 </section>

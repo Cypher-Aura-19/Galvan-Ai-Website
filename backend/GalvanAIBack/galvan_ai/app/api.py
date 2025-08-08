@@ -667,7 +667,7 @@ def create_team():
             return jsonify({'error': 'Skills must be an array'}), 400
 
         # Validate array fields
-        array_fields = ['background_interests', 'awards', 'certifications', 'languages']
+        array_fields = ['background', 'interests', 'awards', 'certifications', 'languages']
         for field in array_fields:
             if field in data and not isinstance(data[field], list):
                 return jsonify({'error': f'{field} must be an array'}), 400
@@ -715,7 +715,7 @@ def update_team(team_id):
             return jsonify({'error': 'Skills must be an array'}), 400
 
         # Validate array fields
-        array_fields = ['background_interests', 'awards', 'certifications', 'languages']
+        array_fields = ['background', 'interests', 'awards', 'certifications', 'languages']
         for field in array_fields:
             if field in data and not isinstance(data[field], list):
                 return jsonify({'error': f'{field} must be an array'}), 400
@@ -739,7 +739,8 @@ def update_team(team_id):
         team.department = data['department']
         team.position = data['position']
         team.skills = json.dumps(data.get('skills', []))
-        team.background_interests = json.dumps(data.get('background_interests', []))
+        team.background = json.dumps(data.get('background', []))
+        team.interests = json.dumps(data.get('interests', []))
         team.awards = json.dumps(data.get('awards', []))
         team.certifications = json.dumps(data.get('certifications', []))
         team.location = data.get('location', '')

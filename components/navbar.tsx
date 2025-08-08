@@ -22,24 +22,24 @@ export default function Navbar() {
           <Link href="#" className="flex items-center space-x-2 pl-6" prefetch={false}>
             <div className="flex items-center space-x-2">
               <img src="/Galvan AI logo transparent.png" alt="Galvan AI Logo" className="h-10 w-auto" />
-              <span className={`text-2xl font-semibold ${isDark ? 'text-white' : 'text-black'}`}>Galvan AI</span>
+              <span className={`text-2xl font-extrabold tracking-tight font-barlow ${isDark ? 'text-white' : 'text-black'}`}>Galvan AI</span>
             </div>
           </Link>
           {/* Navigation Items - Center (Made bolder) */}
           <nav className="hidden lg:flex items-center space-x-10 absolute left-1/2 transform -translate-x-1/2">
-            <a href="/projects" className={`text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Projects</a>
-            <a href="#services" className={`text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Services</a>
-            <a href="#blogs" className={`text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Blogs</a>
-            <a href="#team" className={`text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Team</a>
-            <a href="#testimonials" className={`text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Testimonials</a>
-            <a href="#contact" className={`text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Contact</a>
-            <a href="#newsletter" className={`text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Newsletter</a>
-            <a href="/careers" className={`text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Careers</a>
+            <a href="/projects" className={`text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Projects</a>
+            <a href="#services" className={`text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Services</a>
+            <a href="#blogs" className={`text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Blogs</a>
+            <a href="#team" className={`text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Team</a>
+            <a href="#testimonials" className={`text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Testimonials</a>
+            <a href="#contact" className={`text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Contact</a>
+            <a href="#newsletter" className={`text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Newsletter</a>
+            <a href="/careers" className={`text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>Careers</a>
           </nav>
           {/* Buttons - Right Corner (Removed multilingual) */}
           <div className="hidden lg:flex items-center space-x-4 pr-6">
             {/* Get a Quote Button - Pill Shaped */}
-            <Button className="bg-[#156af2] text-white hover:bg-[#0f4dbd] rounded-full px-8 py-3 text-lg font-normal">
+            <Button className="bg-[#156af2] text-white hover:bg-[#0f4dbd] rounded-xl px-8 py-3 text-lg font-medium font-barlow">
               {" "}
               Get a Quote
             </Button>
@@ -72,19 +72,19 @@ export default function Navbar() {
                     <img src="/Galvan AI logo transparent.png" alt="Galvan AI Logo" className="h-10 w-auto" />
                   </div>
                                     <nav className="flex flex-col space-y-2 px-6 py-4">
-                   <a href="/projects" className={`py-2 text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Projects</a>
-                      <a href="#services" className={`py-2 text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Services</a>
-                      <a href="#blogs" className={`py-2 text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Blogs</a>
-                      <a href="#team" className={`py-2 text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Team</a>
-                      <a href="#testimonials" className={`py-2 text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Testimonials</a>
-                      <a href="#contact" className={`py-2 text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Contact</a>
-                      <a href="#newsletter" className={`py-2 text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Newsletter</a>
-                      <a href="/careers" className={`py-2 text-lg font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Careers</a>
+                   <a href="/projects" className={`py-2 text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Projects</a>
+                      <a href="#services" className={`py-2 text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Services</a>
+                      <a href="#blogs" className={`py-2 text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Blogs</a>
+                      <a href="#team" className={`py-2 text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Team</a>
+                      <a href="#testimonials" className={`py-2 text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Testimonials</a>
+                      <a href="#contact" className={`py-2 text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Contact</a>
+                      <a href="#newsletter" className={`py-2 text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Newsletter</a>
+                      <a href="/careers" className={`py-2 text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Careers</a>
                   </nav>
                   <div className="flex flex-col gap-3 px-6 pb-6">
-                    <Button className="bg-[#156af2] text-white hover:bg-[#0f4dbd] rounded-full px-8 py-3 text-lg font-normal w-full">Get a Quote</Button>
-                    <Button variant="ghost" size="icon" onClick={toggleTheme} className={`rounded-full w-12 h-12 ${isDark ? 'text-gray-300 hover:text-white hover:bg-gray-800/50 border border-gray-700' : 'text-gray-600 hover:text-black hover:bg-gray-200/50 border border-gray-300'} w-full justify-start transition-all duration-300 hover:scale-105`}>
-                      {isDark ? <Sun className="h-10 w-10" /> : <Moon className="h-10 w-10" />}
+                    <Button className="bg-[#156af2] text-white hover:bg-[#0f4dbd] rounded-xl px-8 py-3 text-lg font-medium font-barlow w-full">Get a Quote</Button>
+                    <Button variant="ghost" onClick={toggleTheme} className={`rounded-full ${isDark ? 'text-gray-300 hover:text-white hover:bg-gray-800/50 border border-gray-700' : 'text-gray-600 hover:text-black hover:bg-gray-200/50 border border-gray-300'} w-full justify-center items-center transition-all duration-300 hover:scale-105 py-3`}>
+                      {isDark ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
                       <span className="ml-3">Theme</span>
                     </Button>
                   </div>

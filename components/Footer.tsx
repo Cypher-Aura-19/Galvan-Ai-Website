@@ -109,25 +109,25 @@ const Footer = () => {
                       <div className={`w-10 h-10 ${isDark ? "bg-white/10" : "bg-black/10"} rounded-lg flex items-center justify-center`}>
                         <Phone className="h-5 w-5" />
                       </div>
-                      <span className="text-lg sm:text-xl font-sans">+1 (555) 123-4567</span>
+                      <span className="text-lg sm:text-xl font-sans">+92 3336550750</span>
                     </div>
                     <div className={`flex items-center space-x-4 ${isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} transition-colors duration-300`}>
                       <div className={`w-10 h-10 ${isDark ? "bg-white/10" : "bg-black/10"} rounded-lg flex items-center justify-center`}>
                         <Mail className="h-5 w-5" />
                       </div>
-                      <span className="text-lg">hello@techcorp.com</span>
+                      <span className="text-lg">team@galvanai.com</span>
                     </div>
                     <div className={`flex items-center space-x-4 ${isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} transition-colors duration-300`}>
                       <div className={`w-10 h-10 ${isDark ? "bg-white/10" : "bg-black/10"} rounded-lg flex items-center justify-center`}>
                         <MapPin className="h-5 w-5" />
                       </div>
-                      <span className="text-lg">123 Innovation Street, Tech City, TC 12345</span>
+                      <span className="text-lg">Office 1, Innovista Rawal, Phase 1, DHA Rawalpindi, Pakistan</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Newsletter Subscription */}
-                <div className={`${isDark ? "bg-white/5 border-white/10" : "bg-black/5 border-black/10"} rounded-2xl p-4 sm:p-6 border`}>
+                <div className={`${isDark ? "bg-white/5 border-white/10" : "bg-black/5 border-black/10"} rounded-2xl p-4 sm:p-6 border mt-8`}>
                   <h3 className="text-2xl font-bold mb-4">Stay Updated</h3>
                   <p className={`${isDark ? "text-gray-300" : "text-gray-600"} mb-6`}>
                     Subscribe to our newsletter for the latest updates and insights.

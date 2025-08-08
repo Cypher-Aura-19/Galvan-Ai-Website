@@ -20,7 +20,8 @@ type TeamMember = {
   department: string;
   position: string;
   skills?: string[];
-  background_interests?: string[];
+  background?: string[];
+  interests?: string[];
   awards?: string[];
   certifications?: string[];
   location?: string;
@@ -42,7 +43,8 @@ const emptyMember: TeamMember = {
   department: "",
   position: "",
   skills: [],
-  background_interests: [],
+  background: [],
+  interests: [],
   awards: [],
   certifications: [],
   location: "",
@@ -63,7 +65,8 @@ export default function TeamManagementPage() {
   // Add chip input state for skills
   const [skillInput, setSkillInput] = useState("");
   // Add chip input state for new array fields
-  const [backgroundInterestInput, setBackgroundInterestInput] = useState("");
+  const [backgroundInput, setBackgroundInput] = useState("");
+  const [interestInput, setInterestInput] = useState("");
   const [awardInput, setAwardInput] = useState("");
   const [certificationInput, setCertificationInput] = useState("");
   const [languageInput, setLanguageInput] = useState("");
@@ -101,7 +104,8 @@ export default function TeamManagementPage() {
     setForm({ 
       ...member, 
       skills: member.skills || [],
-      background_interests: member.background_interests || [],
+      background: member.background || [],
+      interests: member.interests || [],
       awards: member.awards || [],
       certifications: member.certifications || [],
       languages: member.languages || []
@@ -501,24 +505,24 @@ export default function TeamManagementPage() {
                 </div>
                   </div>
 
-                  {/* Background Interests Section */}
+                  {/* Background Section */}
                   <div className="bg-zinc-900/50 rounded-2xl p-6 border border-zinc-700/50">
                     <div className="flex items-center gap-3 mb-6">
-                      <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                      <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                       </svg>
-                      <h3 className="text-xl font-bold text-white">Background & Interests</h3>
+                      <h3 className="text-xl font-bold text-white">Background</h3>
                     </div>
                     <div>
-                      <label className="block text-zinc-300 mb-2 font-semibold">Background Interests</label>
+                      <label className="block text-zinc-300 mb-2 font-semibold">Professional Background</label>
                       <div className="flex flex-wrap gap-3 mb-4">
-                        {(form.background_interests || []).map((interest, i) => (
-                          <span key={i} className="flex items-center bg-indigo-600/20 text-indigo-200 px-4 py-2 rounded-lg text-sm font-semibold border border-indigo-600/30 shadow-lg">
-                            {interest}
+                        {(form.background || []).map((bg, i) => (
+                          <span key={i} className="flex items-center bg-blue-600/20 text-blue-200 px-4 py-2 rounded-lg text-sm font-semibold border border-blue-600/30 shadow-lg">
+                            {bg}
                             <button 
                               type="button" 
-                              className="ml-2 text-indigo-300 hover:text-red-400 transition-colors" 
-                              onClick={() => setForm(f => ({ ...f, background_interests: (f.background_interests || []).filter((_, idx) => idx !== i) }))}
+                              className="ml-2 text-blue-300 hover:text-red-400 transition-colors" 
+                              onClick={() => setForm(f => ({ ...f, background: (f.background || []).filter((_, idx) => idx !== i) }))}
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
@@ -529,13 +533,72 @@ export default function TeamManagementPage() {
                       </div>
                       <div className="flex gap-3">
                         <input
-                          value={backgroundInterestInput}
-                          onChange={e => setBackgroundInterestInput(e.target.value)}
+                          value={backgroundInput}
+                          onChange={e => setBackgroundInput(e.target.value)}
                           onKeyDown={e => {
-                            if ((e.key === "Enter" || e.key === ",") && backgroundInterestInput.trim()) {
+                            if ((e.key === "Enter" || e.key === ",") && backgroundInput.trim()) {
                               e.preventDefault();
-                              setForm(f => ({ ...f, background_interests: [...(f.background_interests || []), backgroundInterestInput.trim()] }));
-                              setBackgroundInterestInput("");
+                              setForm(f => ({ ...f, background: [...(f.background || []), backgroundInput.trim()] }));
+                              setBackgroundInput("");
+                            }
+                          }}
+                          placeholder="Add background (e.g., Computer Science Degree, 5 years experience) and press Enter"
+                          className="flex-1 px-4 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700 text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        />
+                        <button 
+                          type="button" 
+                          onClick={() => { 
+                            if (backgroundInput.trim()) { 
+                              setForm(f => ({ ...f, background: [...(f.background || []), backgroundInput.trim()] })); 
+                              setBackgroundInput(""); 
+                            } 
+                          }} 
+                          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl text-white font-semibold shadow-lg transition-all flex items-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/>
+                          </svg>
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Interests Section */}
+                  <div className="bg-zinc-900/50 rounded-2xl p-6 border border-zinc-700/50">
+                    <div className="flex items-center gap-3 mb-6">
+                      <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                      </svg>
+                      <h3 className="text-xl font-bold text-white">Interests</h3>
+                    </div>
+                    <div>
+                      <label className="block text-zinc-300 mb-2 font-semibold">Personal Interests</label>
+                      <div className="flex flex-wrap gap-3 mb-4">
+                        {(form.interests || []).map((interest, i) => (
+                          <span key={i} className="flex items-center bg-indigo-600/20 text-indigo-200 px-4 py-2 rounded-lg text-sm font-semibold border border-indigo-600/30 shadow-lg">
+                            {interest}
+                            <button 
+                              type="button" 
+                              className="ml-2 text-indigo-300 hover:text-red-400 transition-colors" 
+                              onClick={() => setForm(f => ({ ...f, interests: (f.interests || []).filter((_, idx) => idx !== i) }))}
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                              </svg>
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex gap-3">
+                        <input
+                          value={interestInput}
+                          onChange={e => setInterestInput(e.target.value)}
+                          onKeyDown={e => {
+                            if ((e.key === "Enter" || e.key === ",") && interestInput.trim()) {
+                              e.preventDefault();
+                              setForm(f => ({ ...f, interests: [...(f.interests || []), interestInput.trim()] }));
+                              setInterestInput("");
                             }
                           }}
                           placeholder="Add an interest (e.g., AI Research, Photography, Travel) and press Enter"
@@ -544,9 +607,9 @@ export default function TeamManagementPage() {
                         <button 
                           type="button" 
                           onClick={() => { 
-                            if (backgroundInterestInput.trim()) { 
-                              setForm(f => ({ ...f, background_interests: [...(f.background_interests || []), backgroundInterestInput.trim()] })); 
-                              setBackgroundInterestInput(""); 
+                            if (interestInput.trim()) { 
+                              setForm(f => ({ ...f, interests: [...(f.interests || []), interestInput.trim()] })); 
+                              setInterestInput(""); 
                             } 
                           }} 
                           className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold shadow-lg transition-all flex items-center gap-2"

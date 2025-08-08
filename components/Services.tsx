@@ -843,11 +843,11 @@ const ScrollAnimation = () => {
             text-align: center;
           }
           .scroll-animation-root .card-copy p {
-            font-size: 0.65rem;
+            font-size: 0.85rem;
             text-align: center;
           }
           .scroll-animation-root .card-copy p:first-child {
-            font-size: 0.85rem;
+            font-size: 1.1rem;
             text-align: center;
           }
         }
@@ -860,11 +860,11 @@ const ScrollAnimation = () => {
             text-align: center;
           }
           .scroll-animation-root .card-copy p {
-            font-size: 0.55rem;
+            font-size: 0.75rem;
             text-align: center;
           }
           .scroll-animation-root .card-copy p:first-child {
-            font-size: 0.7rem;
+            font-size: 0.95rem;
             text-align: center;
           }
             
@@ -933,9 +933,13 @@ const ScrollAnimation = () => {
         }
         .flip-card-back p:not(:first-child) {
           border: 1.5px solid #000 !important;
+          background: #000 !important;
+          color: #fff !important;
         }
         .flip-card-back p:first-child {
           border: none !important;
+          background: none !important;
+          color: #000 !important;
         }
 
         /* Dark theme: white for border, text, etc. */
@@ -953,9 +957,13 @@ const ScrollAnimation = () => {
         }
         :global(.dark) .flip-card-back p:not(:first-child) {
           border: 1.5px solid #fff !important;
+          background: #fff !important;
+          color: #000 !important;
         }
         :global(.dark) .flip-card-back p:first-child {
           border: none !important;
+          background: none !important;
+          color: #fff !important;
         }
       `}</style>
 

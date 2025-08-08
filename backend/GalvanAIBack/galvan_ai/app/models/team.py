@@ -15,7 +15,8 @@ class Team(db.Model):
     department = db.Column(db.String(100), nullable=False)
     position = db.Column(db.String(100), nullable=False)
     skills = db.Column(db.Text)  # Store as JSON string
-    background_interests = db.Column(db.Text)  # Store as JSON string
+    background = db.Column(db.Text)  # Store as JSON string
+    interests = db.Column(db.Text)  # Store as JSON string
     awards = db.Column(db.Text)  # Store as JSON string
     certifications = db.Column(db.Text)  # Store as JSON string
     location = db.Column(db.String(200))  # Optional field
@@ -42,7 +43,8 @@ class Team(db.Model):
             'department': self.department,
             'position': self.position,
             'skills': json.loads(self.skills) if self.skills else [],
-            'background_interests': json.loads(self.background_interests) if self.background_interests else [],
+            'background': json.loads(self.background) if self.background else [],
+            'interests': json.loads(self.interests) if self.interests else [],
             'awards': json.loads(self.awards) if self.awards else [],
             'certifications': json.loads(self.certifications) if self.certifications else [],
             'location': self.location,
@@ -70,7 +72,8 @@ class Team(db.Model):
             department=data['department'],
             position=data['position'],
             skills=json.dumps(data.get('skills', [])),
-            background_interests=json.dumps(data.get('background_interests', [])),
+            background=json.dumps(data.get('background', [])),
+            interests=json.dumps(data.get('interests', [])),
             awards=json.dumps(data.get('awards', [])),
             certifications=json.dumps(data.get('certifications', [])),
             location=data.get('location', ''),
