@@ -250,10 +250,10 @@ const Footer = () => {
                 © 2025 TechCorp. All rights reserved.
               </div>
               <div className="flex flex-wrap justify-center md:justify-end items-center space-x-6 sm:space-x-8">
-                <a href="#" className={`${isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} transition-colors duration-300`}>
+                <a href="/privacy-policy" className={`${isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} transition-colors duration-300`}>
                   Privacy Policy
                 </a>
-                <a href="#" className={`${isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} transition-colors duration-300`}>
+                <a href="/terms-of-service" className={`${isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} transition-colors duration-300`}>
                   Terms of Service
                 </a>
               </div>

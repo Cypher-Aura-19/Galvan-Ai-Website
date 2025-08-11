@@ -449,6 +449,107 @@ const CareersComplete: React.FC = () => {
     );
   }
 
+  // Show no careers state when there are no jobs
+  if (!loading && !error && jobs.length === 0) {
+    return (
+      <div className={`min-h-screen ${isDark ? 'bg-black text-white' : 'bg-gray-50 text-black'}`}>
+        <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
+        
+        {/* Back to Home Button */}
+        <div className="absolute top-4 left-4 lg:top-8 lg:left-8 z-50">
+          <Link href="/" className={`inline-flex items-center gap-2 transition-all duration-300 group px-4 py-2 lg:px-6 lg:py-3 rounded-full backdrop-blur-sm border-2 text-sm lg:text-base font-medium ${
+            isDark 
+              ? 'text-white hover:text-gray-300 bg-white/5 hover:bg-white/10 border-white/20 hover:border-white/30' 
+              : 'text-gray-800 hover:text-gray-600 bg-white/80 hover:bg-white/90 border-gray-200 hover:border-gray-300'
+          }`}>
+            <ArrowLeft className="w-4 h-4 lg:w-5 lg:h-5 group-hover:-translate-x-1 transition-transform duration-300" />
+            <span className="hidden sm:inline">Back to Home</span>
+          </Link>
+        </div>
+
+        {/* No Careers Content */}
+        <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Icon */}
+            <div className={`w-24 h-24 lg:w-32 lg:h-32 mx-auto mb-8 lg:mb-12 rounded-full flex items-center justify-center ${
+              isDark ? 'bg-white/10 border border-white/20' : 'bg-gray-100 border border-gray-200'
+            }`}>
+              <Users className={`w-12 h-12 lg:w-16 lg:h-16 ${isDark ? 'text-white/60' : 'text-gray-400'}`} />
+            </div>
+
+            {/* Main Heading */}
+            <h1 className={`font-barlow font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight mb-6 lg:mb-8 tracking-tight ${
+              isDark ? 'text-white' : 'text-black'
+            }`}>
+              No Open Positions
+              <br />
+              <span className={`font-barlow bg-gradient-to-r bg-clip-text text-transparent ${
+                isDark ? 'from-white to-gray-300' : 'from-black to-gray-600'
+              }`}>
+                Right Now
+              </span>
+            </h1>
+
+            {/* Description */}
+            <p className={`font-sans text-lg sm:text-xl lg:text-2xl leading-relaxed font-light max-w-3xl mx-auto mb-8 lg:mb-12 ${
+              isDark ? 'text-white/80' : 'text-black/80'
+            }`}>
+              We're not actively hiring at the moment, but we're always looking for exceptional talent to join our team. 
+              Feel free to reach out and introduce yourself!
+            </p>
+
+            {/* Decorative Line */}
+            <div className={`w-32 h-px mx-auto mb-8 lg:mb-12 ${
+              isDark ? 'bg-gradient-to-r from-white/50 to-transparent' : 'bg-gradient-to-r from-gray-400/50 to-transparent'
+            }`}></div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 lg:mb-12">
+              <Link href="/#contact">
+                <button className={`inline-flex items-center gap-3 transition-all duration-300 group px-8 py-4 lg:px-10 lg:py-5 rounded-2xl font-bold text-base lg:text-lg shadow-2xl ${
+                  isDark 
+                    ? 'bg-white text-black hover:bg-gray-100 hover:shadow-white/20' 
+                    : 'bg-black text-white hover:bg-gray-800 hover:shadow-gray-900/20'
+                }`}>
+                  <span>Get in Touch</span>
+                  <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                </button>
+              </Link>
+              
+              <Link href="/about-us">
+                <button className={`inline-flex items-center gap-3 transition-all duration-300 group px-8 py-4 lg:px-10 lg:py-5 rounded-2xl font-bold text-base lg:text-lg border-2 backdrop-blur-sm ${
+                  isDark 
+                    ? 'text-white border-white/20 hover:border-white/40 hover:bg-white/5' 
+                    : 'text-black border-black/20 hover:border-black/40 hover:bg-black/5'
+                }`}>
+                  <span>Learn About Us</span>
+                  <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                </button>
+              </Link>
+            </div>
+
+            {/* Additional Info */}
+            <div className={`max-w-2xl mx-auto p-6 lg:p-8 rounded-2xl backdrop-blur-sm border ${
+              isDark ? 'bg-white/5 border-white/20' : 'bg-white/80 border-gray-200'
+            }`}>
+              <h3 className={`font-barlow font-bold text-lg lg:text-xl mb-4 ${
+                isDark ? 'text-white' : 'text-black'
+              }`}>
+                Future Opportunities
+              </h3>
+              <p className={`font-sans text-sm lg:text-base leading-relaxed font-light ${
+                isDark ? 'text-white/70' : 'text-black/70'
+              }`}>
+                We regularly update our careers page with new opportunities. Check back soon, or send us your resume 
+                and we'll keep you in mind for future positions that match your skills and experience.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`min-h-screen ${isDark ? 'bg-black' : 'bg-gray-50'}`}>
       <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />

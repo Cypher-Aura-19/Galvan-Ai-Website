@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 import { useTheme } from "./theme-provider"
+import Link from "next/link"
 // Left-side brand icons
 import { SiOpenai, SiDocker, SiStripe, SiFirebase, SiShopify } from "react-icons/si";
 import { FaAws } from "react-icons/fa";
@@ -17,7 +18,8 @@ import { RiSettings4Line } from "react-icons/ri"; // Tech gear with circuit styl
 
 import { GiArtificialIntelligence } from "react-icons/gi"; // AI-specific chip design
 
-const tracks = [
+// Desktop tracks configuration
+const desktopTracks = [
   {
     pathId: "path1",
     color: "#156af2",
@@ -80,6 +82,70 @@ const tracks = [
   },
 ]
 
+// Mobile/Tablet tracks configuration (exact from provided code)
+const mobileTracks = [
+  {
+    pathId: 'topLeftPath',
+    color: '#156af2',
+    dashLen: 10,
+    gap: 10,
+    speed: 300,
+    freq: 0.5,
+    start: 1,
+    end: 20
+  },
+  {
+    pathId: 'topCenterPath',
+    color: '#156af2',
+    dashLen: 10,
+    gap: 10,
+    speed: 160,
+    freq: 0.5,
+    start: 1,
+    end: 20
+  },
+  {
+    pathId: 'topRightPath',
+    color: '#156af2',
+    dashLen: 60,
+    gap: 60,
+    speed: 160,
+    freq: 1.8,
+    start: 1,
+    end: 20
+  },
+  {
+    pathId: 'bottomLeftPath',
+    color: '#156af2',
+    dashLen: 60,
+    gap: 60,
+    speed: 160,
+    freq: 1.8,
+    start: 1,
+    end: 20
+  },
+  {
+    pathId: 'bottomCenterPath',
+    color: '#156af2',
+    dashLen: 60,
+    gap: 60,
+    speed: 160,
+    freq: 1.8,
+    start: 1,
+    end: 20
+  },
+  {
+    pathId: 'bottomRightPath',
+    color: '#156af2',
+    dashLen: 60,
+    gap: 60,
+    speed: 160,
+    freq: 1.8,
+    start: 1,
+    end: 20
+  },
+];
+
 // Desktop layout (original)
 const leftIconsDesktop = [
   { Icon: SiOpenai, top: "0%", left: "0%" },         // ChatGPT (OpenAI)
@@ -131,6 +197,7 @@ const rightIconsMobile = [
 
 export default function SVGPulseAnimation() {
   const sceneRef = useRef<SVGSVGElement>(null)
+  const mobileSceneRef = useRef<SVGSVGElement>(null)
   const activeTimersRef = useRef<Set<NodeJS.Timeout>>(new Set())
   const autoRestartTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop')
@@ -173,7 +240,13 @@ export default function SVGPulseAnimation() {
     }
   }
 
+  // Get appropriate tracks based on device type
+  const getTracks = () => {
+    return deviceType === 'desktop' ? desktopTracks : mobileTracks
+  }
+
   const startAnimation = () => {
+    const tracks = getTracks()
     tracks.forEach(initTrack)
     const maxEnd = Math.max(...tracks.map((t) => t.end))
     autoRestartTimerRef.current = setTimeout(restartAnimation, (maxEnd + 1) * 1000)
@@ -188,99 +261,97 @@ export default function SVGPulseAnimation() {
     activeTimersRef.current.forEach((id) => clearTimeout(id))
     activeTimersRef.current.clear()
 
+    // Clean only animated dash paths, not icon elements
     if (sceneRef.current) {
-      // Only remove the animated dash paths, not the guide paths or icons
       const animatedPaths = sceneRef.current.querySelectorAll("path.animated-dash")
+      animatedPaths.forEach((p) => p.remove())
+    }
+    
+    if (mobileSceneRef.current) {
+      const animatedPaths = mobileSceneRef.current.querySelectorAll("path.animated-dash")
       animatedPaths.forEach((p) => p.remove())
     }
 
     startAnimation()
   }
 
-  const initTrack = (track: (typeof tracks)[0]) => {
-    if (!sceneRef.current) return
+  const initTrack = (track: any) => {
+    const currentScene = deviceType === 'desktop' ? sceneRef.current : mobileSceneRef.current
+    if (!currentScene) return
 
-    const guide = sceneRef.current.querySelector(`#${track.pathId}`) as SVGPathElement
+    const guide = currentScene.querySelector(`#${track.pathId}`) as SVGPathElement
     if (!guide) {
       console.warn(`Guide path #${track.pathId} not found`)
       return
     }
 
     const pathLength = guide.getTotalLength()
-    const travel = pathLength + track.dashLen
-    const dashDuration = travel / track.speed
+    const totalTravelDistance = pathLength + track.dashLen
+    const animationDuration = totalTravelDistance / track.speed
 
     if (track.end <= track.start) {
       console.warn(`Track ${track.pathId} has end <= start; skipping.`)
       return
     }
 
-    const firstLaunch = track.start * 1000
-    const interval = track.freq * 1000
-    const lastLaunch = Math.max(0, track.end - dashDuration) * 1000
+    const firstLaunchTime = track.start * 1000
+    const launchInterval = track.freq * 1000
+    const lastLaunchTime = Math.max(0, (track.end - animationDuration)) * 1000
 
-    for (let t = firstLaunch; t <= lastLaunch + 1; t += interval) {
-      const id = setTimeout(() => {
-        launchDash(track, guide, pathLength, dashDuration)
-        activeTimersRef.current.delete(id)
-      }, t)
-      activeTimersRef.current.add(id)
+    for (let currentTime = firstLaunchTime; currentTime <= lastLaunchTime + 1; currentTime += launchInterval) {
+      const timerId = setTimeout(() => {
+        createPulseDash(track, guide, pathLength, animationDuration)
+        activeTimersRef.current.delete(timerId)
+      }, currentTime)
+      activeTimersRef.current.add(timerId)
     }
   }
 
-  const launchDash = (track: (typeof tracks)[0], guide: SVGPathElement, pathLength: number, dashDuration: number) => {
-    if (!sceneRef.current) return
+  const createPulseDash = (track: any, guidePath: SVGPathElement, pathLength: number, animationDuration: number) => {
+    const currentScene = deviceType === 'desktop' ? sceneRef.current : mobileSceneRef.current
+    if (!currentScene) return
 
-    const dash = guide.cloneNode(false) as SVGPathElement
-    dash.removeAttribute("id")
-    dash.classList.remove("guide")
-    dash.classList.add("animated-dash") // Add specific class for animated dashes
-    dash.setAttribute("stroke", track.color)
-    dash.setAttribute("fill", "none")
-    dash.setAttribute("stroke-dasharray", `${track.dashLen} ${pathLength}`)
-    dash.setAttribute("stroke-dashoffset", String(pathLength + track.dashLen))
-    dash.style.opacity = "0"
+    const pulseDash = guidePath.cloneNode(false) as SVGPathElement
+    pulseDash.removeAttribute('id')
+    pulseDash.classList.remove('guide')
+    pulseDash.classList.add('animated-dash')
+    pulseDash.setAttribute('stroke', track.color)
+    pulseDash.setAttribute('fill', 'none')
 
-    sceneRef.current.appendChild(dash)
+    // one visible segment followed by long gap
+    pulseDash.setAttribute('stroke-dasharray', `${track.dashLen} ${pathLength}`)
+    pulseDash.setAttribute('stroke-dashoffset', String(pathLength + track.dashLen))
+    pulseDash.style.opacity = '0'
+    guidePath.parentNode?.appendChild(pulseDash)
 
-    const fadeTime = Math.min(track.dashLen / track.speed, dashDuration * 0.4)
+    const fadeTransitionTime = Math.min(track.dashLen / track.speed, animationDuration * 0.4)
 
-    gsap
-      .timeline({
-        defaults: { immediateRender: false },
-        onComplete: () => dash.remove(),
-      })
-      .to(
-        dash,
-        {
-          attr: { "stroke-dashoffset": 0 },
-          duration: dashDuration,
-          ease: "none",
-        },
-        0,
-      )
-      .to(
-        dash,
-        {
-          opacity: 1,
-          duration: fadeTime,
-          ease: "power1.in",
-        },
-        0,
-      )
-      .to(
-        dash,
-        {
-          opacity: 0,
-          duration: fadeTime,
-          ease: "power1.out",
-        },
-        dashDuration - fadeTime,
-      )
+    gsap.timeline({
+    defaults: { immediateRender: false },
+      onComplete: () => pulseDash.remove()
+    })
+    // Slide along full travel
+    .to(pulseDash, {
+      attr: { 'stroke-dashoffset': 0 },
+      duration: animationDuration,
+      ease: 'none'
+    }, 0)
+    // Fade in
+    .to(pulseDash, {
+      opacity: 1,
+      duration: fadeTransitionTime,
+      ease: 'power1.in'
+    }, 0)
+    // Fade out
+    .to(pulseDash, {
+      opacity: 0,
+      duration: fadeTransitionTime,
+      ease: 'power1.out'
+    }, animationDuration - fadeTransitionTime)
   }
 
   useEffect(() => {
-    startAnimation()
+      startAnimation()
 
     return () => {
       if (autoRestartTimerRef.current) {
@@ -289,7 +360,7 @@ export default function SVGPulseAnimation() {
       activeTimersRef.current.forEach((id) => clearTimeout(id))
       activeTimersRef.current.clear()
     }
-  }, [])
+  }, [deviceType]) // Restart animation when device type changes
 
   // Responsive content based on device type
   const getResponsiveContent = () => {
@@ -299,7 +370,7 @@ export default function SVGPulseAnimation() {
           title: "DESIGN. LAUNCH. SCALE.",
           subtitle: "",
           description: "AI that fits your vision, not the other way around.\nFrom design to scale, we build what your users will love.",
-          buttonText: "Get Started",
+          buttonText: "Book a free consultation",
           titleSize: "text-3xl",
           subtitleSize: "text-sm",
           descriptionSize: "text-base",
@@ -373,229 +444,235 @@ export default function SVGPulseAnimation() {
             <h1 className={`font-barlow ${content.titleSize} font-extrabold tracking-tight ${theme === 'dark' ? 'text-black' : 'text-white'} relative z-10 text-center ${
               deviceType === 'mobile' ? 'px-4 py-3' :
               deviceType === 'tablet' ? 'px-6 py-4' : 'px-8 py-6 mt-8 -mr-36 -ml-44'
-            }`}>
-              <span className="relative inline-block px-3 py-2 md:px-4 md:py-4">
-                <span className={`absolute inset-0 ${theme === 'dark' ? 'bg-white' : 'bg-black'} rounded-xl opacity-100 -z-10`} />
-                {content.title}
-              </span>
-            </h1>
+           }`}>
+             <span className="relative inline-block px-3 py-2 md:px-4 md:py-4">
+               <span className={`absolute inset-0 ${theme === 'dark' ? 'bg-white' : 'bg-black'} rounded-xl opacity-100 -z-10`} />
+               {content.title}
+             </span>
+           </h1>
 
-            <p className={`${content.subtitleSize} ${theme === 'dark' ? 'text-white' : 'text-black'} leading-relaxed text-center font-light ${
-              deviceType === 'mobile' ? 'max-w-[85vw]' :
-              deviceType === 'tablet' ? 'max-w-[70vw]' :
-              'max-w-[60ch]'
-            }`}>
-              <span className="block">{content.subtitle}</span>
-            </p>
+       <p className={`${content.subtitleSize} ${theme === 'dark' ? 'text-white' : 'text-black'} leading-relaxed text-center font-light ${
+             deviceType === 'mobile' ? 'max-w-[85vw]' :
+             deviceType === 'tablet' ? 'max-w-[70vw]' :
+             'max-w-[60ch]'
+           }`}>
+             <span className="block">{content.subtitle}</span>
+           </p>
 
-            <p className={`${content.descriptionSize} text-white leading-relaxed text-center font-light ${
-              deviceType === 'mobile' ? 'max-w-[85vw]' :
-              deviceType === 'tablet' ? 'max-w-[70vw]' :
-              'max-w-[60ch]'
-            }`}>
-              <span className="block">AI that fits your vision, not the other way around.</span>
-              <span className="block">From design to scale, we build what your users will love.</span>
-            </p>
+       <p className={`${content.descriptionSize} ${theme === 'dark' ? 'text-white' : 'text-black'} leading-relaxed text-center font-light ${
+             deviceType === 'mobile' ? 'max-w-[85vw]' :
+             deviceType === 'tablet' ? 'max-w-[70vw]' :
+             'max-w-[60ch]'
+           }`}>
+             <span className="block">AI that fits your vision, not the other way around.</span>
+             <span className="block">From design to scale, we build what your users will love.</span>
+           </p>
 
-            <button className={`${theme === 'dark' ? 'bg-white text-black hover:bg-white/90' : 'bg-black text-white hover:bg-black/90'} rounded-xl mt-4 md:mt-8 ${content.buttonSize} font-medium transition-all duration-300 flex items-center gap-2 ${
-              deviceType === 'mobile' ? 'hover:scale-105' :
-              deviceType === 'tablet' ? 'hover:scale-110' : 'hover:scale-110'
-            }`}>
-              {content.buttonText}
-            </button>
+        <a href="#contact">
+          <button className={`${theme === 'dark' ? 'bg-white text-black hover:bg-white/90' : 'bg-black text-white hover:bg-black/90'} rounded-xl mt-4 md:mt-8 ${content.buttonSize} font-medium transition-all duration-300 flex items-center gap-2 ${
+                deviceType === 'mobile' ? 'hover:scale-105' :
+                deviceType === 'tablet' ? 'hover:scale-110' : 'hover:scale-110'
+              }`}>
+            {content.buttonText}
+          </button>
+        </a>
           </div>
         </div>
 
         {deviceType === 'desktop' ? (
-          <svg
-            ref={sceneRef}
-            id="scene"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="-300 -50 2600 950"
-            fill="none"
-            className="w-full h-full"
-            style={{ 
-              maxWidth: '100%', 
+        <svg
+          ref={sceneRef}
+          id="scene"
+          xmlns="http://www.w3.org/2000/svg"
+      viewBox="-300 -50 2600 950"
+          fill="none"
+          className="w-full h-full"
+          style={{ 
+            maxWidth: '100%', 
               maxHeight: '60vh',
               minHeight: 350
             }}
           >
             {/* Desktop SVG content */}
-            {/* Paths */}
-            <path
-              id="path1"
-              className="guide"
-              d="M-299.5 3.5H152.574C160.53 3.5 168.161 6.6607 173.787 12.2868L258 96.5L531.713 370.213C537.339 375.839 544.97 379 552.926 379H1388.07C1396.03 379 1403.66 375.839 1409.29 370.213L1683 96.5L1770.21 9.2868C1775.84 3.66071 1783.47 0.5 1791.43 0.5H2243.5"
+      {/* Paths */}
+              <path
+                id="path1"
+                className="guide"
+                d="M-299.5 3.5H152.574C160.53 3.5 168.161 6.6607 173.787 12.2868L258 96.5L531.713 370.213C537.339 375.839 544.97 379 552.926 379H1388.07C1396.03 379 1403.66 375.839 1409.29 370.213L1683 96.5L1770.21 9.2868C1775.84 3.66071 1783.47 0.5 1791.43 0.5H2243.5"
               stroke={theme === 'dark' ? 'white' : 'black'}
-              strokeWidth="6"
-              fill="none"
+                strokeWidth="6"
+                fill="none"
               style={{ display: 'block' }}
-            />
-            <path
-              id="path2"
-              className="guide"
-              d="M-196.5 70.5H154.574C162.53 70.5 170.161 73.6607 175.787 79.2868L258 161.5L483.213 386.713C488.839 392.339 496.47 395.5 504.426 395.5H1434.07C1442.03 395.5 1449.66 392.339 1455.29 386.713L1683 159L1762.71 79.2868C1768.34 73.6607 1775.97 70.5 1783.93 70.5H2135"
+              />
+              <path
+                id="path2"
+                className="guide"
+                d="M-196.5 70.5H154.574C162.53 70.5 170.161 73.6607 175.787 79.2868L258 161.5L483.213 386.713C488.839 392.339 496.47 395.5 504.426 395.5H1434.07C1442.03 395.5 1449.66 392.339 1455.29 386.713L1683 159L1762.71 79.2868C1768.34 73.6607 1775.97 70.5 1783.93 70.5H2135"
               stroke={theme === 'dark' ? 'white' : 'black'}
-              strokeWidth="6"
-              fill="none"
+                strokeWidth="6"
+                fill="none"
               style={{ display: 'block' }}
-            />
-            <path
-              id="path3"
-              className="guide"
-              d="M-261 135H132.574C140.53 135 148.161 138.161 153.787 143.787L420.713 410.713C426.339 416.339 433.97 419.5 441.926 419.5H1492.57C1500.53 419.5 1508.16 416.339 1513.79 410.713L1780.71 143.787C1786.34 138.161 1793.97 135 1801.93 135H2191"
+              />
+              <path
+                id="path3"
+                className="guide"
+                d="M-261 135H132.574C140.53 135 148.161 138.161 153.787 143.787L420.713 410.713C426.339 416.339 433.97 419.5 441.926 419.5H1492.57C1500.53 419.5 1508.16 416.339 1513.79 410.713L1780.71 143.787C1786.34 138.161 1793.97 135 1801.93 135H2191"
               stroke={theme === 'dark' ? 'white' : 'black'}
-              strokeWidth="6"
-              fill="none"
+                strokeWidth="6"
+                fill="none"
               style={{ display: 'block' }}
-            />
-            <path
-              id="path4"
-              className="guide"
-              d="M-299.5 836H152.574C160.53 836 168.161 832.839 173.787 827.213L258 743L531.713 469.287C537.339 463.661 544.97 460.5 552.926 460.5H1388.07C1396.03 460.5 1403.66 463.661 1409.29 469.287L1683 743L1770.21 830.213C1775.84 835.839 1783.47 839 1791.43 839H2243.5"
+              />
+              <path
+                id="path4"
+                className="guide"
+                d="M-299.5 836H152.574C160.53 836 168.161 832.839 173.787 827.213L258 743L531.713 469.287C537.339 463.661 544.97 460.5 552.926 460.5H1388.07C1396.03 460.5 1403.66 463.661 1409.29 469.287L1683 743L1770.21 830.213C1775.84 835.839 1783.47 839 1791.43 839H2243.5"
               stroke={theme === 'dark' ? 'white' : 'black'}
-              strokeWidth="6"
-              fill="none"
+                strokeWidth="6"
+                fill="none"
               style={{ display: 'block' }}
-            />
-            <path
-              id="path5"
-              className="guide"
-              d="M-196.5 769H154.574C162.53 769 170.161 765.839 175.787 760.213L258 678L483.213 452.787C488.839 447.161 496.47 444 504.426 444H1434.07C1442.03 444 1449.66 447.161 1455.29 452.787L1683 680.5L1762.71 760.213C1768.34 765.839 1775.97 769 1783.93 769H2135"
+              />
+              <path
+                id="path5"
+                className="guide"
+                d="M-196.5 769H154.574C162.53 769 170.161 765.839 175.787 760.213L258 678L483.213 452.787C488.839 447.161 496.47 444 504.426 444H1434.07C1442.03 444 1449.66 447.161 1455.29 452.787L1683 680.5L1762.71 760.213C1768.34 765.839 1775.97 769 1783.93 769H2135"
               stroke={theme === 'dark' ? 'white' : 'black'}
-              strokeWidth="6"
-              fill="none"
+                strokeWidth="6"
+                fill="none"
               style={{ display: 'block' }}
-            />
-            <path
-              id="path6"
-              className="guide"
-              d="M-261 704.5H132.574C140.53 704.5 148.161 701.339 153.787 695.713L420.713 428.787C426.339 423.161 433.97 420 441.926 420H1492.57C1500.53 420 1508.16 423.161 1513.79 428.787L1780.71 695.713C1786.34 701.339 1793.97 704.5 1801.93 704.5H2191"
+              />
+              <path
+                id="path6"
+                className="guide"
+                d="M-261 704.5H132.574C140.53 704.5 148.161 701.339 153.787 695.713L420.713 428.787C426.339 423.161 433.97 420 441.926 420H1492.57C1500.53 420 1508.16 423.161 1513.79 428.787L1780.71 695.713C1786.34 701.339 1793.97 704.5 1801.93 704.5H2191"
               stroke={theme === 'dark' ? 'white' : 'black'}
-              strokeWidth="6"
-              fill="none"
+                strokeWidth="6"
+                fill="none"
               style={{ display: 'block' }}
-            />
+              />
 
-            {/* Left‐end icons (circle then icon) */}
-            <g transform="translate(-299.5, 3.5)" style={{ zIndex: 1000 }}>
+      {/* Left‐end icons (circle then icon) */}
+            <g transform="translate(-299.5, 3.5)" style={{ zIndex: 2000 }}>
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
-              <foreignObject x={-17.5} y={-17.5} width={35} height={35}>
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <SiOpenai style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                </div>
-              </foreignObject>
-            </g>
-            <g transform="translate(-196.5, 70.5)" style={{ zIndex: 1000 }}>
+                  </div>
+                </foreignObject>
+              </g>
+            <g transform="translate(-196.5, 70.5)" style={{ zIndex: 2000 }}>
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
-              <foreignObject x={-17.5} y={-17.5} width={35} height={35}>
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <SiDocker style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                </div>
-              </foreignObject>
-            </g>
-            <g transform="translate(-261, 135)" style={{ zIndex: 1000 }}>
+                  </div>
+                </foreignObject>
+              </g>
+            <g transform="translate(-261, 135)" style={{ zIndex: 2000 }}>
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
-              <foreignObject x={-17.5} y={-17.5} width={35} height={35}>
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <SiStripe style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                </div>
-              </foreignObject>
-            </g>
-            <g transform="translate(-299.5, 836)" style={{ zIndex: 1000 }}>
+                  </div>
+                </foreignObject>
+              </g>
+            <g transform="translate(-299.5, 836)" style={{ zIndex: 2000 }}>
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
-              <foreignObject x={-17.5} y={-17.5} width={35} height={35}>
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <SiFirebase style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                </div>
-              </foreignObject>
-            </g>
-            <g transform="translate(-196.5, 769)" style={{ zIndex: 1000 }}>
+                  </div>
+                </foreignObject>
+              </g>
+            <g transform="translate(-196.5, 769)" style={{ zIndex: 2000 }}>
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
-              <foreignObject x={-17.5} y={-17.5} width={35} height={35}>
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <SiShopify style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                </div>
-              </foreignObject>
-            </g>
-            <g transform="translate(-261, 704.5)" style={{ zIndex: 1000 }}>
+                  </div>
+                </foreignObject>
+              </g>
+            <g transform="translate(-261, 704.5)" style={{ zIndex: 2000 }}>
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
-              <foreignObject x={-17.5} y={-17.5} width={35} height={35}>
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FaAws style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                </div>
-              </foreignObject>
-            </g>
+                  </div>
+                </foreignObject>
+              </g>
 
-            {/* Right‐end icons */}
-            <g transform="translate(2243.5, 0.5)" style={{ zIndex: 1000 }}>
+      {/* Right‐end icons */}
+            <g transform="translate(2243.5, 0.5)" style={{ zIndex: 2000 }}>
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
-              <foreignObject x={-17.5} y={-17.5} width={35} height={35}>
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <SiZapier style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                </div>
-              </foreignObject>
-            </g>
-            <g transform="translate(2135, 70.5)" style={{ zIndex: 1000 }}>
+                  </div>
+                </foreignObject>
+              </g>
+            <g transform="translate(2135, 70.5)" style={{ zIndex: 2000 }}>
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
-              <foreignObject x={-17.5} y={-17.5} width={35} height={35}>
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <SiSlack style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                </div>
-              </foreignObject>
-            </g>
-            <g transform="translate(2191, 135)" style={{ zIndex: 1000 }}>
+                  </div>
+                </foreignObject>
+              </g>
+            <g transform="translate(2191, 135)" style={{ zIndex: 2000 }}>
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
-              <foreignObject x={-17.5} y={-17.5} width={35} height={35}>
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FaNetworkWired style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                </div>
-              </foreignObject>
-            </g>
-            <g transform="translate(2243.5, 839)" style={{ zIndex: 1000 }}>
+                  </div>
+                </foreignObject>
+              </g>
+            <g transform="translate(2243.5, 839)" style={{ zIndex: 2000 }}>
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
-              <foreignObject x={-17.5} y={-17.5} width={35} height={35}>
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FaCloud style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                </div>
-              </foreignObject>
-            </g>
-            <g transform="translate(2135, 769)" style={{ zIndex: 1000 }}>
+                  </div>
+                </foreignObject>
+              </g>
+            <g transform="translate(2135, 769)" style={{ zIndex: 2000 }}>
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
-              <foreignObject x={-17.5} y={-17.5} width={35} height={35}>
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <GiArtificialIntelligence style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                </div>
-              </foreignObject>
-            </g>
-            <g transform="translate(2191, 704.5)" style={{ zIndex: 1000 }}>
+                  </div>
+                </foreignObject>
+              </g>
+            <g transform="translate(2191, 704.5)" style={{ zIndex: 2000 }}>
               <circle cx="0" cy="0" r={30} fill={theme === 'dark' ? 'white' : 'black'} />
-              <foreignObject x={-15} y={-15} width={30} height={30}>
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <foreignObject x={-15} y={-15} width={30} height={30} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <RiSettings4Line style={{ width: '30px', height: '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                </div>
-              </foreignObject>
-            </g>
-          </svg>
+                  </div>
+                </foreignObject>
+              </g>
+        </svg>
         ) : (
           <svg
+            ref={mobileSceneRef}
             viewBox="-300 -50 1300 950"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             style={{
               overflow: 'hidden',
-              width: '100%',
+              width: '85%',
               height: 'auto',
-              maxHeight: deviceType === 'mobile' ? '60vh' : '70vh',
-              minHeight: deviceType === 'mobile' ? 300 : 400,
-              top: '100px',
-              position: 'relative'
+              maxHeight: '600px',
+              position: 'relative',
+              top: '40px',
+              zIndex: 1,
+              textAlign: 'center',
+              display: 'block',
+              margin: '0 auto'
             }}
           >
-            <g transform="rotate(90 350 425) scale(0.6) translate(-150, 300)">
-              {/* Path 1 */}
+            <g transform="rotate(90 350 425)">
+              {/* Top Left Path */}
               <path
-                id="path1"
+                id="topLeftPath"
                 className="guide"
                 d="
                   M-299.5 3.5
@@ -610,18 +687,10 @@ export default function SVGPulseAnimation() {
                 strokeWidth="6"
                 fill="none"
               />
-              
-              {/* Circle at start of path 1 (left side) */}
-              <circle
-                cx="-299.5"
-                cy="3.5"
-                r="15"
-                fill={theme === 'dark' ? 'white' : 'black'}
-              />
 
-              {/* Path 2 */}
+              {/* Top Center Path */}
               <path
-                id="path2"
+                id="topCenterPath"
                 className="guide"
                 d="
                   M-196.5 70.5
@@ -636,18 +705,10 @@ export default function SVGPulseAnimation() {
                 strokeWidth="6"
                 fill="none"
               />
-              
-              {/* Circle at start of path 2 (left side) */}
-              <circle
-                cx="-196.5"
-                cy="70.5"
-                r="15"
-                fill={theme === 'dark' ? 'white' : 'black'}
-              />
 
-              {/* Path 3 */}
+              {/* Top Right Path */}
               <path
-                id="path3"
+                id="topRightPath"
                 className="guide"
                 d="
                   M-261 135
@@ -661,18 +722,10 @@ export default function SVGPulseAnimation() {
                 strokeWidth="6"
                 fill="none"
               />
-              
-              {/* Circle at start of path 3 (left side) */}
-              <circle
-                cx="-261"
-                cy="135"
-                r="15"
-                fill={theme === 'dark' ? 'white' : 'black'}
-              />
 
-              {/* Path 4 */}
+              {/* Bottom Left Path */}
               <path
-                id="path4"
+                id="bottomLeftPath"
                 className="guide"
                 d="
                   M-299.5 836
@@ -687,18 +740,10 @@ export default function SVGPulseAnimation() {
                 strokeWidth="6"
                 fill="none"
               />
-              
-              {/* Circle at start of path 4 (left side) */}
-              <circle
-                cx="-299.5"
-                cy="836"
-                r="15"
-                fill={theme === 'dark' ? 'white' : 'black'}
-              />
 
-              {/* Path 5 */}
+              {/* Bottom Center Path */}
               <path
-                id="path5"
+                id="bottomCenterPath"
                 className="guide"
                 d="
                   M-196.5 769
@@ -713,18 +758,10 @@ export default function SVGPulseAnimation() {
                 strokeWidth="6"
                 fill="none"
               />
-              
-              {/* Circle at start of path 5 (left side) */}
-              <circle
-                cx="-196.5"
-                cy="769"
-                r="15"
-                fill={theme === 'dark' ? 'white' : 'black'}
-              />
 
-              {/* Path 6 */}
+              {/* Bottom Right Path */}
               <path
-                id="path6"
+                id="bottomRightPath"
                 className="guide"
                 d="
                   M-261 704.5
@@ -738,14 +775,156 @@ export default function SVGPulseAnimation() {
                 strokeWidth="6"
                 fill="none"
               />
-              
-              {/* Circle at start of path 6 (left side) */}
-              <circle
-                cx="-261"
-                cy="704.5"
-                r="15"
-                fill={theme === 'dark' ? 'white' : 'black'}
-              />
+
+              {/* Left-end circles with icons */}
+              <g transform="translate(-299.5, 3.5)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <SiOpenai style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(-196.5, 70.5)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <SiDocker style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(-261, 135)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <SiStripe style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(-299.5, 836)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <SiFirebase style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(-196.5, 769)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <SiShopify style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(-261, 704.5)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FaAws style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+
+              {/* Corner circles with icons */}
+              <g transform="translate(52.574, 3.5)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 20 : 25} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -10 : -12.5} y={deviceType === 'mobile' ? -10 : -12.5} width={deviceType === 'mobile' ? 20 : 25} height={deviceType === 'mobile' ? 20 : 25} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FaRobot style={{ width: deviceType === 'mobile' ? '20px' : '25px', height: deviceType === 'mobile' ? '20px' : '25px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(54.574, 70.5)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 20 : 25} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -10 : -12.5} y={deviceType === 'mobile' ? -10 : -12.5} width={deviceType === 'mobile' ? 20 : 25} height={deviceType === 'mobile' ? 20 : 25} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FaBrain style={{ width: deviceType === 'mobile' ? '20px' : '25px', height: deviceType === 'mobile' ? '20px' : '25px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(32.574, 135)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 20 : 25} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -10 : -12.5} y={deviceType === 'mobile' ? -10 : -12.5} width={deviceType === 'mobile' ? 20 : 25} height={deviceType === 'mobile' ? 20 : 25} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FaNetworkWired style={{ width: deviceType === 'mobile' ? '20px' : '25px', height: deviceType === 'mobile' ? '20px' : '25px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(52.574, 836)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 20 : 25} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -10 : -12.5} y={deviceType === 'mobile' ? -10 : -12.5} width={deviceType === 'mobile' ? 20 : 25} height={deviceType === 'mobile' ? 20 : 25} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FaCloud style={{ width: deviceType === 'mobile' ? '20px' : '25px', height: deviceType === 'mobile' ? '20px' : '25px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(54.574, 769)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 20 : 25} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -10 : -12.5} y={deviceType === 'mobile' ? -10 : -12.5} width={deviceType === 'mobile' ? 20 : 25} height={deviceType === 'mobile' ? 20 : 25} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <GiArtificialIntelligence style={{ width: deviceType === 'mobile' ? '20px' : '25px', height: deviceType === 'mobile' ? '20px' : '25px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(32.574, 704.5)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 20 : 25} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -10 : -12.5} y={deviceType === 'mobile' ? -10 : -12.5} width={deviceType === 'mobile' ? 20 : 25} height={deviceType === 'mobile' ? 20 : 25} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <RiSettings4Line style={{ width: deviceType === 'mobile' ? '20px' : '25px', height: deviceType === 'mobile' ? '20px' : '25px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+
+              {/* Right-end circles with icons */}
+              <g transform="translate(752.926, 379)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <SiZapier style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(704.426, 395.5)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <SiSlack style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(641.926, 419.5)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FaNetworkWired style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(752.926, 460.5)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FaCloud style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(704.426, 444)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <GiArtificialIntelligence style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
+              <g transform="translate(641.926, 420)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 22 : 27} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={deviceType === 'mobile' ? -11 : -13.5} y={deviceType === 'mobile' ? -11 : -13.5} width={deviceType === 'mobile' ? 22 : 27} height={deviceType === 'mobile' ? 22 : 27} style={{ zIndex: 3000 }}>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <RiSettings4Line style={{ width: deviceType === 'mobile' ? '22px' : '27px', height: deviceType === 'mobile' ? '22px' : '27px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  </div>
+                </foreignObject>
+              </g>
             </g>
           </svg>
         )}

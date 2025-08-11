@@ -303,10 +303,12 @@ export default function ProjectsPage() {
             Let's collaborate and bring your vision to life with cutting-edge technology and innovative design solutions.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-black dark:bg-white text-white dark:text-black font-semibold py-4 px-8 md:px-10 rounded-2xl transition-all duration-300 hover:bg-zinc-800 dark:hover:bg-zinc-100 hover:transform hover:scale-105 hover:shadow-xl flex items-center justify-center gap-2 font-barlow text-base md:text-lg">
-              <span>Start a Project</span>
-              <ArrowRight className="w-5 h-5" />
-            </button>
+            <Link href="/#contact">
+              <button className="bg-black dark:bg-white text-white dark:text-black font-semibold py-4 px-8 md:px-10 rounded-2xl transition-all duration-300 hover:bg-zinc-800 dark:hover:bg-zinc-100 hover:transform hover:scale-105 hover:shadow-xl flex items-center justify-center gap-2 font-barlow text-base md:text-lg">
+                <span>Start a Project</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </Link>
           </div>
         </div>
       </section>

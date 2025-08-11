@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTheme } from "@/components/theme-provider";
+import Link from "next/link";
 
 const milestones = [
   { label: "PROJECTS DELIVERED", value: 50, suffix: "+" },
@@ -78,11 +79,13 @@ export default function MilestonesSection() {
           <p className={`mb-6 text-base sm:text-lg text-right ${isDark ? "text-white/80" : "text-black/80"}`}>
             Whether it’s a smart AI agent, a powerful automation tool, or a full-scale SaaS platform, we build with precision. Our solutions help businesses move faster, work smarter, and scale with confidence.
           </p>
-          <button
-            className={`uppercase font-semibold rounded-lg px-8 py-3 text-base tracking-wide transition-colors duration-200 ${isDark ? "bg-white text-black hover:bg-white/90" : "bg-black text-white hover:bg-black/90"}`}
-          >
-            KNOW MORE ABOUT US
-          </button>
+          <Link href="/about-us">
+            <button
+              className={`uppercase font-semibold rounded-lg px-8 py-3 text-base tracking-wide transition-colors duration-200 ${isDark ? "bg-white text-black hover:bg-white/90" : "bg-black text-white hover:bg-black/90"}`}
+            >
+              KNOW MORE ABOUT US
+            </button>
+          </Link>
         </div>
       </div>
       <div className="milestones-grid max-w-[1700px] mx-auto mt-10 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 px-4">

@@ -52,29 +52,138 @@ export default function Component() {
   }, []);
 
   useEffect(() => {
-    if (!testimonialsRef.current) return;
+    if (!testimonialsRef.current || testimonials.length === 0) return;
+    
     const ctx = gsap.context(() => {
-      gsap.utils.toArray<HTMLElement>(".testimonials-fade").forEach((el, i) => {
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            delay: i * 0.1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 90%",
-              toggleActions: "play none none none",
-            },
-          }
-        );
-      });
+      // Initial entrance animations that play immediately
+      gsap.set(".testimonial-card", { opacity: 0, y: 50, scale: 0.9 });
+      gsap.set(".testimonials-header", { opacity: 0, y: 30 });
+      gsap.set(".testimonials-sidebar", { opacity: 0, x: -50 });
+      gsap.set(".testimonials-main-content", { opacity: 0, y: 50 });
+
+      // Entrance sequence
+      const tl = gsap.timeline();
+      
+      tl.to(".testimonials-header", {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      })
+      .to(".testimonials-sidebar", {
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      }, "-=0.4")
+      .to(".testimonials-main-content", {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      }, "-=0.4")
+      .to(".testimonial-card", {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "back.out(1.7)"
+      }, "-=0.2");
+
+      // Scroll-triggered animations
+      gsap.fromTo(
+        ".testimonials-header",
+        { opacity: 0, y: 60, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".testimonials-header",
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+
+      // Sidebar animations with staggered effect
+      gsap.fromTo(
+        ".testimonials-sidebar-item",
+        { opacity: 0, x: -40, scale: 0.9 },
+        {
+          opacity: 1,
+          x: 0,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".testimonials-sidebar",
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+
+      // Main content animation
+      gsap.fromTo(
+        ".testimonials-main-content",
+        { opacity: 0, y: 60, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.0,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".testimonials-main-content",
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+
+      // Badge and icon animations
+      gsap.fromTo(
+        ".testimonials-badge",
+        { opacity: 0, scale: 0.8, rotation: -10 },
+        {
+          opacity: 1,
+          scale: 1,
+          rotation: 0,
+          duration: 0.6,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: ".testimonials-badge",
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+
+      // Sparkles icon animation
+      gsap.fromTo(
+        ".testimonials-sparkles",
+        { opacity: 0, scale: 0, rotation: -180 },
+        {
+          opacity: 1,
+          scale: 1,
+          rotation: 0,
+          duration: 0.8,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: ".testimonials-sparkles",
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
     }, testimonialsRef);
     return () => ctx.revert();
-  }, []);
+  }, [testimonials.length]);
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -107,12 +216,12 @@ export default function Component() {
   <section ref={testimonialsRef} className={`w-full min-h-screen px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 relative overflow-hidden flex items-center font-sans ${isDark ? "bg-black text-white" : "bg-white text-black"}`}>
     <div className="w-full max-w-[1700px] mx-auto relative z-10">
       {/* Header */}
-      <div className="testimonials-fade text-center mb-8 sm:mb-12">
+      <div className="testimonials-header text-center mb-8 sm:mb-12">
         <div className="flex items-center justify-center mb-3 sm:mb-4">
-          <Sparkles className={`h-5 w-5 sm:h-6 sm:w-6 ${isDark ? "text-white" : "text-black"} mr-2`} />
+          <Sparkles className={`testimonials-sparkles h-5 w-5 sm:h-6 sm:w-6 ${isDark ? "text-white" : "text-black"} mr-2`} />
           <Badge
             variant="outline"
-            className={`font-sans ${isDark ? 'border-white/30 text-white bg-white/10' : 'border-black/30 text-black bg-black/10'}`}
+            className={`testimonials-badge font-sans ${isDark ? 'border-white/30 text-white bg-white/10' : 'border-black/30 text-black bg-black/10'}`}
           >
             Testimonials
           </Badge>
@@ -128,24 +237,24 @@ export default function Component() {
       {/* In the main grid, ensure sidebar is always first (left) and main testimonial content is second (right) */}
       <div className="w-full max-w-[1700px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
         {/* Sidebar with testimonial list */}
-        <div className="testimonials-fade lg:col-span-1 space-y-3 sm:space-y-4 order-1 lg:order-1">
+        <div className="testimonials-sidebar lg:col-span-1 space-y-3 sm:space-y-4 order-1 lg:order-1">
           {testimonials.map((testimonial) => (
             <Card
               key={testimonial.id}
-              className={`cursor-pointer transition-all duration-300 border ${
+              className={`testimonial-card testimonials-sidebar-item cursor-pointer transition-all duration-500 border hover:scale-105 hover:shadow-2xl ${
                 selectedTestimonial?.id === testimonial.id
                   ? isDark 
                     ? "bg-white/10 border-white shadow-lg"
                     : "bg-black/10 border-black shadow-lg"
                   : isDark
-                    ? "bg-black border-white/20 hover:bg-white/5"
-                    : "bg-white border-black/20 hover:bg-black/5"
+                    ? "bg-black border-white/20 hover:bg-white/5 hover:border-white/40"
+                    : "bg-white border-black/20 hover:bg-black/5 hover:border-black/40"
               }`}
               onClick={() => setSelectedTestimonial(testimonial)}
             >
               <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center space-x-3 sm:space-x-4">
-                  <Avatar className={`h-10 w-10 sm:h-14 sm:w-14 ring-2 ${isDark ? "ring-white/20" : "ring-black/20"}`}>
+                  <Avatar className={`h-10 w-10 sm:h-14 sm:w-14 ring-2 transition-all duration-300 hover:scale-110 ${isDark ? "ring-white/20" : "ring-black/20"}`}>
                     <AvatarImage
                       src={testimonial.avatar || "/placeholder.svg"}
                       alt={testimonial.name}
@@ -177,7 +286,7 @@ export default function Component() {
             <DialogTrigger asChild>
               <Button
                 variant="ghost"
-                className={`w-full p-4 sm:p-5 h-auto font-normal text-sm sm:text-base group transition-all duration-300 ${
+                className={`testimonial-card testimonials-sidebar-item w-full p-4 sm:p-5 h-auto font-normal text-sm sm:text-base group transition-all duration-500 hover:scale-105 hover:shadow-xl ${
                   isDark 
                     ? "text-white hover:text-white hover:bg-white/10" 
                     : "text-black hover:text-black hover:bg-black/10"
@@ -185,7 +294,7 @@ export default function Component() {
               >
                 <div className="flex items-center justify-between w-full">
                   <span>View other testimonials</span>
-                  <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-2 transition-transform duration-300" />
                 </div>
               </Button>
             </DialogTrigger>
@@ -199,7 +308,7 @@ export default function Component() {
                 {testimonials.map((testimonial) => (
                   <Card
                     key={testimonial.id}
-                    className={`${isDark ? "bg-black border-white/20 hover:bg-white/5" : "bg-white border-black/20 hover:bg-black/5"} transition-colors`}
+                    className={`${isDark ? "bg-black border-white/20 hover:bg-white/5" : "bg-white border-black/20 hover:bg-black/5"} transition-all duration-300 hover:scale-105 hover:shadow-lg`}
                   >
                     <CardContent className="p-4 sm:p-6">
                       <div className="flex items-center space-x-3 mb-3 sm:mb-4">
@@ -242,12 +351,12 @@ export default function Component() {
         </div>
 
         {/* Main testimonial content */}
-        <div className="testimonials-fade lg:col-span-2 order-2 lg:order-2">
-          <Card className={`${isDark ? 'bg-black border-white/20' : 'bg-white border-black/20'} shadow-xl h-full`}>
+        <div className="testimonials-main-content lg:col-span-2 order-2 lg:order-2">
+          <Card className={`testimonial-card ${isDark ? 'bg-black border-white/20' : 'bg-white border-black/20'} shadow-xl h-full transition-all duration-500 hover:shadow-2xl hover:scale-[1.02]`}>
             <CardContent className="p-6 sm:p-10 md:p-16 h-full flex flex-col justify-center">
               <div className="space-y-6 sm:space-y-8 lg:space-y-10">
                 <div className="flex items-center justify-between">
-                  <Quote className={`h-12 w-12 sm:h-16 sm:w-16 ${isDark ? "text-white" : "text-black"}`} />
+                  <Quote className={`h-12 w-12 sm:h-16 sm:w-16 transition-all duration-300 hover:scale-110 ${isDark ? "text-white" : "text-black"}`} />
                   <div className="flex items-center space-x-1">
                     {renderStars(selectedTestimonial?.rating || 0)}
                   </div>
@@ -270,7 +379,7 @@ export default function Component() {
                 </div>
 
                 <div className={`flex items-center space-x-4 sm:space-x-6 pt-6 sm:pt-8 border-t ${isDark ? "border-white/10" : "border-black/10"}`}>
-                  <Avatar className={`h-12 w-12 sm:h-16 sm:w-16 ring-2 ${isDark ? "ring-white/20" : "ring-black/20"}`}>
+                  <Avatar className={`h-12 w-12 sm:h-16 sm:w-16 ring-2 transition-all duration-300 hover:scale-110 ${isDark ? "ring-white/20" : "ring-black/20"}`}>
                     <AvatarImage
                       src={selectedTestimonial?.avatar || "/placeholder.svg"}
                       alt={selectedTestimonial?.name}
@@ -291,7 +400,7 @@ export default function Component() {
                     </p>
                   </div>
                   {selectedTestimonial?.featured && (
-                    <Badge className={`font-sans ${isDark ? 'border-white/30 text-white bg-white/10' : 'border-black/30 text-black bg-black/10'}`}>
+                    <Badge className={`font-sans transition-all duration-300 hover:scale-110 ${isDark ? 'border-white/30 text-white bg-white/10' : 'border-black/30 text-black bg-black/10'}`}>
                       Featured
                     </Badge>
                   )}

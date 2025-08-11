@@ -39,10 +39,12 @@ export default function Navbar() {
           {/* Buttons - Right Corner (Removed multilingual) */}
           <div className="hidden lg:flex items-center space-x-4 pr-6">
             {/* Get a Quote Button - Pill Shaped */}
-            <Button className="bg-[#156af2] text-white hover:bg-[#0f4dbd] rounded-xl px-8 py-3 text-lg font-medium font-barlow">
-              {" "}
-              Get a Quote
-            </Button>
+            <a href="#contact">
+              <Button className="bg-[#156af2] text-white hover:bg-[#0f4dbd] rounded-xl px-8 py-3 text-lg font-medium font-barlow">
+                {" "}
+                Get a Quote
+              </Button>
+            </a>
             {/* Theme Toggle Icon */}
             <Button
               variant="ghost"
@@ -82,7 +84,9 @@ export default function Navbar() {
                       <a href="/careers" className={`py-2 text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>Careers</a>
                   </nav>
                   <div className="flex flex-col gap-3 px-6 pb-6">
-                    <Button className="bg-[#156af2] text-white hover:bg-[#0f4dbd] rounded-xl px-8 py-3 text-lg font-medium font-barlow w-full">Get a Quote</Button>
+                    <a href="#contact">
+                      <Button className="bg-[#156af2] text-white hover:bg-[#0f4dbd] rounded-xl px-8 py-3 text-lg font-medium font-barlow w-full">Get a Quote</Button>
+                    </a>
                     <Button variant="ghost" onClick={toggleTheme} className={`rounded-full ${isDark ? 'text-gray-300 hover:text-white hover:bg-gray-800/50 border border-gray-700' : 'text-gray-600 hover:text-black hover:bg-gray-200/50 border border-gray-300'} w-full justify-center items-center transition-all duration-300 hover:scale-105 py-3`}>
                       {isDark ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
                       <span className="ml-3">Theme</span>
