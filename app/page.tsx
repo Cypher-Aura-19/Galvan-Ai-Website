@@ -14,6 +14,7 @@ import Newsletter from "@/components/newsletter";
 import Contact from "@/components/contact";
 import Teams from "@/components/teams";
 import { useTheme } from "@/components/theme-provider";
+import AnimatedGridBg from "@/components/AnimatedGridBg";
 
 export default function Home() {
   const { theme } = useTheme();
@@ -23,24 +24,10 @@ export default function Home() {
     <div className={`relative min-h-screen w-full overflow-hidden transition-colors duration-300 ${
       isDark ? 'bg-black' : 'bg-white'
     }`}>
-      {/* === Background Tile Images Only at Corners === */}
-      <div className="background-tiles pointer-events-none">
-        <img
-          src="https://cdn.prod.website-files.com/66d5553aa640d66c668df6f1/66da7f5d7c141ac49ea9e563_HIW%20Background%20Left.avif"
-          loading="lazy"
-          alt=""
-          className="image-full"
-        />
-      </div>
-
-      <div className="background-tiles right pointer-events-none">
-        <img
-          src="https://cdn.prod.website-files.com/66d5553aa640d66c668df6f1/66da7f5df1e7ae1868432218_HIW%20Background%20Right.avif"
-          loading="lazy"
-          alt=""
-          className="image-full"
-        />
-      </div>
+      {/* === Animated Grid Background === */}
+      <AnimatedGridBg />
+      
+      {/* Removed old corner background tiles */}
 
       {/* === Foreground Page Content === */}
       <div className="relative z-10">
@@ -57,14 +44,14 @@ export default function Home() {
             <div className="text-center mb-16 md:mb-24 px-4 md:px-8 font-barlow">
               <h1
                 className={`
-                  text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold font-barlow mb-8 md:mb-12 tracking-tight text-white
+                  text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold font-barlow mb-8 md:mb-12 tracking-tight ${isDark ? 'text-white' : 'text-black'}
                 `}
               >
-                Our <span className="text-white">Projects</span>
+                Our <span className={isDark ? 'text-white' : 'text-black'}>Projects</span>
               </h1>
               <p
                 className={`
-                  text-lg sm:text-xl max-w-3xl md:max-w-6xl mx-auto leading-relaxed font-sans text-white font-normal
+                  text-lg sm:text-xl max-w-3xl md:max-w-6xl mx-auto leading-relaxed font-sans ${isDark ? 'text-white' : 'text-black'} font-normal
                 `}
               >
                 A journey through Our creative works and technical achievements

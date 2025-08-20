@@ -1,10 +1,13 @@
 "use client"
 import React, { useState } from 'react';
-import { ArrowLeft, ArrowUpRight, MapPin, Clock, DollarSign, Users, Building2, Sun, Moon } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, MapPin, Clock, DollarSign, Users, Building2 } from 'lucide-react';
 import Link from "next/link";
 import JobApplicationForm from '@/components/JobApplicationForm';
 import { useTheme } from '@/components/theme-provider';
 import BrandedLoading from '@/components/BrandedLoading';
+import AnimatedGridBg from "@/components/AnimatedGridBg";
+import Navbar from '@/components/navbar';
+import Footer from '@/components/Footer';
 
 // Job interface
 interface Job {
@@ -27,21 +30,11 @@ interface Job {
 // Careers Page Component
 const CareersPage: React.FC<{ jobs: Job[]; onViewJob: (job: Job) => void; isDark: boolean }> = ({ jobs, onViewJob, isDark }) => {
   return (
-    <div className={`min-h-screen flex flex-col lg:flex-row ${isDark ? 'bg-black' : 'bg-gray-50'}`}>
-      {/* Back to Home Button - Top Left */}
-      <div className="absolute top-4 left-4 lg:top-8 lg:left-8 z-50">
-        <Link href="/" className={`inline-flex items-center gap-2 transition-all duration-300 group px-4 py-2 lg:px-6 lg:py-3 rounded-full backdrop-blur-sm border-2 text-sm lg:text-base font-medium ${
-          isDark 
-            ? 'text-white hover:text-gray-300 bg-white/5 hover:bg-white/10 border-white/20 hover:border-white/30' 
-            : 'text-gray-800 hover:text-gray-600 bg-white/80 hover:bg-white/90 border-gray-200 hover:border-gray-300'
-        }`}>
-          <ArrowLeft className="w-4 h-4 lg:w-5 lg:h-5 group-hover:-translate-x-1 transition-transform duration-300" />
-          <span className="hidden sm:inline">Back to Home</span>
-        </Link>
-      </div>
+    <div className={`relative flex flex-col lg:flex-row ${isDark ? 'bg-black' : 'bg-gray-50'}`}>
+      <AnimatedGridBg />
 
       {/* Fixed Left Side */}
-      <div className="w-full lg:w-1/2 p-6 lg:p-16 flex flex-col justify-center relative min-h-screen lg:min-h-0">
+      <div className="w-full lg:w-1/2 p-6 lg:p-16 flex flex-col justify-center relative min-h-screen lg:min-h-0 pt-20 lg:pt-24">
         {/* Subtle gradient overlay */}
         <div className={`absolute inset-0 pointer-events-none ${
           isDark 
@@ -70,15 +63,15 @@ const CareersPage: React.FC<{ jobs: Job[]; onViewJob: (job: Job) => void; isDark
       </div>
 
       {/* Scrollable Right Side - Job Cards */}
-      <div className="w-full lg:w-1/2 overflow-y-auto h-screen">
+      <div className="w-full lg:w-1/2 overflow-y-auto h-screen pt-20 lg:pt-24">
         <div className="p-6 lg:p-16 space-y-6 lg:space-y-8">
           {jobs.map((job, index) => (
             <div 
               key={job.id} 
-              className={`group relative backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-10 transition-all duration-500 hover:shadow-2xl ${
+              className={`group relative backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-10 transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] ${
                 isDark 
-                  ? 'bg-black/80 border-white/20 hover:bg-black/90 hover:border-white/30 hover:shadow-white/10' 
-                  : 'bg-white/80 border-gray-200 hover:bg-white/90 hover:border-gray-300 hover:shadow-gray-200/50'
+                  ? 'bg-black/40 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20' 
+                  : 'bg-black/5 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20'
               }`}
             >
               {/* Glassy effect overlay */}
@@ -87,27 +80,27 @@ const CareersPage: React.FC<{ jobs: Job[]; onViewJob: (job: Job) => void; isDark
               }`}></div>
               
               <div className="relative z-10">
-                <div className="flex items-start justify-between mb-6 lg:mb-8">
-                  <div className={`text-xs lg:text-sm font-bold px-3 py-1 lg:px-4 lg:py-2 rounded-full backdrop-blur-sm border ${
-                    isDark 
-                      ? 'text-gray-400 bg-white/5 border-white/10' 
-                      : 'text-gray-600 bg-gray-100/50 border-gray-200'
-                  }`}>
-                    {String(index + 1).padStart(2, '0')}
-                  </div>
-                </div>
+                                 <div className="flex items-start justify-between mb-6 lg:mb-8">
+                   <div className={`text-xs lg:text-sm font-bold px-3 py-1 lg:px-4 lg:py-2 rounded-full backdrop-blur-sm border transition-all duration-300 ${
+                     isDark 
+                       ? 'text-gray-400 bg-white/5 border-white/10 group-hover:text-blue-400 group-hover:border-blue-400/40' 
+                       : 'text-gray-600 bg-gray-100/50 border-gray-200 group-hover:text-blue-600 group-hover:border-blue-600/40'
+                   }`}>
+                     {String(index + 1).padStart(2, '0')}
+                   </div>
+                 </div>
                 
                 <div className="mb-6 lg:mb-8">
                   <h2 className={`font-barlow font-extrabold text-xl lg:text-3xl mb-3 lg:mb-4 transition-colors duration-300 ${isDark ? 'text-white group-hover:text-gray-100' : 'text-black group-hover:text-gray-800'}`}>
                     {job.title}
                   </h2>
-                  <div className={`text-xs lg:text-sm font-semibold uppercase tracking-wider inline-block px-4 py-2 lg:px-6 lg:py-3 rounded-full backdrop-blur-sm border ${
-                    isDark 
-                      ? 'text-gray-300 bg-white/5 border-white/10' 
-                      : 'text-gray-600 bg-gray-100/50 border-gray-200'
-                  }`}>
-                    {job.type}
-                  </div>
+                                     <div className={`text-xs lg:text-sm font-semibold uppercase tracking-wider inline-block px-4 py-2 lg:px-6 lg:py-3 rounded-full backdrop-blur-sm border transition-all duration-300 ${
+                     isDark 
+                       ? 'text-gray-300 bg-white/5 border-white/10 group-hover:text-blue-400 group-hover:border-blue-400/40' 
+                       : 'text-gray-600 bg-gray-100/50 border-gray-200 group-hover:text-blue-600 group-hover:border-blue-600/40'
+                   }`}>
+                     {job.type}
+                   </div>
                 </div>
                 
                 <div className="mb-8 lg:mb-12">
@@ -141,8 +134,9 @@ const CareersPage: React.FC<{ jobs: Job[]; onViewJob: (job: Job) => void; isDark
 // Job Detail Page Component
 const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job) => void; isDark: boolean }> = ({ job, onBack, onApply, isDark }) => {
   return (
-    <div className={`min-h-screen ${isDark ? 'bg-black' : 'bg-gray-50'}`}>
-      <div className="w-full px-4 lg:px-8 py-8 lg:py-12">
+    <div className={`relative ${isDark ? 'bg-black' : 'bg-gray-50'}`}>
+      <AnimatedGridBg />
+      <div className="w-full px-4 lg:px-8 py-8 lg:py-12 pt-20 lg:pt-24">
         <div className="max-w-[1700px] mx-auto">
           <button
             onClick={onBack}
@@ -158,9 +152,11 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
           
           {/* Hero Section - Full Width */}
           <div className="mb-12 lg:mb-16">
-            <div className={`relative backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-12 overflow-hidden ${
-              isDark ? 'bg-black/80 border-white/20' : 'bg-white/80 border-gray-200'
-            }`}>
+                         <div className={`relative backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-12 overflow-hidden transition-all duration-500 hover:scale-[1.02] ${
+               isDark 
+                ? 'bg-black/40 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20' 
+                : 'bg-black/5 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20'
+             }`}>
               {/* Gradient background */}
               <div className={`absolute inset-0 ${
                 isDark ? 'bg-gradient-to-br from-white/5 to-transparent' : 'bg-gradient-to-br from-gray-100/50 to-transparent'
@@ -183,9 +179,11 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
                   </div>
                   
                   <div className="space-y-4">
-                    <div className={`backdrop-blur-sm border-2 rounded-xl lg:rounded-2xl p-4 lg:p-5 ${
-                      isDark ? 'bg-white/5 border-white/20' : 'bg-white/80 border-gray-200'
-                    }`}>
+                                         <div className={`backdrop-blur-sm border-2 rounded-xl lg:rounded-2xl p-4 lg:p-5 transition-all duration-500 hover:scale-[1.02] ${
+                       isDark 
+                         ? 'bg-white/5 border-white/20 hover:bg-black/40 hover:border-blue-400/40 hover:shadow-blue-500/20' 
+                         : 'bg-white/80 border-gray-200 hover:bg-black/5 hover:border-blue-600/40 hover:shadow-blue-600/20'
+                     }`}>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <div className="flex items-center gap-2 mb-2">
@@ -247,8 +245,10 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
             {/* Left Column */}
             <div className="space-y-6 lg:space-y-8">
-              <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-8 ${
-                isDark ? 'bg-black/80 border-white/20' : 'bg-white/80 border-gray-200'
+              <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-8 transition-all duration-500 hover:scale-[1.02] ${
+                isDark 
+                  ? 'bg-black/40 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20' 
+                  : 'bg-black/5 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20'
               }`}>
                 <h2 className={`font-barlow font-extrabold text-xl lg:text-2xl mb-4 lg:mb-6 flex items-center gap-3 ${isDark ? 'text-white' : 'text-black'}`}>
                   <div className={`w-3 h-3 rounded-full ${isDark ? 'bg-white' : 'bg-gray-900'}`}></div>
@@ -264,8 +264,10 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
                 </ul>
               </div>
               
-              <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-8 ${
-                isDark ? 'bg-black/80 border-white/20' : 'bg-white/80 border-gray-200'
+              <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-8 transition-all duration-500 hover:scale-[1.02] ${
+                isDark 
+                  ? 'bg-black/40 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20' 
+                  : 'bg-black/5 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20'
               }`}>
                 <h2 className={`font-barlow font-extrabold text-xl lg:text-2xl mb-4 lg:mb-6 flex items-center gap-3 ${isDark ? 'text-white' : 'text-black'}`}>
                   <div className={`w-3 h-3 rounded-full ${isDark ? 'bg-white' : 'bg-gray-900'}`}></div>
@@ -288,8 +290,10 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
             
             {/* Right Column */}
             <div className="space-y-6 lg:space-y-8">
-              <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-8 ${
-                isDark ? 'bg-black/80 border-white/20' : 'bg-white/80 border-gray-200'
+              <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-8 transition-all duration-500 hover:scale-[1.02] ${
+                isDark 
+                  ? 'bg-black/40 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20' 
+                  : 'bg-black/5 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20'
               }`}>
                 <h2 className={`font-barlow font-extrabold text-xl lg:text-2xl mb-4 lg:mb-6 flex items-center gap-3 ${isDark ? 'text-white' : 'text-black'}`}>
                   <div className={`w-3 h-3 rounded-full ${isDark ? 'bg-white' : 'bg-gray-900'}`}></div>
@@ -309,8 +313,10 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
                 </ul>
               </div>
               
-              <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-8 ${
-                isDark ? 'bg-black/80 border-white/20' : 'bg-white/80 border-gray-200'
+              <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-6 lg:p-8 transition-all duration-500 hover:scale-[1.02] ${
+                isDark 
+                  ? 'bg-black/40 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20' 
+                  : 'bg-black/5 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20'
               }`}>
                 <h2 className={`font-barlow font-extrabold text-xl lg:text-2xl mb-4 lg:mb-6 flex items-center gap-3 ${isDark ? 'text-white' : 'text-black'}`}>
                   <div className={`w-3 h-3 rounded-full ${isDark ? 'bg-white' : 'bg-gray-900'}`}></div>
@@ -336,8 +342,10 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
           
           {/* Bottom CTA - Full Width */}
           <div className="mt-12 lg:mt-16">
-            <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-8 lg:p-12 text-center relative overflow-hidden ${
-              isDark ? 'bg-black/80 border-white/20' : 'bg-white/80 border-gray-200'
+            <div className={`backdrop-blur-xl border-2 rounded-2xl lg:rounded-3xl p-8 lg:p-12 text-center relative overflow-hidden transition-all duration-500 hover:scale-[1.02] ${
+              isDark 
+                ? 'bg-black/40 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-500/20' 
+                : 'bg-black/5 border-blue-500/20 hover:border-blue-400/40 hover:shadow-blue-600/20'
             }`}>
               <div className={`absolute inset-0 ${
                 isDark ? 'bg-gradient-to-br from-white/5 to-transparent' : 'bg-gradient-to-br from-gray-100/50 to-transparent'
@@ -369,22 +377,6 @@ const JobDetailPage: React.FC<{ job: Job; onBack: () => void; onApply: (job: Job
   );
 };
 
-// Theme Toggle Component
-const ThemeToggle: React.FC<{ isDark: boolean; toggleTheme: () => void }> = ({ isDark, toggleTheme }) => {
-  return (
-    <button
-      onClick={toggleTheme}
-      className={`fixed top-4 right-4 lg:top-8 lg:right-8 z-50 p-3 rounded-full backdrop-blur-sm border-2 transition-all duration-300 ${
-        isDark 
-          ? 'text-white bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/30' 
-          : 'text-gray-800 bg-white/80 border-gray-200 hover:bg-white/90 hover:border-gray-300'
-      }`}
-    >
-      {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-    </button>
-  );
-};
-
 // Main Careers Complete Component
 const CareersComplete: React.FC = () => {
   const [currentView, setCurrentView] = useState<'careers' | 'job-detail'>('careers');
@@ -394,7 +386,7 @@ const CareersComplete: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [jobToApply, setJobToApply] = useState<Job | null>(null);
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
   const isDark = theme === 'dark';
 
   React.useEffect(() => {
@@ -436,39 +428,42 @@ const CareersComplete: React.FC = () => {
   };
 
   if (loading) {
-    return <BrandedLoading minDuration={7000} />;
+    return (
+      <>
+        <Navbar />
+        <BrandedLoading minDuration={7000} />
+        <Footer />
+      </>
+    );
   }
   
   if (error) {
     return (
-      <div className={`min-h-screen flex items-center justify-center text-2xl ${
-        isDark ? 'bg-black text-red-500' : 'bg-gray-50 text-red-600'
-      }`}>
+      <>
+        <Navbar />
+        <div className={`min-h-screen flex items-center justify-center text-2xl ${isDark ? 'bg-black text-red-500' : 'bg-gray-50 text-red-600'}`}>
         {error}
       </div>
+        <Footer />
+      </>
     );
   }
 
   // Show no careers state when there are no jobs
   if (!loading && !error && jobs.length === 0) {
     return (
-      <div className={`min-h-screen ${isDark ? 'bg-black text-white' : 'bg-gray-50 text-black'}`}>
-        <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
+      <div className={`relative min-h-screen w-full overflow-hidden transition-colors duration-300 ${
+        isDark ? 'bg-black' : 'bg-white'
+      }`}>
+        {/* === Animated Grid Background === */}
+        <AnimatedGridBg />
         
-        {/* Back to Home Button */}
-        <div className="absolute top-4 left-4 lg:top-8 lg:left-8 z-50">
-          <Link href="/" className={`inline-flex items-center gap-2 transition-all duration-300 group px-4 py-2 lg:px-6 lg:py-3 rounded-full backdrop-blur-sm border-2 text-sm lg:text-base font-medium ${
-            isDark 
-              ? 'text-white hover:text-gray-300 bg-white/5 hover:bg-white/10 border-white/20 hover:border-white/30' 
-              : 'text-gray-800 hover:text-gray-600 bg-white/80 hover:bg-white/90 border-gray-200 hover:border-gray-300'
-          }`}>
-            <ArrowLeft className="w-4 h-4 lg:w-5 lg:h-5 group-hover:-translate-x-1 transition-transform duration-300" />
-            <span className="hidden sm:inline">Back to Home</span>
-          </Link>
-        </div>
-
+        {/* === Foreground Page Content === */}
+        <div className="relative z-10">
+          <Navbar />
+          <main>
         {/* No Careers Content */}
-        <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+            <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20 lg:pt-24">
           <div className="max-w-4xl mx-auto text-center">
             {/* Icon */}
             <div className={`w-24 h-24 lg:w-32 lg:h-32 mx-auto mb-8 lg:mb-12 rounded-full flex items-center justify-center ${
@@ -506,10 +501,10 @@ const CareersComplete: React.FC = () => {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 lg:mb-12">
               <Link href="/#contact">
-                <button className={`inline-flex items-center gap-3 transition-all duration-300 group px-8 py-4 lg:px-10 lg:py-5 rounded-2xl font-bold text-base lg:text-lg shadow-2xl ${
+                <button className={`inline-flex items-center gap-3 transition-all duration-300 group px-8 py-4 lg:px-10 lg:py-5 rounded-2xl font-bold text-base lg:text-lg shadow-2xl hover:scale-105 ${
                   isDark 
-                    ? 'bg-white text-black hover:bg-gray-100 hover:shadow-white/20' 
-                    : 'bg-black text-white hover:bg-gray-800 hover:shadow-gray-900/20'
+                    ? 'bg-white text-black hover:bg-gray-100 hover:shadow-blue-500/30 hover:border-blue-400/40' 
+                    : 'bg-black text-white hover:bg-gray-800 hover:shadow-blue-600/30 hover:border-blue-600/40'
                 }`}>
                   <span>Get in Touch</span>
                   <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
@@ -517,10 +512,10 @@ const CareersComplete: React.FC = () => {
               </Link>
               
               <Link href="/about-us">
-                <button className={`inline-flex items-center gap-3 transition-all duration-300 group px-8 py-4 lg:px-10 lg:py-5 rounded-2xl font-bold text-base lg:text-lg border-2 backdrop-blur-sm ${
+                <button className={`inline-flex items-center gap-3 transition-all duration-300 group px-8 py-4 lg:px-10 lg:py-5 rounded-2xl font-bold text-base lg:text-lg border-2 backdrop-blur-sm hover:scale-105 ${
                   isDark 
-                    ? 'text-white border-white/20 hover:border-white/40 hover:bg-white/5' 
-                    : 'text-black border-black/20 hover:border-black/40 hover:bg-black/5'
+                    ? 'text-white border-white/20 hover:border-blue-400/40 hover:bg-white/5 hover:shadow-blue-500/20' 
+                    : 'text-black border-black/20 hover:border-blue-600/40 hover:bg-black/5 hover:shadow-blue-600/20'
                 }`}>
                   <span>Learn About Us</span>
                   <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
@@ -529,8 +524,10 @@ const CareersComplete: React.FC = () => {
             </div>
 
             {/* Additional Info */}
-            <div className={`max-w-2xl mx-auto p-6 lg:p-8 rounded-2xl backdrop-blur-sm border ${
-              isDark ? 'bg-white/5 border-white/20' : 'bg-white/80 border-gray-200'
+            <div className={`max-w-2xl mx-auto p-6 lg:p-8 rounded-2xl backdrop-blur-sm border transition-all duration-500 hover:scale-[1.02] ${
+              isDark 
+                ? 'bg-white/5 border-white/20 hover:bg-black/40 hover:border-blue-400/40 hover:shadow-2xl hover:shadow-blue-500/20' 
+                : 'bg-white/80 border-gray-200 hover:bg-black/5 hover:border-blue-600/40 hover:shadow-2xl hover:shadow-blue-600/20'
             }`}>
               <h3 className={`font-barlow font-bold text-lg lg:text-xl mb-4 ${
                 isDark ? 'text-white' : 'text-black'
@@ -545,15 +542,25 @@ const CareersComplete: React.FC = () => {
               </p>
             </div>
           </div>
+            </div>
+            <Footer />
+          </main>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen ${isDark ? 'bg-black' : 'bg-gray-50'}`}>
-      <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
+    <div className={`relative min-h-screen w-full overflow-hidden transition-colors duration-300 ${
+      isDark ? 'bg-black' : 'bg-white'
+    }`}>
+      {/* === Animated Grid Background === */}
+      <AnimatedGridBg />
       
+      {/* === Foreground Page Content === */}
+      <div className="relative z-10">
+        <Navbar />
+        <main>
       {currentView === 'careers' ? (
         <CareersPage jobs={jobs} onViewJob={handleViewJob} isDark={isDark} />
       ) : (
@@ -567,6 +574,9 @@ const CareersComplete: React.FC = () => {
           isDark={isDark}
         />
       )}
+          <Footer />
+        </main>
+      </div>
     </div>
   );
 };

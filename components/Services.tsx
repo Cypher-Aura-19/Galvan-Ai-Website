@@ -6,7 +6,7 @@ import Lenis from 'lenis';
 import MilestonesSection from './milestones';
 
 const ScrollAnimation = () => {
-  const lenisRef = useRef(null);
+  const lenisRef = useRef<InstanceType<typeof Lenis> | null>(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -20,7 +20,7 @@ const ScrollAnimation = () => {
     });
     gsap.ticker.lagSmoothing(0);
 
-    const smoothStep = (p) => p * p * (3 - 2 * p);
+    const smoothStep = (p: number) => p * p * (3 - 2 * p);
 
     // Hero cards animation for desktop
     if (window.innerWidth > 1000) {
@@ -158,173 +158,198 @@ const ScrollAnimation = () => {
       });
     }
 
-    // Services section animations (desktop only)
+    // Services section animations (desktop only) – start when milestones leave viewport
     if (window.innerWidth > 1000) {
-      ScrollTrigger.create({
-        trigger: ".services",
-        start: "top top",
-        end: `+=${window.innerHeight * 4}px`,
-        pin: ".services",
-        pinSpacing: true,
-      });
+      let servicesInited = false;
 
-      ScrollTrigger.create({
-        trigger: ".services",
-        start: "top top",
-        end: `+=${window.innerHeight * 4}px`,
-        onLeave: () => {
-          const servicesSection = document.querySelector(".services");
-          const servicesRect = servicesSection.getBoundingClientRect();
-          const servicesTop = window.pageYOffset + servicesRect.top;
+      const initServicesDesktopScroll = () => {
+        if (servicesInited) return;
+        servicesInited = true;
 
-          gsap.set(".cards", {
-            position: "absolute",
-            top: servicesTop,
-            left: 0,
-            width: "100%",
-            height: "100svh",
-          });
-        },
-        onEnterBack: () => {
-          gsap.set(".cards", {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100svh",
-          });
-        },
-      });
+        ScrollTrigger.create({
+          trigger: ".services",
+          start: "top top",
+          end: `+=${window.innerHeight * 4}px`,
+          pin: ".services",
+          pinSpacing: true,
+        });
 
-      ScrollTrigger.create({
-        trigger: ".services",
-        start: "top bottom",
-        end: `+=${window.innerHeight * 4}`,
-        scrub: 1,
-        onUpdate: (self) => {
-          const progress = self.progress;
+        ScrollTrigger.create({
+          trigger: ".services",
+          start: "top top",
+          end: `+=${window.innerHeight * 4}px`,
+          onLeave: () => {
+            const servicesSection = document.querySelector(".services");
+            if (!servicesSection) return;
+            const servicesRect = servicesSection.getBoundingClientRect();
+            const servicesTop = window.pageYOffset + servicesRect.top;
 
-          const headerProgress = gsap.utils.clamp(0, 1, progress / 0.9);
-          const headerY = gsap.utils.interpolate(
-            "400%",
-            "0%",
-            smoothStep(headerProgress)
-          );
-          gsap.set(".services-header", {
-            y: headerY,
-          });
+            gsap.set(".cards", {
+              position: "absolute",
+              top: servicesTop,
+              left: 0,
+              width: "100%",
+              height: "100svh",
+            });
+          },
+          onEnterBack: () => {
+            gsap.set(".cards", {
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100svh",
+            });
+          },
+        });
 
-          ["#card-1", "#card-2", "#card-3", "#card-4"].forEach((cardId, index) => {
-            const delay = index * 0.3;
-            const cardProgress = gsap.utils.clamp(
-              0,
-              1,
-              (progress - delay * 0.1) / (0.9 - delay * 0.1)
+        ScrollTrigger.create({
+          trigger: ".services",
+          start: "top top",
+          end: `+=${window.innerHeight * 4}`,
+          scrub: 1,
+          onUpdate: (self) => {
+            const progress = self.progress;
+
+            const headerProgress = gsap.utils.clamp(0, 1, progress / 0.9);
+            const headerY = gsap.utils.interpolate(
+              "400%",
+              "0%",
+              smoothStep(headerProgress)
             );
+            gsap.set(".services-header", {
+              y: headerY,
+            });
 
-            const innerCard = document.querySelector(
-              `${cardId} .flip-card-inner`
-            );
-
-            let y;
-            if (cardProgress < 0.4) {
-              const normalizedProgress = cardProgress / 0.4;
-              y = gsap.utils.interpolate(
-                "-100%",
-                "50%",
-                smoothStep(normalizedProgress)
-              );
-            } else if (cardProgress < 0.6) {
-              const normalizedProgress = (cardProgress - 0.4) / 0.2;
-              y = gsap.utils.interpolate(
-                "50%",
-                "0%",
-                smoothStep(normalizedProgress)
-              );
-            } else {
-              y = "0%";
-            }
-
-            let scale;
-            if (cardProgress < 0.4) {
-              const normalizedProgress = cardProgress / 0.4;
-              scale = gsap.utils.interpolate(
-                0.25,
-                0.75,
-                smoothStep(normalizedProgress)
-              );
-            } else if (cardProgress < 0.6) {
-              const normalizedProgress = (cardProgress - 0.4) / 0.2;
-              scale = gsap.utils.interpolate(
-                0.75,
-                1,
-                smoothStep(normalizedProgress)
-              );
-            } else {
-              scale = 1;
-            }
-
-            let opacity;
-            if (cardProgress < 0.2) {
-              const normalizedProgress = cardProgress / 0.2;
-              opacity = smoothStep(normalizedProgress);
-            } else {
-              opacity = 1;
-            }
-
-            let x, rotate, rotationY;
-            if (cardProgress < 0.6) {
-              x = index === 0 ? "100%" : index === 1 ? "33%" : index === 2 ? "-33%" : "-100%";
-              rotate = index === 0 ? -5 : index === 1 ? -2 : index === 2 ? 2 : 5;
-              rotationY = 0;
-            } else if (cardProgress < 1) {
-              const normalizedProgress = (cardProgress - 0.6) / 0.4;
-              x = gsap.utils.interpolate(
-                index === 0 ? "100%" : index === 1 ? "33%" : index === 2 ? "-33%" : "-100%",
-                "0%",
-                smoothStep(normalizedProgress)
-              );
-              rotate = gsap.utils.interpolate(
-                index === 0 ? -5 : index === 1 ? -2 : index === 2 ? 2 : 5,
+            ["#card-1", "#card-2", "#card-3", "#card-4"].forEach((cardId, index) => {
+              const delay = index * 0.3;
+              const cardProgress = gsap.utils.clamp(
                 0,
-                smoothStep(normalizedProgress)
+                1,
+                (progress - delay * 0.1) / (0.9 - delay * 0.1)
               );
-              rotationY = smoothStep(normalizedProgress) * 180;
-            } else {
-              x = "0%";
-              rotate = 0;
-              rotationY = 180;
-            }
 
-            gsap.set(cardId, {
-              opacity: opacity,
-              y: y,
-              x: x,
-              rotate: rotate,
-              scale: scale,
-            });
+              const innerCard = document.querySelector(
+                `${cardId} .flip-card-inner`
+              );
 
-            gsap.set(innerCard, {
-              rotationY: rotationY,
-            });
+              let y;
+              if (cardProgress < 0.4) {
+                const normalizedProgress = cardProgress / 0.4;
+                y = gsap.utils.interpolate(
+                  "-100%",
+                  "50%",
+                  smoothStep(normalizedProgress)
+                );
+              } else if (cardProgress < 0.6) {
+                const normalizedProgress = (cardProgress - 0.4) / 0.2;
+                y = gsap.utils.interpolate(
+                  "50%",
+                  "0%",
+                  smoothStep(normalizedProgress)
+                );
+              } else {
+                y = "0%";
+              }
 
-            // Stop floating animation when cards are fully positioned
-            const cardWrapper = document.querySelector(`${cardId} .card-wrapper`);
-            if (cardProgress >= 1) {
-              gsap.set(cardWrapper, {
-                animation: 'none',
-                transform: 'translate(-50%, -50%)'
+              let scale;
+              if (cardProgress < 0.4) {
+                const normalizedProgress = cardProgress / 0.4;
+                scale = gsap.utils.interpolate(
+                  0.25,
+                  0.75,
+                  smoothStep(normalizedProgress)
+                );
+              } else if (cardProgress < 0.6) {
+                const normalizedProgress = (cardProgress - 0.4) / 0.2;
+                scale = gsap.utils.interpolate(
+                  0.75,
+                  1,
+                  smoothStep(normalizedProgress)
+                );
+              } else {
+                scale = 1;
+              }
+
+              let opacity;
+              if (cardProgress < 0.2) {
+                const normalizedProgress = cardProgress / 0.2;
+                opacity = smoothStep(normalizedProgress);
+              } else {
+                opacity = 1;
+              }
+
+              let x, rotate, rotationY;
+              if (cardProgress < 0.6) {
+                x = index === 0 ? "100%" : index === 1 ? "33%" : index === 2 ? "-33%" : "-100%";
+                rotate = index === 0 ? -5 : index === 1 ? -2 : index === 2 ? 2 : 5;
+                rotationY = 0;
+              } else if (cardProgress < 1) {
+                const normalizedProgress = (cardProgress - 0.6) / 0.4;
+                x = gsap.utils.interpolate(
+                  index === 0 ? "100%" : index === 1 ? "33%" : index === 2 ? "-33%" : "-100%",
+                  "0%",
+                  smoothStep(normalizedProgress)
+                );
+                rotate = gsap.utils.interpolate(
+                  index === 0 ? -5 : index === 1 ? -2 : index === 2 ? 2 : 5,
+                  0,
+                  smoothStep(normalizedProgress)
+                );
+                rotationY = smoothStep(normalizedProgress) * 180;
+              } else {
+                x = "0%";
+                rotate = 0;
+                rotationY = 180;
+              }
+
+              gsap.set(cardId, {
+                opacity: opacity,
+                y: y,
+                x: x,
+                rotate: rotate,
+                scale: scale,
               });
-            } else {
-              // Re-enable floating animation when cards are not fully positioned
-              gsap.set(cardWrapper, {
-                animation: 'floating 2s infinite ease-in-out',
-                animationDelay: `${index * 0.2}s`
+
+              gsap.set(innerCard, {
+                rotationY: rotationY,
               });
-            }
-          });
-        },
+
+              // Stop floating animation when cards are fully positioned
+              const cardWrapper = document.querySelector(`${cardId} .card-wrapper`);
+              if (cardProgress >= 1) {
+                gsap.set(cardWrapper, {
+                  animation: 'none',
+                  transform: 'translate(-50%, -50%)'
+                });
+              } else {
+                // Re-enable floating animation when cards are not fully positioned
+                gsap.set(cardWrapper, {
+                  animation: 'floating 2s infinite ease-in-out',
+                  animationDelay: `${index * 0.2}s`
+                });
+              }
+            });
+          },
+        });
+      };
+
+      // Trigger init after milestones leave the viewport
+      ScrollTrigger.create({
+        trigger: ".milestones-section",
+        start: "bottom bottom",
+        onLeave: () => initServicesDesktopScroll(),
       });
+
+      // If we are already past milestones on load (deep link/refresh), init immediately
+      const msEl = document.querySelector('.milestones-section');
+      if (msEl) {
+        const rect = msEl.getBoundingClientRect();
+        const msBottomY = rect.bottom + window.scrollY;
+        if (window.scrollY >= msBottomY) {
+          initServicesDesktopScroll();
+        }
+      }
     }
 
     return () => {
@@ -445,7 +470,8 @@ const ScrollAnimation = () => {
           aspect-ratio: 5/7;
           padding: 1rem;
           border-radius: 0.75rem;
-          border: 2px solid white;
+          border: 2px solid rgba(37,99,235,0.6);
+          
           display: flex;
           flex-direction: column;
           justify-content: space-between;
@@ -593,7 +619,7 @@ const ScrollAnimation = () => {
           flex-direction: column;
           justify-content: space-between;
           align-items: center;
-          border: 2px solid white;
+          border: 2px solid rgba(37,99,235,0.6);
         }
 
         #card-1 .flip-card-front {
@@ -619,7 +645,7 @@ const ScrollAnimation = () => {
           justify-content: space-between;
           gap: 2rem;
           background-color: #000;
-          border: 2px solid white;
+          border: 2px solid rgba(37,99,235,0.6);
           transform: rotateY(180deg);
         }
 
@@ -639,7 +665,7 @@ const ScrollAnimation = () => {
           font-size: 1rem;
           color: white;
           border-radius: 0.25rem;
-          border: 1px solid white;
+          border: 1px solid rgba(37,99,235,0.6);
           background: none;
         }
         .scroll-animation-root .card-copy p:first-child {
@@ -870,20 +896,45 @@ const ScrollAnimation = () => {
             
         }
 
-        /* Override hero cards and flip cards to always have a solid background */
-        .hero-cards .card {
-          background: #fff !important;
+
+
+
+
+        .hero-cards .card:hover {
+          transform: scale(1.03);
+          box-shadow: 0 25px 60px rgba(37,99,235,0.25);
+          border-color: rgba(37,99,235,0.6) !important;
         }
         :global(.dark) .hero-cards .card {
           background: #000 !important;
+          border-color: rgba(59,130,246,0.6) !important;
+        }
+        :global(.dark) .hero-cards .card:hover {
+          box-shadow: 0 25px 60px rgba(59,130,246,0.25);
+          border-color: rgba(59,130,246,0.6) !important;
         }
         .flip-card-front,
         .flip-card-back {
           background: #fff !important;
+          border: 2px solid rgba(37,99,235,0.6) !important;
+          transition: all 300ms ease !important;
+        }
+        .cards .flip-card-inner:hover .flip-card-front,
+        .cards .flip-card-inner:hover .flip-card-back {
+          border-color: rgba(37,99,235,0.6) !important;
+          box-shadow: 0 25px 60px rgba(37,99,235,0.25) !important;
+          transform: translateZ(0) scale(1.015) !important;
         }
         :global(.dark) .flip-card-front,
         :global(.dark) .flip-card-back {
           background: #000 !important;
+          border-color: rgba(59,130,246,0.6) !important;
+        }
+        :global(.dark) .cards .flip-card-inner:hover .flip-card-front,
+        :global(.dark) .cards .flip-card-inner:hover .flip-card-back {
+          border-color: rgba(59,130,246,0.6) !important;
+          box-shadow: 0 25px 60px rgba(59,130,246,0.25) !important;
+          transform: translateZ(0) scale(1.015) !important;
         }
 
         /* Our Services heading style (matches contact.tsx heading) */
@@ -924,7 +975,14 @@ const ScrollAnimation = () => {
         .flip-card-back {
           background: #fff !important;
           color: #000 !important;
-          border: 2px solid #000 !important;
+          border: 2px solid rgba(37,99,235,0.6) !important;
+          transition: all 300ms ease !important;
+        }
+        
+        /* Ensure mobile cards have proper transitions */
+        .mobile-cards .flip-card-front,
+        .mobile-cards .flip-card-back {
+          transition: all 300ms ease !important;
         }
         .hero-cards .card *,
         .flip-card-front *,
@@ -935,6 +993,13 @@ const ScrollAnimation = () => {
           border: 1.5px solid #000 !important;
           background: #000 !important;
           color: #fff !important;
+        }
+        /* Blue hover on flip-card back content - desktop only */
+        .cards .flip-card-inner:hover .flip-card-back p:not(:first-child) {
+          border-color: rgba(37,99,235,0.75) !important; /* blue-600 */
+          background: rgba(37,99,235,0.9) !important;
+          color: #fff !important;
+          box-shadow: 0 8px 30px rgba(37,99,235,0.35) !important;
         }
         .flip-card-back p:first-child {
           border: none !important;
@@ -949,6 +1014,7 @@ const ScrollAnimation = () => {
           background: #000 !important;
           color: #fff !important;
           border: 2px solid #fff !important;
+          transition: all 300ms ease !important;
         }
         :global(.dark) .hero-cards .card *,
         :global(.dark) .flip-card-front *,
@@ -960,10 +1026,72 @@ const ScrollAnimation = () => {
           background: #fff !important;
           color: #000 !important;
         }
+        :global(.dark) .cards .flip-card-inner:hover .flip-card-back p:not(:first-child) {
+          border-color: rgba(59,130,246,0.75) !important; /* blue-500 */
+          background: rgba(59,130,246,0.9) !important;
+          color: #000 !important;
+          box-shadow: 0 8px 30px rgba(59,130,246,0.35) !important;
+        }
         :global(.dark) .flip-card-back p:first-child {
           border: none !important;
           background: none !important;
           color: #fff !important;
+        }
+
+        /* Force flip card hover effects - desktop only */
+        .cards .flip-card-inner:hover .flip-card-front,
+        .cards .flip-card-inner:hover .flip-card-back {
+          border-color: rgba(37,99,235,0.6) !important;
+          box-shadow: 0 25px 60px rgba(37,99,235,0.25) !important;
+          transform: translateZ(0) scale(1.015) !important;
+        }
+        :global(.dark) .cards .flip-card-inner:hover .flip-card-front,
+        :global(.dark) .cards .flip-card-inner:hover .flip-card-back {
+          border-color: rgba(59,130,246,0.6) !important;
+          box-shadow: 0 25px 60px rgba(59,130,246,0.25) !important;
+          transform: translateZ(0) scale(1.015) !important;
+        }
+
+        /* Mobile flip card border hover effects - with higher specificity */
+        .mobile-cards .card .flip-card-inner:hover .flip-card-front,
+        .mobile-cards .card .flip-card-inner:hover .flip-card-back {
+          border-color: rgba(37,99,235,0.6) !important;
+          box-shadow: 0 15px 40px rgba(37,99,235,0.25) !important;
+          transform: translateZ(0) scale(1.02) !important;
+        }
+        :global(.dark) .mobile-cards .card .flip-card-inner:hover .flip-card-front,
+        :global(.dark) .mobile-cards .card .flip-card-inner:hover .flip-card-back {
+          border-color: rgba(59,130,246,0.6) !important;
+          box-shadow: 0 15px 40px rgba(59,130,246,0.25) !important;
+          transform: translateZ(0) scale(1.02) !important;
+        }
+
+        /* Force mobile flip card hover with maximum specificity */
+        .scroll-animation-root .mobile-cards .card .flip-card-inner:hover .flip-card-front,
+        .scroll-animation-root .mobile-cards .card .flip-card-inner:hover .flip-card-back {
+          border-color: rgba(37,99,235,0.6) !important;
+          box-shadow: 0 15px 40px rgba(37,99,235,0.25) !important;
+          transform: translateZ(0) scale(1.02) !important;
+        }
+        :global(.dark) .scroll-animation-root .mobile-cards .card .flip-card-inner:hover .flip-card-front,
+        :global(.dark) .scroll-animation-root .mobile-cards .card .flip-card-inner:hover .flip-card-back {
+          border-color: rgba(59,130,246,0.6) !important;
+          box-shadow: 0 15px 40px rgba(59,130,246,0.25) !important;
+          transform: translateZ(0) scale(1.02) !important;
+        }
+
+        /* Direct mobile card hover - most specific */
+        .mobile-cards .card:hover .flip-card-front,
+        .mobile-cards .card:hover .flip-card-back {
+          border-color: rgba(37,99,235,0.6) !important;
+          box-shadow: 0 15px 40px rgba(37,99,235,0.25) !important;
+          transform: translateZ(0) scale(1.02) !important;
+        }
+        :global(.dark) .mobile-cards .card:hover .flip-card-front,
+        :global(.dark) .mobile-cards .card:hover .flip-card-back {
+          border-color: rgba(59,130,246,0.6) !important;
+          box-shadow: 0 15px 40px rgba(59,130,246,0.25) !important;
+          transform: translateZ(0) scale(1.02) !important;
         }
       `}</style>
 

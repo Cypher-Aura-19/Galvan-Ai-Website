@@ -1338,11 +1338,9 @@ def update_job_application(application_id):
         application = JobApplication.query.get(application_id)
         if not application:
             return jsonify({'error': 'Application not found'}), 404
-        # Allow updating status and notes only
-        if 'status' in data:
-            application.status = data['status']
-        if 'notes' in data:
-            application.notes = data['notes']
+        
+        # Update application using the new method
+        application.update_from_dict(data)
         db.session.commit()
         return jsonify({'success': True, 'message': 'Application updated successfully'})
     except Exception as e:

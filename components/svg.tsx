@@ -87,7 +87,7 @@ const mobileTracks = [
   {
     pathId: 'topLeftPath',
     color: '#156af2',
-    dashLen: 10,
+    dashLen: 40,
     gap: 10,
     speed: 300,
     freq: 0.5,
@@ -97,7 +97,7 @@ const mobileTracks = [
   {
     pathId: 'topCenterPath',
     color: '#156af2',
-    dashLen: 10,
+    dashLen: 50,
     gap: 10,
     speed: 160,
     freq: 0.5,
@@ -425,7 +425,7 @@ export default function SVGPulseAnimation() {
   const rightIcons = getRightIcons()
 
   return (
-    <div className={`${theme === 'dark' ? 'magicpattern' : 'magicpattern-2'} flex flex-col items-center justify-center gap-4 w-full ${
+    <div className={`flex flex-col items-center justify-center gap-4 w-full ${
       deviceType === 'mobile' ? 'min-h-screen py-4' :
       deviceType === 'tablet' ? 'min-h-screen py-8' : 'min-h-screen py-20'
     }`}>
@@ -437,8 +437,8 @@ export default function SVGPulseAnimation() {
         {/* Text content positioned in center */}
         <div className="absolute inset-0 z-30 flex items-center justify-center">
           <div className={`relative z-30 text-center flex flex-col items-center justify-center ${content.contentGap} ${content.containerPadding} ${
-            deviceType === 'mobile' ? 'min-w-[280px] max-w-[85vw] py-4' :
-            deviceType === 'tablet' ? 'min-w-[400px] max-w-[75vw] py-6' :
+            deviceType === 'mobile' ? 'min-w-[280px] max-w-[85vw] py-4 mt-14' :
+            deviceType === 'tablet' ? 'min-w-[400px] max-w-[75vw] py-6 mt-20' :
             'min-w-[450px] max-w-[70vw] mt-24 py-8'
           }`}>
             <h1 className={`font-barlow ${content.titleSize} font-extrabold tracking-tight ${theme === 'dark' ? 'text-black' : 'text-white'} relative z-10 text-center ${
@@ -469,12 +469,12 @@ export default function SVGPulseAnimation() {
            </p>
 
         <a href="#contact">
-          <button className={`${theme === 'dark' ? 'bg-white text-black hover:bg-white/90' : 'bg-black text-white hover:bg-black/90'} rounded-xl mt-4 md:mt-8 ${content.buttonSize} font-medium transition-all duration-300 flex items-center gap-2 ${
-                deviceType === 'mobile' ? 'hover:scale-105' :
-                deviceType === 'tablet' ? 'hover:scale-110' : 'hover:scale-110'
-              }`}>
-            {content.buttonText}
-          </button>
+        <button className={`${theme === 'dark' ? 'bg-white text-black hover:bg-white/90' : 'bg-black text-white hover:bg-black/90'} rounded-xl mt-4 md:mt-8 ${content.buttonSize} font-medium transition-all duration-300 flex items-center gap-2 ${
+              deviceType === 'mobile' ? 'hover:scale-105' :
+              deviceType === 'tablet' ? 'hover:scale-110' : 'hover:scale-110'
+            }`}>
+              {content.buttonText}
+            </button>
         </a>
           </div>
         </div>
@@ -555,7 +555,15 @@ export default function SVGPulseAnimation() {
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
               <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <SiOpenai style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  <SiOpenai style={{ 
+              width: '35px', 
+              height: '35px', 
+              color: theme === 'dark' ? '#000000' : '#ffffff',
+              transition: 'color 0.3s ease, transform 0.3s ease',
+              cursor: 'pointer'
+            }} 
+            className="hover:text-blue-500 hover:scale-110 transition-all duration-300"
+            />
                   </div>
                 </foreignObject>
               </g>
@@ -563,7 +571,15 @@ export default function SVGPulseAnimation() {
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
               <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <SiDocker style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  <SiDocker style={{ 
+              width: '35px', 
+              height: '35px', 
+              color: theme === 'dark' ? '#000000' : '#ffffff',
+              transition: 'color 0.3s ease, transform 0.3s ease',
+              cursor: 'pointer'
+            }} 
+            className="hover:text-blue-500 hover:scale-110 transition-all duration-300"
+            />
                   </div>
                 </foreignObject>
               </g>
@@ -571,7 +587,15 @@ export default function SVGPulseAnimation() {
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
               <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <SiStripe style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  <SiStripe style={{ 
+              width: '35px', 
+              height: '35px', 
+              color: theme === 'dark' ? '#000000' : '#ffffff',
+              transition: 'color 0.3s ease, transform 0.3s ease',
+              cursor: 'pointer'
+            }} 
+            className="hover:text-blue-500 hover:scale-110 transition-all duration-300"
+            />
                   </div>
                 </foreignObject>
               </g>
@@ -595,7 +619,15 @@ export default function SVGPulseAnimation() {
               <circle cx="0" cy="0" r={35} fill={theme === 'dark' ? 'white' : 'black'} />
               <foreignObject x={-17.5} y={-17.5} width={35} height={35} style={{ zIndex: 3000 }}>
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FaAws style={{ width: '35px', height: '35px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                  <FaAws style={{ 
+              width: '35px', 
+              height: '35px', 
+              color: theme === 'dark' ? '#000000' : '#ffffff',
+              transition: 'color 0.3s ease, transform 0.3s ease',
+              cursor: 'pointer'
+            }} 
+            className="hover:text-blue-500 hover:scale-110 transition-all duration-300"
+            />
                   </div>
                 </foreignObject>
               </g>
@@ -653,11 +685,11 @@ export default function SVGPulseAnimation() {
         ) : (
           <svg
             ref={mobileSceneRef}
-            viewBox="-300 -50 1300 950"
+            viewBox="-150 -160 1600 1000"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             style={{
-              overflow: 'hidden',
+              overflow: 'visible',
               width: '85%',
               height: 'auto',
               maxHeight: '600px',
@@ -669,19 +701,13 @@ export default function SVGPulseAnimation() {
               margin: '0 auto'
             }}
           >
-            <g transform="rotate(90 350 425)">
+<g transform="rotate(0 350 425)">
               {/* Top Left Path */}
               <path
                 id="topLeftPath"
                 className="guide"
                 d="
-                  M-299.5 3.5
-                  H52.574
-                  C160.53 3.5 168.161 6.6607 173.787 12.2868
-                  L241.157 79.657
-                  L531.713 370.213
-                  C537.339 375.839 544.97 379 552.926 379
-                  H752.926
+                  M1259.5 -182V270.074C1259.5 278.03 1256.34 285.661 1250.71 291.287L1166.5 375.5L892.787 649.213C887.161 654.839 884 662.47 884 670.426V870.426
                 "
                 stroke={theme === 'dark' ? 'white' : 'black'}
                 strokeWidth="6"
@@ -693,13 +719,7 @@ export default function SVGPulseAnimation() {
                 id="topCenterPath"
                 className="guide"
                 d="
-                  M-196.5 70.5
-                  H54.574
-                  C162.53 70.5 170.161 73.6607 175.787 79.2868
-                  L241.557 145.057
-                  L483.213 386.713
-                  C488.839 392.339 496.47 395.5 504.426 395.5
-                  H704.426
+                M1103 -50V301.074C1103 309.03 1099.84 316.661 1094.21 322.287L1012 404.5L786.787 629.713C781.161 635.339 778 642.97 778 650.926V850.926
                 "
                 stroke={theme === 'dark' ? 'white' : 'black'}
                 strokeWidth="6"
@@ -711,12 +731,7 @@ export default function SVGPulseAnimation() {
                 id="topRightPath"
                 className="guide"
                 d="
-                  M-261 135
-                  H32.574
-                  C140.53 135 148.161 138.161 153.787 143.787
-                  L367.328 357.328
-                  C426.339 416.339 433.97 419.5 441.926 419.5
-                  H641.926
+                  M940 -136V257.574C940 265.53 936.839 273.161 931.213 278.787L664.287 545.713C658.661 551.339 655.5 558.97 655.5 566.926V766.926
                 "
                 stroke={theme === 'dark' ? 'white' : 'black'}
                 strokeWidth="6"
@@ -728,13 +743,7 @@ export default function SVGPulseAnimation() {
                 id="bottomLeftPath"
                 className="guide"
                 d="
-                  M-299.5 836
-                  H52.574
-                  C160.53 836 168.161 832.839 173.787 827.213
-                  L241.157 759.843
-                  L531.713 469.287
-                  C537.339 463.661 544.97 460.5 552.926 460.5
-                  H752.926
+                M37 -182V270.074C37 278.03 40.161 285.661 45.787 291.287L130 375.5L403.713 649.213C409.339 654.839 412.5 662.47 412.5 670.426V870.426
                 "
                 stroke={theme === 'dark' ? 'white' : 'black'}
                 strokeWidth="6"
@@ -746,13 +755,7 @@ export default function SVGPulseAnimation() {
                 id="bottomCenterPath"
                 className="guide"
                 d="
-                  M-196.5 769
-                  H54.574
-                  C162.53 769 170.161 765.839 175.787 760.213
-                  L241.557 694.443
-                  L483.213 452.787
-                  C488.839 447.161 496.47 444 504.426 444
-                  H704.426
+                  M209 -50V301.074C209 309.03 212.161 316.661 217.787 322.287L300 404.5L525.213 629.713C530.839 635.339 534 642.97 534 650.926V850.926
                 "
                 stroke={theme === 'dark' ? 'white' : 'black'}
                 strokeWidth="6"
@@ -764,164 +767,91 @@ export default function SVGPulseAnimation() {
                 id="bottomRightPath"
                 className="guide"
                 d="
-                  M-261 704.5
-                  H32.574
-                  C140.53 704.5 148.161 701.339 153.787 695.713
-                  L367.328 482.172
-                  C426.339 423.161 433.97 420 441.926 420
-                  H641.926
+                  M370.5 -136V257.574C370.5 265.53 373.661 273.161 379.287 278.787L646.213 545.713C651.839 551.339 655 558.97 655 566.926V766.926
                 "
                 stroke={theme === 'dark' ? 'white' : 'black'}
                 strokeWidth="6"
                 fill="none"
               />
 
-              {/* Left-end circles with icons */}
-              <g transform="translate(-299.5, 3.5)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+              {/* Start-of-path icons for mobile/tablet */}
+              <g transform="translate(1259.5, -182)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={60} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={-30} y={-30} width={60} height={60} style={{ zIndex: 3000 }}>
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <SiOpenai style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                    <SiOpenai style={{ 
+              width: '60px', 
+              height: '60px', 
+              color: theme === 'dark' ? '#000000' : '#ffffff',
+              transition: 'color 0.3s ease, transform 0.3s ease',
+              cursor: 'pointer'
+            }} 
+            className="hover:text-blue-500 hover:scale-110 transition-all duration-300"
+            />
                   </div>
                 </foreignObject>
               </g>
-              <g transform="translate(-196.5, 70.5)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+              <g transform="translate(1103, -50)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={60} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={-30} y={-30} width={60} height={60} style={{ zIndex: 3000 }}>
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <SiDocker style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                    <SiDocker style={{ 
+              width: '60px', 
+              height: '60px', 
+              color: theme === 'dark' ? '#000000' : '#ffffff',
+              transition: 'color 0.3s ease, transform 0.3s ease',
+              cursor: 'pointer'
+            }} 
+            className="hover:text-blue-500 hover:scale-110 transition-all duration-300"
+            />
                   </div>
                 </foreignObject>
               </g>
-              <g transform="translate(-261, 135)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+              <g transform="translate(940, -136)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={60} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={-30} y={-30} width={60} height={60} style={{ zIndex: 3000 }}>
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <SiStripe style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                    <SiStripe style={{ 
+              width: '60px', 
+              height: '60px', 
+              color: theme === 'dark' ? '#000000' : '#ffffff',
+              transition: 'color 0.3s ease, transform 0.3s ease',
+              cursor: 'pointer'
+            }} 
+            className="hover:text-blue-500 hover:scale-110 transition-all duration-300"
+            />
                   </div>
                 </foreignObject>
               </g>
-              <g transform="translate(-299.5, 836)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+              <g transform="translate(37, -182)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={60} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={-30} y={-30} width={60} height={60} style={{ zIndex: 3000 }}>
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <SiFirebase style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                    <SiFirebase style={{ width: '60px', height: '60px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
                   </div>
                 </foreignObject>
               </g>
-              <g transform="translate(-196.5, 769)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+              <g transform="translate(209, -50)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={60} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={-30} y={-30} width={60} height={60} style={{ zIndex: 3000 }}>
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <SiShopify style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                    <SiShopify style={{ width: '60px', height: '60px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
                   </div>
                 </foreignObject>
               </g>
-              <g transform="translate(-261, 704.5)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
+              <g transform="translate(370.5, -136)" style={{ zIndex: 2000 }}>
+                <circle cx="0" cy="0" r={60} fill={theme === 'dark' ? 'white' : 'black'} />
+                <foreignObject x={-30} y={-30} width={60} height={60} style={{ zIndex: 3000 }}>
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <FaAws style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                  </div>
-                </foreignObject>
-              </g>
-
-              {/* Corner circles with icons */}
-              <g transform="translate(52.574, 3.5)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 20 : 25} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -10 : -12.5} y={deviceType === 'mobile' ? -10 : -12.5} width={deviceType === 'mobile' ? 20 : 25} height={deviceType === 'mobile' ? 20 : 25} style={{ zIndex: 3000 }}>
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <FaRobot style={{ width: deviceType === 'mobile' ? '20px' : '25px', height: deviceType === 'mobile' ? '20px' : '25px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                  </div>
-                </foreignObject>
-              </g>
-              <g transform="translate(54.574, 70.5)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 20 : 25} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -10 : -12.5} y={deviceType === 'mobile' ? -10 : -12.5} width={deviceType === 'mobile' ? 20 : 25} height={deviceType === 'mobile' ? 20 : 25} style={{ zIndex: 3000 }}>
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <FaBrain style={{ width: deviceType === 'mobile' ? '20px' : '25px', height: deviceType === 'mobile' ? '20px' : '25px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                  </div>
-                </foreignObject>
-              </g>
-              <g transform="translate(32.574, 135)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 20 : 25} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -10 : -12.5} y={deviceType === 'mobile' ? -10 : -12.5} width={deviceType === 'mobile' ? 20 : 25} height={deviceType === 'mobile' ? 20 : 25} style={{ zIndex: 3000 }}>
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <FaNetworkWired style={{ width: deviceType === 'mobile' ? '20px' : '25px', height: deviceType === 'mobile' ? '20px' : '25px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                  </div>
-                </foreignObject>
-              </g>
-              <g transform="translate(52.574, 836)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 20 : 25} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -10 : -12.5} y={deviceType === 'mobile' ? -10 : -12.5} width={deviceType === 'mobile' ? 20 : 25} height={deviceType === 'mobile' ? 20 : 25} style={{ zIndex: 3000 }}>
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <FaCloud style={{ width: deviceType === 'mobile' ? '20px' : '25px', height: deviceType === 'mobile' ? '20px' : '25px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                  </div>
-                </foreignObject>
-              </g>
-              <g transform="translate(54.574, 769)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 20 : 25} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -10 : -12.5} y={deviceType === 'mobile' ? -10 : -12.5} width={deviceType === 'mobile' ? 20 : 25} height={deviceType === 'mobile' ? 20 : 25} style={{ zIndex: 3000 }}>
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <GiArtificialIntelligence style={{ width: deviceType === 'mobile' ? '20px' : '25px', height: deviceType === 'mobile' ? '20px' : '25px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                  </div>
-                </foreignObject>
-              </g>
-              <g transform="translate(32.574, 704.5)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 20 : 25} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -10 : -12.5} y={deviceType === 'mobile' ? -10 : -12.5} width={deviceType === 'mobile' ? 20 : 25} height={deviceType === 'mobile' ? 20 : 25} style={{ zIndex: 3000 }}>
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <RiSettings4Line style={{ width: deviceType === 'mobile' ? '20px' : '25px', height: deviceType === 'mobile' ? '20px' : '25px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                  </div>
-                </foreignObject>
-              </g>
-
-              {/* Right-end circles with icons */}
-              <g transform="translate(752.926, 379)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <SiZapier style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                  </div>
-                </foreignObject>
-              </g>
-              <g transform="translate(704.426, 395.5)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <SiSlack style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                  </div>
-                </foreignObject>
-              </g>
-              <g transform="translate(641.926, 419.5)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <FaNetworkWired style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                  </div>
-                </foreignObject>
-              </g>
-              <g transform="translate(752.926, 460.5)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <FaCloud style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                  </div>
-                </foreignObject>
-              </g>
-              <g transform="translate(704.426, 444)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 25 : 30} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -12.5 : -15} y={deviceType === 'mobile' ? -12.5 : -15} width={deviceType === 'mobile' ? 25 : 30} height={deviceType === 'mobile' ? 25 : 30} style={{ zIndex: 3000 }}>
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <GiArtificialIntelligence style={{ width: deviceType === 'mobile' ? '25px' : '30px', height: deviceType === 'mobile' ? '25px' : '30px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
-                  </div>
-                </foreignObject>
-              </g>
-              <g transform="translate(641.926, 420)" style={{ zIndex: 2000 }}>
-                <circle cx="0" cy="0" r={deviceType === 'mobile' ? 22 : 27} fill={theme === 'dark' ? 'white' : 'black'} />
-                <foreignObject x={deviceType === 'mobile' ? -11 : -13.5} y={deviceType === 'mobile' ? -11 : -13.5} width={deviceType === 'mobile' ? 22 : 27} height={deviceType === 'mobile' ? 22 : 27} style={{ zIndex: 3000 }}>
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <RiSettings4Line style={{ width: deviceType === 'mobile' ? '22px' : '27px', height: deviceType === 'mobile' ? '22px' : '27px', color: theme === 'dark' ? '#000000' : '#ffffff' }} />
+                    <FaAws style={{ 
+              width: '60px', 
+              height: '60px', 
+              color: theme === 'dark' ? '#000000' : '#ffffff',
+              transition: 'color 0.3s ease, transform 0.3s ease',
+              cursor: 'pointer'
+            }} 
+            className="hover:text-blue-500 hover:scale-110 transition-all duration-300"
+            />
                   </div>
                 </foreignObject>
               </g>

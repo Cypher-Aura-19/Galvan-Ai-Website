@@ -1,7 +1,78 @@
 import { NextRequest, NextResponse } from "next/server";
+import { v2 as cloudinary } from 'cloudinary';
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { existsSync } from "fs";
+
+// Cloudinary configuration
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+async function uploadToCloudinary(fileBuffer: Buffer, fileName: string, mimeType: string) {
+  try {
+    // Convert buffer to base64 for Cloudinary
+    const base64File = `data:${mimeType};base64,${fileBuffer.toString('base64')}`;
+    
+    // Upload to Cloudinary with specific folder
+    const result = await cloudinary.uploader.upload(base64File, {
+      folder: 'job-applications',
+      public_id: fileName.replace(/\.[^/.]+$/, ''), // Remove file extension for public_id
+      resource_type: 'auto',
+      overwrite: false, // Don't overwrite existing files
+      unique_filename: true, // Ensure unique filenames
+    });
+
+    return {
+      fileUrl: result.secure_url,
+      fileId: result.public_id,
+      webViewLink: result.secure_url,
+      directDownloadLink: result.secure_url,
+      cloudinaryId: result.public_id,
+    };
+  } catch (error) {
+    console.error('Cloudinary upload error:', error);
+    throw new Error('Failed to upload file to Cloudinary');
+  }
+}
+
+async function uploadToLocalStorage(fileBuffer: Buffer, fileName: string) {
+  try {
+    // Create uploads directory if it doesn't exist
+    const uploadsDir = join(process.cwd(), "public", "uploads");
+    if (!existsSync(uploadsDir)) {
+      await mkdir(uploadsDir, { recursive: true });
+    }
+
+    // Create job applications directory
+    const jobApplicationsDir = join(uploadsDir, "job-applications");
+    if (!existsSync(jobApplicationsDir)) {
+      await mkdir(jobApplicationsDir, { recursive: true });
+    }
+
+    const filePath = join(jobApplicationsDir, fileName);
+    await writeFile(filePath, fileBuffer);
+
+    // Get the base URL from environment or default to localhost
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    
+    // Return the full file URL
+    const fileUrl = `${baseUrl}/uploads/job-applications/${fileName}`;
+
+    return {
+      fileUrl,
+      fileId: null,
+      webViewLink: null,
+      webContentLink: null,
+      directDownloadLink: fileUrl,
+    };
+  } catch (error) {
+    console.error('Local storage upload error:', error);
+    throw new Error('Failed to upload file to local storage');
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -85,39 +156,57 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), "public", "uploads");
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true });
-    }
+    // Convert file to buffer
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
 
-    // Create job applications directory
-    const jobApplicationsDir = join(uploadsDir, "job-applications");
-    if (!existsSync(jobApplicationsDir)) {
-      await mkdir(jobApplicationsDir, { recursive: true });
-    }
-
-    // Generate unique filename with enhanced security
+    // Generate unique filename
     const timestamp = Date.now();
     const randomString = Math.random().toString(36).substring(2, 15);
     const fileExt = sanitizedFileName.split('.').pop() || 'txt';
-    const fileName = `${timestamp}-${randomString}.${fileExt}`;
-    const filePath = join(jobApplicationsDir, fileName);
+    const fileName = `${timestamp}-${randomString}-${sanitizedFileName}`;
 
-    // Convert file to buffer and save
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(filePath, buffer);
+    // Try Cloudinary first, fallback to local storage
+    let uploadResult;
+    let actualStorageType = 'local'; // Default to local
+    
+    const useCloudinary = process.env.CLOUDINARY_CLOUD_NAME && 
+                         process.env.CLOUDINARY_API_KEY && 
+                         process.env.CLOUDINARY_API_SECRET;
 
-    // Return the file URL
-    const fileUrl = `/uploads/job-applications/${fileName}`;
+    console.log('Cloudinary configuration check:', {
+      hasCloudName: !!process.env.CLOUDINARY_CLOUD_NAME,
+      hasApiKey: !!process.env.CLOUDINARY_API_KEY,
+      hasApiSecret: !!process.env.CLOUDINARY_API_SECRET,
+      useCloudinary
+    });
+
+    if (useCloudinary) {
+      try {
+        uploadResult = await uploadToCloudinary(buffer, fileName, file.type);
+        actualStorageType = 'cloudinary';
+        console.log('File uploaded to Cloudinary successfully');
+      } catch (error) {
+        console.warn('Cloudinary upload failed, falling back to local storage:', error);
+        uploadResult = await uploadToLocalStorage(buffer, fileName);
+        actualStorageType = 'local';
+        console.log('File uploaded to local storage as fallback');
+      }
+    } else {
+      uploadResult = await uploadToLocalStorage(buffer, fileName);
+      actualStorageType = 'local';
+      console.log('File uploaded to local storage (Cloudinary not configured)');
+    }
 
     return NextResponse.json({ 
       success: true, 
-      fileUrl,
+      fileUrl: uploadResult.directDownloadLink,
+      fileId: uploadResult.fileId,
+      webViewLink: uploadResult.webViewLink,
       fileName: file.name,
       fileSize: file.size,
-      fileType: file.type
+      fileType: file.type,
+      storageType: actualStorageType
     });
 
   } catch (error) {

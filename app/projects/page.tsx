@@ -3,8 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { ExternalLink, Code, Palette, Database, Smartphone, Globe, Calendar, Users, ArrowRight, Filter, Layers, Star, CheckCircle, ArrowLeft } from 'lucide-react';
 import Link from "next/link";
 import { useTheme } from "@/components/theme-provider";
+import AnimatedGridBg from "@/components/AnimatedGridBg";
 import { Sun, Moon } from "lucide-react";
 import BrandedLoading from '@/components/BrandedLoading';
+import Navbar from '@/components/navbar';
+import Footer from '@/components/Footer';
 
 interface Project {
   id: number;
@@ -46,7 +49,7 @@ function ProjectCard({ project }: { project: Project }) {
   const cardImage = project.hero?.banner || project.image || '';
   // Guard: Only render the View Details button if project.id is defined
   return (
-    <div className="group relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl md:rounded-3xl overflow-hidden flex flex-col h-full min-h-[420px] max-h-[420px] transition-colors duration-300">
+    <div className="group relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl md:rounded-3xl overflow-hidden flex flex-col h-full min-h-[420px] max-h-[420px] transition-colors duration-300 z-20">
       {/* Image Section */}
       <div className="relative h-40 md:h-48 xl:h-56 overflow-hidden">
         <img 
@@ -97,13 +100,18 @@ function ProjectCard({ project }: { project: Project }) {
         {/* Action Button */}
         {project.id !== undefined && project.id !== null ? (
           <Link href={`/projects/${String(project.id)}`} passHref legacyBehavior>
-            <button className="w-full bg-black dark:bg-white text-white dark:text-black font-semibold py-2.5 md:py-3 px-4 md:px-6 rounded-xl md:rounded-2xl transition-all duration-300 hover:bg-zinc-900 dark:hover:bg-zinc-100 hover:shadow-lg group-hover:transform group-hover:translate-y-[-2px] flex items-center justify-center gap-2 font-barlow text-sm md:text-base">
+            <a className="mt-auto group/btn inline-flex items-center justify-center gap-2 bg-black dark:bg-white text-white dark:text-black font-semibold py-2.5 md:py-3 px-4 md:px-6 rounded-xl md:rounded-2xl transition-all duration-300 hover:bg-zinc-900 dark:hover:bg-zinc-100 hover:shadow-lg group-hover:transform group-hover:translate-y-[-2px] font-barlow text-sm md:text-base">
               <span>View Details</span>
-              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/button:translate-x-1" />
-            </button>
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover/btn:translate-x-1 transition-transform duration-300" />
+            </a>
           </Link>
         ) : (
-          <div className="text-red-500 text-xs mt-2">No project ID</div>
+          <div className="mt-auto">
+            <div className="inline-flex items-center justify-center gap-2 bg-zinc-300 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 font-semibold py-2.5 md:py-3 px-4 md:px-6 rounded-xl md:rounded-2xl font-barlow text-sm md:text-base cursor-not-allowed">
+              <span>View Details</span>
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+            </div>
+          </div>
         )}
       </div>
     </div>
@@ -112,7 +120,7 @@ function ProjectCard({ project }: { project: Project }) {
 
 function TechnologyFilter({ selected, onSelect, allTechnologies }: { selected: string | null, onSelect: (tech: string | null) => void, allTechnologies: string[] }) {
   return (
-    <div className="flex items-center justify-center py-6">
+    <div className="flex items-center justify-center py-6 relative z-20">
       <label htmlFor="tech-filter" className="mr-3 text-base font-semibold font-barlow text-black dark:text-white">Filter by Technology:</label>
       <select
         id="tech-filter"
@@ -129,30 +137,13 @@ function TechnologyFilter({ selected, onSelect, allTechnologies }: { selected: s
   );
 }
 
-function TechnologiesSection({ allTechnologies }: { allTechnologies: string[] }) {
-  return (
-    <section className="w-full py-16 bg-gradient-to-b from-black via-zinc-900 to-black border-t border-zinc-800/50">
-      <div className="max-w-[1700px] mx-auto px-8">
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 font-barlow text-center">Technologies We Use</h2>
-        <div className="flex flex-wrap gap-6 justify-center">
-          {allTechnologies.map((tech: string) => (
-            <div key={tech} className="flex items-center gap-3 bg-zinc-900/80 border border-zinc-700/50 rounded-2xl px-8 py-4 shadow-lg">
-              <CheckCircle className="w-5 h-5 text-emerald-400" />
-              <span className="text-lg font-semibold text-white font-barlow">{tech}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedTech, setSelectedTech] = useState<string | null>(null);
   const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
 
   useEffect(() => {
     setLoading(true);
@@ -175,25 +166,66 @@ export default function ProjectsPage() {
   const allTechnologies = Array.from(new Set(projects.flatMap(p => p.technologies)));
   const filteredProjects = selectedTech ? projects.filter(p => p.technologies.includes(selectedTech)) : projects;
 
-  return (
-    <div className="min-h-screen w-full bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
-      {/* Back to Home Button */}
-      <div className="fixed top-4 left-4 z-50">
-        <Link href="/" className="inline-flex items-center gap-2 bg-zinc-200 dark:bg-zinc-800 text-black dark:text-white px-4 py-2 rounded-full shadow border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition font-medium">
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Home</span>
-        </Link>
+  if (loading) {
+    return (
+      <div className={`relative min-h-screen w-full overflow-hidden transition-colors duration-300 ${
+        isDark ? 'bg-black' : 'bg-white'
+      }`}>
+        <AnimatedGridBg />
+        <div className="relative z-10">
+          <Navbar />
+          <main>
+            <div className="min-h-screen flex items-center justify-center">
+              <BrandedLoading />
+            </div>
+          </main>
+          <Footer />
+        </div>
       </div>
-      {/* Theme Toggle Button */}
-      <button
-        className="fixed top-4 right-4 z-50 bg-zinc-200 dark:bg-zinc-800 rounded-full p-2 shadow-lg border border-zinc-300 dark:border-zinc-700 transition"
-        onClick={toggleTheme}
-        aria-label="Toggle theme"
-      >
-        {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-      </button>
-      {/* Hero Section - Full Width */}
-      <section className="w-full bg-white dark:bg-black py-20 px-0 border-b border-zinc-200 dark:border-zinc-800/50 transition-colors duration-300">
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={`relative min-h-screen w-full overflow-hidden transition-colors duration-300 ${
+        isDark ? 'bg-black' : 'bg-white'
+      }`}>
+        <AnimatedGridBg />
+        <div className="relative z-10">
+          <Navbar />
+          <main>
+            <div className="min-h-screen flex items-center justify-center">
+              <div className="text-center">
+                <h1 className="text-3xl font-bold mb-4">Error loading projects</h1>
+                <p className="text-red-500 mb-4">{error}</p>
+                <button 
+                  onClick={() => window.location.reload()} 
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          </main>
+          <Footer />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`relative min-h-screen w-full overflow-hidden transition-colors duration-300 ${
+      isDark ? 'bg-black' : 'bg-white'
+    }`}>
+      {/* === Animated Grid Background === */}
+      <AnimatedGridBg />
+      
+      {/* === Foreground Page Content === */}
+      <div className="relative z-10">
+        <Navbar />
+        <main>
+          {/* Hero Section - Full Width */}
+          <section className="w-full bg-transparent py-20 px-0 border-b border-zinc-200 dark:border-zinc-800/50 transition-colors duration-300 relative z-10 pt-20 lg:pt-24">
         <div className="w-full max-w-[1700px] mx-auto px-4 sm:px-8 flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-20">
           <div className="flex-1 flex flex-col items-start justify-center text-left space-y-8 lg:pr-16 w-full">
             <div className="inline-flex items-center gap-3 bg-zinc-100 dark:bg-zinc-900/60 px-6 py-3 rounded-full border border-zinc-200 dark:border-zinc-800/50 mb-6 font-sans">
@@ -229,13 +261,15 @@ export default function ProjectsPage() {
           </div>
         </div>
       </section>
+      
       {/* Technology Filter Bar */}
-      <div className="w-full bg-white dark:bg-black border-b border-zinc-200 dark:border-zinc-800/50 transition-colors duration-300">
+      <div className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800/50 transition-colors duration-300 relative z-10">
         <TechnologyFilter selected={selectedTech} onSelect={setSelectedTech} allTechnologies={allTechnologies} />
       </div>
+      
       {/* Best Projects Section */}
       {!loading && !error && projects.filter(p => p.bestProject).length > 0 && (
-        <section className="w-full bg-white dark:bg-black py-14 md:py-20 border-b border-zinc-200 dark:border-zinc-800/50 transition-colors duration-300">
+        <section className="w-full bg-transparent py-14 md:py-20 border-b border-zinc-200 dark:border-zinc-800/50 transition-colors duration-300 relative z-10">
           <div className="w-full max-w-[1700px] mx-auto px-4 sm:px-8">
             <div className="text-center mb-10 md:mb-14">
               <div className="inline-flex items-center gap-3 bg-yellow-100 dark:bg-yellow-900/30 px-6 py-3 rounded-full border border-yellow-200 dark:border-yellow-800/50 mb-5 font-sans">
@@ -265,22 +299,28 @@ export default function ProjectsPage() {
           </div>
         </section>
       )}
-      {/* Projects Grid - Full Width */}
-      <main className="w-full max-w-[1700px] mx-auto px-4 sm:px-8 py-10 md:py-20">
-        {/* Our Projects Heading */}
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black dark:text-white mb-10 font-barlow text-center">Our All Projects</h2>
-        {loading && <BrandedLoading minDuration={7000} />}
-        {error && <p className="text-center text-red-500 font-sans font-medium">{error}</p>}
-        {!loading && !error && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8 md:gap-12">
+      
+      {/* All Projects Section */}
+      <section className="w-full bg-transparent py-14 md:py-20 border-b border-zinc-200 dark:border-zinc-800/50 transition-colors duration-300 relative z-10">
+        <div className="w-full max-w-[1700px] mx-auto px-4 sm:px-8">
+          <div className="text-center mb-10 md:mb-14">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-barlow tracking-tight mb-4 text-black dark:text-white">
+              All Projects
+            </h2>
+            <p className="text-base sm:text-lg text-zinc-700 dark:text-zinc-300 max-w-3xl mx-auto leading-relaxed font-light font-sans">
+              Discover our complete collection of projects, each representing our commitment to innovation and quality.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-12">
             {filteredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </div>
-        )}
-      </main>
+        </div>
+      </section>
+      
       {/* Technologies Section */}
-      <section className="w-full py-14 bg-white dark:bg-black border-t border-zinc-200 dark:border-zinc-800/50">
+      <section className="w-full py-14 bg-transparent border-t border-zinc-200 dark:border-zinc-800/50 relative z-10">
         <div className="max-w-[1700px] mx-auto px-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-black dark:text-white mb-8 font-barlow text-center">Technologies We Use</h2>
           <div className="flex flex-wrap gap-6 justify-center">
@@ -293,8 +333,9 @@ export default function ProjectsPage() {
           </div>
         </div>
       </section>
-      {/* Bottom CTA Section */}
-      <section className="w-full py-14 md:py-20 bg-white dark:bg-black border-t border-zinc-200 dark:border-zinc-800/50 transition-colors duration-300">
+      
+      {/* Call to Action Section */}
+      <section className="w-full py-14 md:py-20 bg-transparent border-t border-zinc-200 dark:border-zinc-800/50 transition-colors duration-300 relative z-10">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-black dark:text-white mb-6 font-barlow">
             Ready to Start Your Project?
@@ -312,6 +353,9 @@ export default function ProjectsPage() {
           </div>
         </div>
       </section>
+          <Footer />
+        </main>
+      </div>
     </div>
   );
 }

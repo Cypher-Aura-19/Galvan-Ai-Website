@@ -219,12 +219,12 @@
   width: 870px;
   inset: -277px auto auto 50%;
   transform: translate(-1037px);
-  opacity: 0.7;
+  opacity: 0;
 }
 
 .background-tiles.right {
   transform: translate(167px);
-  opacity: 0.7;
+  opacity: 0;
 }
 
 .image-full {
@@ -330,6 +330,31 @@
 .dark .flip-card-front,
 .dark .flip-card-back {
   background: #000;
+}
+
+/* Custom scrollbar styles */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.3) transparent;
 }
 
 

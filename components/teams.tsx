@@ -269,9 +269,9 @@ export default function TeamSection() {
         {/* Mobile Layout: Black Card Wrapper */}
         {isMobile ? (
           <div className="w-full h-full flex items-center justify-center p-4">
-            <div className="w-full max-w-sm bg-black rounded-2xl shadow-2xl overflow-hidden" style={{ height: '90vh', maxHeight: '600px' }}>
+            <div className={`w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden ${theme === 'dark' ? 'bg-black' : 'bg-white'}`} style={{ height: '90vh', maxHeight: '600px' }}>
               {/* Card Content */}
-              <div className="h-full overflow-y-auto bg-black">
+              <div className={`h-full overflow-y-auto ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
                 <div className="p-6">
                   <div className="space-y-4">
                 {/* Mobile Header with Small Profile Image */}
@@ -286,7 +286,7 @@ export default function TeamSection() {
                     />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-2xl font-bold mb-1 text-white">
+                    <h2 className={`text-2xl font-bold mb-1 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                       {member.name}
                     </h2>
                     <h4 className="text-lg font-semibold text-blue-400">
@@ -298,20 +298,20 @@ export default function TeamSection() {
                 {/* About Section */}
                 <section className="space-y-1 md:space-y-2">
                   <h5 className="text-xs md:text-sm lg:text-base font-bold uppercase tracking-wider text-blue-400 border-l-4 border-blue-500 pl-2 mb-1">About Me</h5>
-                  <p className="text-xs md:text-sm lg:text-base leading-relaxed text-white">
+                  <p className={`text-xs md:text-sm lg:text-base leading-relaxed ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                     {member.about}
                   </p>
                 </section>
                 
                 {/* Background & Interests */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
-                  <div className="space-y-1 md:space-y-2 p-2 md:p-3 rounded-lg border bg-white/5 border-white/10">
+                  <div className={`space-y-1 md:space-y-2 p-2 md:p-3 rounded-lg border ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'}`}>
                     <h6 className="text-xs md:text-sm lg:text-base font-bold uppercase tracking-wider text-blue-400">Background</h6>
-                    <p className="text-xs md:text-sm lg:text-base leading-relaxed text-white">{member.background}</p>
+                    <p className={`text-xs md:text-sm lg:text-base leading-relaxed ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{member.background}</p>
                   </div>
-                  <div className="space-y-1 md:space-y-2 p-2 md:p-3 rounded-lg border bg-white/5 border-white/10">
+                  <div className={`space-y-1 md:space-y-2 p-2 md:p-3 rounded-lg border ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'}`}>
                     <h6 className="text-xs md:text-sm lg:text-base font-bold uppercase tracking-wider text-blue-400">Interests</h6>
-                    <p className="text-xs md:text-sm lg:text-base leading-relaxed text-white">{member.interests}</p>
+                    <p className={`text-xs md:text-sm lg:text-base leading-relaxed ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{member.interests}</p>
                   </div>
                 </section>
                 
@@ -336,10 +336,10 @@ export default function TeamSection() {
                 
                 {/* Awards & Certifications Section */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
-                  <div className="space-y-1 md:space-y-2 p-2 md:p-3 rounded-lg border bg-white/5 border-white/10">
+                  <div className={`space-y-1 md:space-y-2 p-2 md:p-3 rounded-lg border ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'}`}>
                     <h6 className="text-xs md:text-sm lg:text-base font-bold uppercase tracking-wider text-blue-400">Awards</h6>
                     {member.awards && member.awards.length > 0 ? (
-                      <ul className="list-disc list-inside text-xs md:text-sm lg:text-base text-white">
+                      <ul className={`list-disc list-inside text-xs md:text-sm lg:text-base ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                         {member.awards.map((award: string) => (
                           <li key={award} className="mb-1">{award}</li>
                         ))}
@@ -348,10 +348,10 @@ export default function TeamSection() {
                       <p className="text-xs md:text-sm lg:text-base text-zinc-400 italic">No awards yet</p>
                     )}
                   </div>
-                  <div className="space-y-1 md:space-y-2 p-2 md:p-3 rounded-lg border bg-white/5 border-white/10">
+                  <div className={`space-y-1 md:space-y-2 p-2 md:p-3 rounded-lg border ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'}`}>
                     <h6 className="text-xs md:text-sm lg:text-base font-bold uppercase tracking-wider text-blue-400">Certifications</h6>
                     {member.certifications && member.certifications.length > 0 ? (
-                      <ul className="list-disc list-inside text-xs md:text-sm lg:text-base text-white">
+                      <ul className={`list-disc list-inside text-xs md:text-sm lg:text-base ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                         {member.certifications.map((cert: string) => (
                           <li key={cert} className="mb-1">{cert}</li>
                         ))}
@@ -364,21 +364,21 @@ export default function TeamSection() {
                 
                 {/* Location, Languages, Fun Fact */}
                 <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4">
-                  <div className="space-y-1 p-2 md:p-3 rounded-lg border flex flex-col items-center bg-white/5 border-white/10">
+                  <div className={`space-y-1 p-2 md:p-3 rounded-lg border flex flex-col items-center ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'}`}>
                     <h6 className="text-xs md:text-sm lg:text-base font-bold uppercase tracking-wider text-blue-400 mb-1 text-center">Location</h6>
-                    <span className="text-xs md:text-sm lg:text-base font-medium text-center text-white">
+                    <span className={`text-xs md:text-sm lg:text-base font-medium text-center ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                       {member.location && member.location.trim() ? member.location : 'Location not specified'}
                     </span>
                   </div>
-                  <div className="space-y-1 p-2 md:p-3 rounded-lg border flex flex-col items-center bg-white/5 border-white/10">
+                  <div className={`space-y-1 p-2 md:p-3 rounded-lg border flex flex-col items-center ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'}`}>
                     <h6 className="text-xs md:text-sm lg:text-base font-bold uppercase tracking-wider text-blue-400 mb-1 text-center">Languages</h6>
-                    <span className="text-xs md:text-sm lg:text-base font-medium text-center text-white">
+                    <span className={`text-xs md:text-sm lg:text-base font-medium text-center ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                       {member.languages && member.languages.length > 0 ? member.languages.join(', ') : 'No languages listed'}
                     </span>
                   </div>
-                  <div className="space-y-1 p-2 md:p-3 rounded-lg border flex flex-col items-center sm:col-span-2 lg:col-span-1 bg-white/5 border-white/10">
+                  <div className={`space-y-1 p-2 md:p-3 rounded-lg border flex flex-col items-center sm:col-span-2 lg:col-span-1 ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'}`}>
                     <h6 className="text-xs md:text-sm lg:text-base font-bold uppercase tracking-wider text-blue-400 mb-1 text-center">Fun Fact</h6>
-                    <span className="text-xs md:text-sm lg:text-base font-medium text-center text-white">
+                    <span className={`text-xs md:text-sm lg:text-base font-medium text-center ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                       {member.funFact && member.funFact.trim() ? member.funFact : 'No fun fact shared yet'}
                     </span>
                   </div>
@@ -388,9 +388,9 @@ export default function TeamSection() {
                 <section className="space-y-1 md:space-y-2">
                   <h5 className="text-xs md:text-sm lg:text-base font-bold uppercase tracking-wider text-blue-400 border-l-4 border-blue-500 pl-2 mb-1">Quote</h5>
                   {member.quote && member.quote.trim() ? (
-                    <div className="relative p-2 md:p-3 rounded-lg bg-blue-500/10 border border-white/10">
+                    <div className={`relative p-2 md:p-3 rounded-lg bg-blue-500/10 border ${theme === 'dark' ? 'border-white/10' : 'border-black/10'}`}>
                       <div className="absolute top-1 md:top-2 left-2 md:left-3 text-blue-400 text-lg md:text-xl lg:text-2xl font-serif select-none">"</div>
-                      <blockquote className="italic text-xs md:text-sm lg:text-base leading-relaxed pt-1 md:pt-2 pl-6 md:pl-8 pr-2 pb-1 md:pb-2 text-white">
+                      <blockquote className={`italic text-xs md:text-sm lg:text-base leading-relaxed pt-1 md:pt-2 pl-6 md:pl-8 pr-2 pb-1 md:pb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                         {member.quote}
                       </blockquote>
                       <div className="absolute bottom-1 md:bottom-2 right-2 md:right-3 text-blue-400 text-lg md:text-xl lg:text-2xl font-serif rotate-180 select-none">"</div>
@@ -410,7 +410,7 @@ export default function TeamSection() {
                         target="_blank" 
                         rel="noopener" 
                         aria-label="LinkedIn" 
-                        className="group p-2 rounded-full border transition-all duration-200 bg-white/10 hover:bg-blue-500/20 border-white/20 hover:border-blue-400/40"
+                        className={`group p-2 rounded-full border transition-all duration-200 ${theme === 'dark' ? 'bg-white/10 hover:bg-blue-500/20 border-white/20 hover:border-blue-400/40' : 'bg-black/10 hover:bg-blue-500/20 border-black/20 hover:border-blue-400/40'}`}
                       >
                         <svg className="w-5 h-5 text-blue-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                           <rect x="2" y="9" width="4" height="12"/>
@@ -425,7 +425,7 @@ export default function TeamSection() {
                         target="_blank" 
                         rel="noopener" 
                         aria-label="Twitter" 
-                        className="group p-2 rounded-full border transition-all duration-200 bg-white/10 hover:bg-blue-500/20 border-white/20 hover:border-blue-400/40"
+                        className={`group p-2 rounded-full border transition-all duration-200 ${theme === 'dark' ? 'bg-white/10 hover:bg-blue-500/20 border-white/20 hover:border-blue-400/40' : 'bg-black/10 hover:bg-blue-500/20 border-black/20 hover:border-blue-400/40'}`}
                       >
                         <svg className="w-5 h-5 text-blue-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                           <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 22.4 1.64a9.09 9.09 0 0 1-2.88 1.1A4.52 4.52 0 0 0 16.11 0c-2.5 0-4.52 2.02-4.52 4.52 0 .35.04.7.11 1.03C7.69 5.4 4.07 3.7 1.64 1.15c-.38.65-.6 1.4-.6 2.2 0 1.52.77 2.86 1.94 3.65A4.48 4.48 0 0 1 .96 6v.06c0 2.13 1.52 3.91 3.54 4.31-.37.1-.76.16-1.16.16-.28 0-.55-.03-.82-.08.55 1.7 2.16 2.94 4.07 2.97A9.06 9.06 0 0 1 0 19.54a12.8 12.8 0 0 0 6.95 2.04c8.34 0 12.9-6.91 12.9-12.9 0-.2 0-.39-.01-.58A9.22 9.22 0 0 0 24 4.59a9.1 9.1 0 0 1-2.6.71z"/>
@@ -438,7 +438,7 @@ export default function TeamSection() {
                         target="_blank" 
                         rel="noopener" 
                         aria-label="GitHub" 
-                        className="group p-2 rounded-full border transition-all duration-200 bg-white/10 hover:bg-blue-500/20 border-white/20 hover:border-blue-400/40"
+                        className={`group p-2 rounded-full border transition-all duration-200 ${theme === 'dark' ? 'bg-white/10 hover:bg-blue-500/20 border-white/20 hover:border-blue-400/40' : 'bg-black/10 hover:bg-blue-500/20 border-black/20 hover:border-blue-400/40'}`}
                       >
                         <svg className="w-5 h-5 text-blue-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                           <path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.66-.22.66-.48 0-.24-.01-.87-.01-1.7-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85.004 1.71.12 2.51.35 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.95.36.31.68.92.68 1.85 0 1.33-.01 2.4-.01 2.73 0 .27.16.58.67.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z"/>
@@ -451,7 +451,7 @@ export default function TeamSection() {
                         target="_blank" 
                         rel="noopener" 
                         aria-label="Dribbble" 
-                        className="group p-2 rounded-full border transition-all duration-200 bg-white/10 hover:bg-blue-500/20 border-white/20 hover:border-blue-400/40"
+                        className={`group p-2 rounded-full border transition-all duration-200 ${theme === 'dark' ? 'bg-white/10 hover:bg-blue-500/20 border-white/20 hover:border-blue-400/40' : 'bg-black/10 hover:bg-blue-500/20 border-black/20 hover:border-blue-400/40'}`}
                       >
                         <svg className="w-5 h-5 text-blue-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                           <circle cx="12" cy="12" r="10"/>
@@ -743,7 +743,7 @@ export default function TeamSection() {
   }, [teamMembers]);
 
   return (
-    <section className="team" ref={containerRef} style={{ position: "relative", overflow: "hidden", background: theme === 'dark' ? '#0a0a0a' : '#f9f9f9', color: theme === 'dark' ? '#e3e3db' : '#222' }}>
+    <section className="team" ref={containerRef} style={{ position: "relative", overflow: "hidden", color: theme === 'dark' ? '#e3e3db' : '#222' }}>
       <div style={{
         position: "absolute",
         inset: 0,
@@ -840,7 +840,6 @@ export default function TeamSection() {
             position: relative;
             width: 100vw;
             height: 100svh;
-            background: #0a0a0a;
             color: #e3e3db;
             display: flex;
             flex-direction: column;
@@ -879,7 +878,6 @@ export default function TeamSection() {
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(10, 10, 20, 0.7);
             display: flex;
             flex-direction: row;
             align-items: stretch;
@@ -890,7 +888,6 @@ export default function TeamSection() {
           .info-image-panel {
             width: 50vw;
             height: 100vh;
-            background: #181c20;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -911,7 +908,6 @@ export default function TeamSection() {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #000;
             z-index: 202;
           }
           .info-card-outer {
@@ -922,7 +918,6 @@ export default function TeamSection() {
             justify-content: center;
           }
           .info-card {
-            background: #000;
             color: #e3e3db;
             width: 90%;
             max-width: 520px;
@@ -1006,7 +1001,6 @@ export default function TeamSection() {
            margin-top: 0.5rem;
          }
          .info-skill {
-           background: #181c20;
            color: #2196f3;
            border: 1px solid #2196f3;
            border-radius: 1.2rem;
@@ -1022,7 +1016,6 @@ export default function TeamSection() {
            width: 44px;
            height: 44px;
            border-radius: 50%;
-           background: #181c20;
            border: 1.5px solid #2196f3;
            transition: background 0.2s, border 0.2s;
          }
@@ -1134,8 +1127,10 @@ export default function TeamSection() {
               height: 4rem;
             }
             .name h1 {
-              font-size: 4rem;
+              font-size: 3rem;
               letter-spacing: 0;
+              margin-top: 0.6em;
+              transform: translateY(120%);
             }
           }
         `}</style>

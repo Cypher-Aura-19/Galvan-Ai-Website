@@ -85,7 +85,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isImageLeft }
   return (
     <div
       ref={cardRef}
-      className={`grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 xl:gap-24 items-center transform transition-all duration-1000 ease-out rounded-3xl p-6 md:p-8 lg:p-12 ${isLight ? 'bg-white' : 'bg-black'} ${
+      className={`grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 xl:gap-24 items-center transform transition-all duration-1000 ease-out rounded-3xl p-6 md:p-8 lg:p-12 ${
+        isLight 
+          ? 'bg-white lg:bg-transparent lg:backdrop-blur-[2.1px]' 
+          : 'bg-black lg:bg-transparent lg:backdrop-blur-[2.1px]'
+      } ${
         isVisible 
           ? 'translate-y-0 opacity-100' 
           : 'translate-y-20 opacity-0'
@@ -145,14 +149,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isImageLeft }
             {project.technologies.map((tech: string, techIndex: number) => (
               <div 
                 key={tech}
-                className={`group/tech relative overflow-hidden rounded-lg md:rounded-xl ${techBg} backdrop-blur-xl border ${techBorder} p-2 md:p-3 hover:${techBgHover} hover:${techBorderHover} transition-all duration-300 hover:scale-105`}
+                className={`group/tech relative overflow-hidden rounded-lg md:rounded-xl ${techBg} backdrop-blur-xl border ${techBorder} p-2 md:p-3 transition-all duration-300 hover:scale-105 ${isLight ? 'hover:border-blue-500/40' : 'hover:border-blue-400/40'}`}
                 style={{ animationDelay: `${techIndex * 100}ms` }}
               >
                 <div className="relative z-10">
-                  <span className={`font-medium text-base md:text-lg font-sans block text-center ${isLight ? 'text-zinc-900' : 'text-white'}`}>{tech}</span>
+                  <span className={`font-medium text-base md:text-lg font-sans block text-center transition-colors duration-300 ${isLight ? 'text-zinc-900 group-hover/tech:text-blue-700' : 'text-white group-hover/tech:text-blue-300'}`}>{tech}</span>
                 </div>
                 {/* Hover Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover/tech:opacity-100 transition-opacity duration-300" />
+                <div className={`absolute inset-0 opacity-0 group-hover/tech:opacity-100 transition-opacity duration-300 ${isLight ? 'bg-blue-500/10' : 'bg-blue-400/10'}`} />
               </div>
             ))}
           </div>
@@ -162,7 +166,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isImageLeft }
         <div className="flex flex-col sm:flex-row gap-4 md:gap-6 lg:gap-8 pt-6 md:pt-8">
           <a 
             href={`/projects/${project.id}`}
-            className={`group/btn inline-flex items-center justify-center px-4 py-2 md:px-6 md:py-3 rounded-lg md:rounded-xl ${isLight ? 'bg-zinc-900 text-white hover:bg-white hover:text-zinc-900 border-zinc-900' : 'bg-black text-white hover:bg-white hover:text-black border-white'} font-barlow font-bold text-base md:text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-white/30 relative overflow-hidden`}
+            className={`group/btn inline-flex items-center justify-center px-4 py-2 md:px-6 md:py-3 rounded-lg md:rounded-xl border ${
+              isLight
+                ? 'bg-zinc-900 text-white border-zinc-900 hover:bg-white hover:text-zinc-900 hover:border-blue-600/60'
+                : 'bg-black text-white border-white hover:bg-white hover:text-black hover:border-blue-400/60'
+            } font-barlow font-bold text-base md:text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
+              isLight ? 'hover:shadow-blue-600/25' : 'hover:shadow-blue-400/25'
+            } relative overflow-hidden`}
           >
             <span className="relative z-10 flex items-center font-barlow font-bold">
               <ExternalLink className="w-4 h-4 md:w-5 md:h-5 mr-2" />
@@ -171,7 +181,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isImageLeft }
             </span>
             
             {/* Button Shine Effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+            <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700`} />
           </a>
         </div>
       </div>

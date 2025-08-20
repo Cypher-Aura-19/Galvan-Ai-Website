@@ -30,6 +30,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from '@/components/theme-provider';
 import { Sun, Moon } from 'lucide-react';
 import BrandedLoading from '@/components/BrandedLoading';
+import AnimatedGridBg from "@/components/AnimatedGridBg";
+import Navbar from '@/components/navbar';
+import Footer from '@/components/Footer';
 
 export default function BlogDetailPage() {
   const { theme, toggleTheme } = useTheme();
@@ -97,46 +100,75 @@ export default function BlogDetailPage() {
     }
   };
 
+  const isDark = theme === 'dark';
+
   if (loading) {
-    return <BrandedLoading minDuration={7000} />;
+    return (
+      <div className={`relative min-h-screen w-full overflow-hidden transition-colors duration-300 ${
+        isDark ? 'bg-black' : 'bg-white'
+      }`}>
+        <AnimatedGridBg />
+        <div className="relative z-10">
+          <Navbar />
+          <main>
+            <div className="min-h-screen flex items-center justify-center">
+              <BrandedLoading minDuration={7000} />
+            </div>
+          </main>
+          <Footer />
+        </div>
+      </div>
+    );
   }
 
   if (!post) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
-        <div className="w-full max-w-[1700px] mx-auto flex items-center justify-center min-h-[400px]">
-          <div className="bg-white dark:bg-black border border-zinc-300 dark:border-zinc-800 rounded-3xl shadow-2xl p-16 flex flex-col items-center w-full">
-            <h1 className="text-4xl font-extrabold mb-3 text-center text-black dark:text-white tracking-tight">Blog Post Not Found</h1>
-            <p className="text-zinc-600 dark:text-zinc-400 text-xl text-center max-w-2xl mb-2">The blog post you're looking for doesn't exist.</p>
-            <Button asChild variant="outline" className="border-zinc-300 dark:border-white/20 text-black dark:text-white hover:bg-zinc-100 dark:hover:bg-white/10 mt-6">
-              <Link href="/">Return to Home</Link>
-            </Button>
-          </div>
+      <div className={`relative min-h-screen w-full overflow-hidden transition-colors duration-300 ${
+        isDark ? 'bg-black' : 'bg-white'
+      }`}>
+        <AnimatedGridBg />
+        <div className="relative z-10">
+          <Navbar />
+          <main>
+            <div className="min-h-screen flex items-center justify-center">
+              <div className="w-full max-w-[1700px] mx-auto flex items-center justify-center min-h-[400px]">
+                <div className="bg-white dark:bg-black border border-zinc-300 dark:border-zinc-800 rounded-3xl shadow-2xl p-16 flex flex-col items-center w-full">
+                  <h1 className="text-4xl font-extrabold mb-3 text-center text-black dark:text-white tracking-tight">Blog Post Not Found</h1>
+                  <p className="text-zinc-600 dark:text-zinc-400 text-xl text-center max-w-2xl mb-2">The blog post you're looking for doesn't exist.</p>
+                  <Button asChild variant="outline" className="border-zinc-300 dark:border-white/20 text-black dark:text-white hover:bg-zinc-100 dark:hover:bg-white/10 mt-6">
+                    <Link href="/">Return to Home</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </main>
+          <Footer />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen w-full bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
-      {/* Theme Toggle Button */}
-      <button
-        className="fixed top-4 right-4 z-50 bg-zinc-200 dark:bg-zinc-800 rounded-full p-2 shadow-lg border border-zinc-300 dark:border-zinc-700 transition"
-        onClick={toggleTheme}
-        aria-label="Toggle theme"
-      >
-        {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-      </button>
-      {/* Reading Progress Bar */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-zinc-200 dark:bg-white/10 z-50">
-        <div 
-          className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
-          style={{ width: `${readingProgress}%` }}
-        />
-      </div>
+    <div className={`relative min-h-screen w-full overflow-hidden transition-colors duration-300 ${
+      isDark ? 'bg-black' : 'bg-white'
+    }`}>
+      {/* === Animated Grid Background === */}
+      <AnimatedGridBg />
+      
+      {/* === Foreground Page Content === */}
+      <div className="relative z-10">
+        <Navbar />
+        <main>
+          {/* Reading Progress Bar */}
+          <div className="fixed top-0 left-0 w-full h-1 bg-zinc-200 dark:bg-white/10 z-50">
+            <div 
+              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
+              style={{ width: `${readingProgress}%` }}
+            />
+          </div>
 
-      {/* Hero Section */}
-      <div className="relative w-full h-[70vh] overflow-hidden bg-white dark:bg-black">
+          {/* Hero Section */}
+          <div className="relative w-full h-[70vh] overflow-hidden bg-white dark:bg-black pt-20 lg:pt-24">
         <Image 
           src={post.image} 
           alt={post.title} 
@@ -194,7 +226,11 @@ export default function BlogDetailPage() {
           {/* Article Content */}
           <div className="lg:col-span-3">
             {/* Author Info */}
-            <Card className="bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md mb-8">
+            <Card className={`bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md mb-8 transition-all duration-500 hover:scale-[1.02] ${
+              isDark
+                ? 'hover:bg-black/40 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/20'
+                : 'hover:bg-black/5 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/20'
+            }`}>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -233,7 +269,11 @@ export default function BlogDetailPage() {
             </Card>
 
             {/* Article Body */}
-            <Card className="bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md mb-8">
+            <Card className={`bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md mb-8 transition-all duration-500 hover:scale-[1.02] ${
+              isDark
+                ? 'hover:bg-black/40 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/20'
+                : 'hover:bg-black/5 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/20'
+            }`}>
               <CardContent className="p-8">
                 <div className="prose prose-lg max-w-none font-sans text-black dark:text-white">
                   <p className="font-sans text-xl text-black dark:text-white leading-relaxed mb-6 font-light">
@@ -277,23 +317,43 @@ export default function BlogDetailPage() {
           <div className="lg:col-span-1">
             <div className="sticky top-8 space-y-6">
               {/* Table of Contents */}
-              <Card className="bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md">
+              <Card className={`bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md transition-all duration-500 hover:scale-[1.02] ${
+                isDark
+                  ? 'hover:bg-black/40 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/20'
+                  : 'hover:bg-black/5 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/20'
+              }`}>
                 <CardContent className="p-6">
                   <h3 className="font-barlow font-extrabold mb-4 flex items-center gap-2 text-black dark:text-white">
                     <Tag className="w-4 h-4" />
                     Table of Contents
                   </h3>
                   <nav className="space-y-2">
-                    <a href="#introduction" className="block text-sm text-zinc-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
+                    <a href="#introduction" className={`block text-sm transition-colors duration-300 ${
+                      isDark 
+                        ? 'text-zinc-600 hover:text-blue-400' 
+                        : 'text-zinc-600 hover:text-blue-600'
+                    }`}>
                       Introduction
                     </a>
-                    <a href="#key-concepts" className="block text-sm text-zinc-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
+                    <a href="#key-concepts" className={`block text-sm transition-colors duration-300 ${
+                      isDark 
+                        ? 'text-zinc-600 hover:text-blue-400' 
+                        : 'text-zinc-600 hover:text-blue-600'
+                    }`}>
                       Key Concepts
                     </a>
-                    <a href="#implementation" className="block text-sm text-zinc-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
+                    <a href="#implementation" className={`block text-sm transition-colors duration-300 ${
+                      isDark 
+                        ? 'text-zinc-600 hover:text-blue-400' 
+                        : 'text-zinc-600 hover:text-blue-600'
+                    }`}>
                       Implementation
                     </a>
-                    <a href="#best-practices" className="block text-sm text-zinc-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
+                    <a href="#best-practices" className={`block text-sm transition-colors duration-300 ${
+                      isDark 
+                        ? 'text-zinc-600 hover:text-blue-400' 
+                        : 'text-zinc-600 hover:text-blue-600'
+                    }`}>
                       Best Practices
                     </a>
                     <a href="#conclusion" className="block text-sm text-zinc-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
@@ -303,9 +363,13 @@ export default function BlogDetailPage() {
                 </CardContent>
               </Card>
 
-              {/* Article Stats */}
-              <Card className="bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md">
-                <CardContent className="p-6">
+                             {/* Article Stats */}
+               <Card className={`bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md transition-all duration-500 hover:scale-[1.02] ${
+                 isDark
+                   ? 'hover:bg-black/40 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/20'
+                   : 'hover:bg-black/5 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/20'
+               }`}>
+                 <CardContent className="p-6">
                   <h3 className="font-barlow font-extrabold mb-4 flex items-center gap-2 text-black dark:text-white">
                     <TrendingUp className="w-4 h-4" />
                     Article Stats
@@ -328,9 +392,13 @@ export default function BlogDetailPage() {
                 </CardContent>
               </Card>
 
-              {/* Tags */}
-              <Card className="bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md">
-                <CardContent className="p-6">
+                             {/* Tags */}
+               <Card className={`bg-zinc-100 dark:bg-white/5 border-zinc-300 dark:border-white/10 backdrop-blur-md transition-all duration-500 hover:scale-[1.02] ${
+                 isDark
+                   ? 'hover:bg-black/40 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/20'
+                   : 'hover:bg-black/5 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/20'
+               }`}>
+                 <CardContent className="p-6">
                   <h3 className="font-barlow font-extrabold mb-4 flex items-center gap-2 text-black dark:text-white">
                     <Tag className="w-4 h-4" />
                     Tags
@@ -401,6 +469,9 @@ export default function BlogDetailPage() {
           <ChevronUp className="w-5 h-5" />
         </Button>
       )}
+          <Footer />
+        </main>
+      </div>
     </div>
   );
 }

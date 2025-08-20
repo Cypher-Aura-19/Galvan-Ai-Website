@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const FLASK_BACKEND_URL = process.env.NEXT_PUBLIC_FLASK_BACKEND_URL || "http://127.0.0.1:5000";
+const FLASK_BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000";
 
 export type ContactFormData = {
   name: string;
@@ -18,11 +18,8 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // Forward cookies for session if needed
-        Cookie: req.headers.get("cookie") || "",
       },
       body: JSON.stringify(data),
-      credentials: "include",
     });
     const result = await res.json();
     if (!res.ok) {

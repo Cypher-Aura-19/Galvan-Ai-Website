@@ -67,7 +67,7 @@ export default function MilestonesSection() {
   return (
     <section
       ref={sectionRef}
-      className={`w-full py-10 sm:py-16 lg:py-20 font-sans transition-colors duration-300 ${isDark ? "bg-black text-white" : "bg-white text-black"}`}
+      className={`milestones-section w-full py-10 sm:py-16 lg:py-20 font-sans transition-colors duration-300 ${isDark ? "text-white" : "text-black"}`}
     >
       <div className="milestones-row max-w-[1700px] mx-auto px-4 flex flex-col md:flex-row gap-8 md:gap-0 items-start justify-between">
         <div className="milestones-heading flex-1">
@@ -90,13 +90,31 @@ export default function MilestonesSection() {
       </div>
       <div className="milestones-grid max-w-[1700px] mx-auto mt-10 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 px-4">
         {milestones.map(({ label, value, suffix }, index) => (
-          <div className="milestone flex flex-col items-center" key={label}>
-            <div className={`milestone-label uppercase tracking-wider mb-2 text-xs sm:text-sm font-medium ${isDark ? "text-white/70" : "text-black/70"}`}>{label}</div>
+          <div key={label} className="group relative">
             <div
-              ref={el => { milestoneRefs.current[index] = el; }}
-              className={`milestone-value font-extrabold text-2xl sm:text-3xl md:text-4xl text-center ${isDark ? "text-white" : "text-black"}`}
+              className={`relative overflow-hidden rounded-3xl p-6 sm:p-8 border text-center transition-all duration-500 hover:scale-[1.03] ${
+                isDark
+                  ? 'bg-black/40 backdrop-blur-xl border-blue-500/20 hover:border-blue-400/40 hover:shadow-2xl hover:shadow-blue-500/20'
+                  : 'bg-black/5 backdrop-blur-sm border-blue-500/20 hover:border-blue-400/40 hover:shadow-2xl hover:shadow-blue-500/20'
+              }`}
             >
-              0{suffix}
+              {/* Decorative blue corners like About page */}
+              <div className="absolute inset-0 opacity-10 pointer-events-none">
+                <div className={`absolute top-4 right-4 w-10 h-10 border-r-2 border-t-2 rounded-tr-2xl ${isDark ? 'border-blue-400/30' : 'border-blue-400/30'}`}></div>
+                <div className={`absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 rounded-bl-2xl ${isDark ? 'border-blue-400/30' : 'border-blue-400/30'}`}></div>
+              </div>
+
+              <div className={`uppercase tracking-wider mb-3 text-xs sm:text-sm font-medium transition-colors duration-300 ${
+                isDark ? 'text-white/70 group-hover:text-blue-400' : 'text-black/70 group-hover:text-blue-600'
+              }`}>{label}</div>
+              <div
+                ref={el => { milestoneRefs.current[index] = el; }}
+                className={`font-extrabold text-2xl sm:text-3xl md:text-4xl transition-colors duration-300 ${
+                  isDark ? 'text-white group-hover:text-blue-400' : 'text-black group-hover:text-blue-600'
+                }`}
+              >
+                0{suffix}
+              </div>
             </div>
           </div>
         ))}

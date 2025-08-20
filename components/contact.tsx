@@ -145,7 +145,7 @@ const ContactSection = () => {
   return (
     <section 
       ref={contactRef}
-      className={`w-full min-h-screen px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 flex flex-col justify-center items-center ${isDark ? "bg-black text-white" : "bg-white text-black"}`}
+      className={`w-full min-h-screen px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 flex flex-col justify-center items-center ${isDark ? "text-white" : "text-black"}`}
     >
       {/* Content Container */}
       <div 
@@ -158,7 +158,7 @@ const ContactSection = () => {
 
         {/* Success Message */}
         {showSuccess && (
-          <div className={`w-full max-w-2xl mx-auto mb-8 ${isDark ? "bg-green-500/10 border-green-500/30" : "bg-green-500/10 border-green-500/30"} border rounded-2xl p-6 backdrop-blur-sm`}>
+          <div className={`w-full max-w-2xl mx-auto mb-8 ${isDark ? "bg-green-500/10 border-green-500/30" : "bg-green-500/10 border-green-500/30"} border rounded-2xl p-6 backdrop-blur-xl`}>
             <div className="flex items-center space-x-3">
               <CheckCircle className={`h-6 w-6 ${isDark ? "text-green-400" : "text-green-600"}`} />
               <div>
@@ -175,7 +175,7 @@ const ContactSection = () => {
 
         {/* Error Message */}
         {showError && (
-          <div className={`w-full max-w-2xl mx-auto mb-8 ${isDark ? "bg-red-500/10 border-red-500/30" : "bg-red-500/10 border-red-500/30"} border rounded-2xl p-6 backdrop-blur-sm`}>
+          <div className={`w-full max-w-2xl mx-auto mb-8 ${isDark ? "bg-red-500/10 border-red-500/30" : "bg-red-500/10 border-red-500/30"} border rounded-2xl p-6 backdrop-blur-xl`}>
             <div className="flex items-center space-x-3">
               <AlertCircle className={`h-6 w-6 ${isDark ? "text-red-400" : "text-red-600"}`} />
               <div>
@@ -193,12 +193,16 @@ const ContactSection = () => {
         {/* Main Content */}
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 px-4 sm:px-8 lg:px-16">
           {/* Left Side - Project Details Form */}
-          <div className={`contact-fade ${isDark ? "bg-white/5 backdrop-blur-sm border-white/10" : "bg-black/5 backdrop-blur-sm border-black/10"} border rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 hover:${isDark ? "bg-white/10" : "bg-black/10"} transition-all duration-300 flex flex-col justify-center min-h-[600px]`}>
+          <div className={`contact-fade group relative overflow-hidden ${isDark ? 'bg-black/40 border-blue-500/20' : 'bg-black/5 border-blue-500/20'} backdrop-blur-xl border rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 transition-all duration-500 hover:scale-[1.02] flex flex-col justify-center min-h-[600px] hover:border-blue-400/40 hover:shadow-2xl hover:shadow-blue-500/20`}>
+            <div className="absolute inset-0 opacity-10 pointer-events-none">
+              <div className={`absolute top-4 right-4 w-12 h-12 border-r-2 border-t-2 rounded-tr-2xl ${isDark ? 'border-blue-400/30' : 'border-blue-400/30'}`}></div>
+              <div className={`absolute bottom-4 left-4 w-10 h-10 border-l-2 border-b-2 rounded-bl-2xl ${isDark ? 'border-blue-400/30' : 'border-blue-400/30'}`}></div>
+            </div>
             <div className="text-center mb-6 sm:mb-8">
-              <div className={`w-10 h-10 sm:w-12 sm:h-12 ${isDark ? "bg-white/10" : "bg-black/10"} rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4`}>
-                <Mail className={`h-4 w-4 sm:h-5 sm:w-5 ${isDark ? "text-white" : "text-black"}`} />
+              <div className={`w-10 h-10 sm:w-12 sm:h-12 ${isDark ? "bg-white/10 group-hover:bg-blue-500/20" : "bg-black/10 group-hover:bg-blue-100"} rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 transition-all duration-300`}>
+                <Mail className={`h-4 w-4 sm:h-5 sm:w-5 transition-all duration-300 ${isDark ? "text-white group-hover:text-blue-400" : "text-black group-hover:text-blue-600"}`} />
               </div>
-              <h2 className={`text-xl sm:text-2xl font-light font-barlow ${isDark ? "text-white" : "text-black"}`}>Project Details</h2>
+              <h2 className={`text-xl sm:text-2xl font-light font-barlow transition-all duration-300 ${isDark ? "text-white group-hover:text-blue-400" : "text-black group-hover:text-blue-600"}`}>Project Details</h2>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
@@ -263,32 +267,36 @@ const ContactSection = () => {
               <Button 
                 type="submit" 
                 disabled={isSubmitting}
-                className={`w-full ${isDark ? "bg-white text-black hover:bg-white/90" : "bg-black text-white hover:bg-black/90"} transition-all duration-300 h-12 sm:h-14 text-sm sm:text-base font-medium rounded-xl disabled:opacity-50 disabled:cursor-not-allowed`}
+                className={`w-full group/btn transition-all duration-300 h-12 sm:h-14 text-sm sm:text-base font-medium rounded-xl disabled:opacity-50 disabled:cursor-not-allowed ${isDark ? "bg-white text-black hover:bg-blue-500 hover:text-white" : "bg-black text-white hover:bg-blue-600 hover:text-white"}`}
               >
-                <Send className="mr-2 h-4 w-4" />
+                <Send className="mr-2 h-4 w-4 transition-all duration-300 group-hover/btn:scale-110" />
                 {isSubmitting ? "Sending..." : "Send Details"}
               </Button>
             </form>
           </div>
           {/* Right Side - Schedule Meeting */}
-          <div className={`contact-fade ${isDark ? "bg-white/5 backdrop-blur-sm border-white/10" : "bg-black/5 backdrop-blur-sm border-black/10"} border rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 flex flex-col justify-center hover:${isDark ? "bg-white/10" : "bg-black/10"} transition-all duration-300 min-h-[600px]`}>
+          <div className={`contact-fade group relative overflow-hidden ${isDark ? 'bg-black/40 border-blue-500/20' : 'bg-black/5 border-blue-500/20'} backdrop-blur-xl border rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 flex flex-col justify-center transition-all duration-500 hover:scale-[1.02] min-h-[600px] hover:border-blue-400/40 hover:shadow-2xl hover:shadow-blue-500/20`}>
+            <div className="absolute inset-0 opacity-10 pointer-events-none">
+              <div className={`absolute top-4 right-4 w-12 h-12 border-r-2 border-t-2 rounded-tr-2xl ${isDark ? 'border-blue-400/30' : 'border-blue-400/30'}`}></div>
+              <div className={`absolute bottom-4 left-4 w-10 h-10 border-l-2 border-b-2 rounded-bl-2xl ${isDark ? 'border-blue-400/30' : 'border-blue-400/30'}`}></div>
+            </div>
             <div className="text-center space-y-6 sm:space-y-8 lg:space-y-10">
               <div className="text-center">
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 ${isDark ? "bg-white/10" : "bg-black/10"} rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4`}>
-                  <CalendarDays className={`h-4 w-4 sm:h-5 sm:w-5 ${isDark ? "text-white" : "text-black"}`} />
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 ${isDark ? "bg-white/10 group-hover:bg-blue-500/20" : "bg-black/10 group-hover:bg-blue-100"} rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 transition-all duration-300`}>
+                  <CalendarDays className={`h-4 w-4 sm:h-5 sm:w-5 transition-all duration-300 ${isDark ? "text-white group-hover:text-blue-400" : "text-black group-hover:text-blue-600"}`} />
                 </div>
-                <h2 className={`text-xl sm:text-2xl font-light font-barlow ${isDark ? "text-white" : "text-black"}`}>Schedule a Call</h2>
+                <h2 className={`text-xl sm:text-2xl font-light font-barlow transition-all duration-300 ${isDark ? "text-white group-hover:text-blue-400" : "text-black group-hover:text-blue-600"}`}>Schedule a Call</h2>
               </div>
               {/* Schedule a Call card: increase height of 30 minute consultation card */}
-              <div className={`${isDark ? "bg-white/5 border-white/10" : "bg-black/5 border-black/10"} rounded-2xl p-6 sm:p-8 border flex flex-col items-center justify-center min-h-[260px]`}>
-                <div className={`text-4xl sm:text-5xl lg:text-6xl font-bold ${isDark ? "text-white/20" : "text-black/20"} mb-2`}>30</div>
-                <div className={`text-xs sm:text-sm ${isDark ? "text-white/60" : "text-black/60"}`}>minute consultation</div>
+              <div className={`group/card ${isDark ? "bg-white/5 border-white/10 group-hover:border-blue-400/40" : "bg-black/5 border-black/10 group-hover:border-blue-400/40"} rounded-2xl p-6 sm:p-8 border flex flex-col items-center justify-center min-h-[260px] transition-all duration-300 group-hover:bg-blue-500/10`}>
+                <div className={`text-4xl sm:text-5xl lg:text-6xl font-bold transition-all duration-300 ${isDark ? "text-white/20 group-hover/card:text-blue-400/40" : "text-black/20 group-hover/card:text-blue-600/40"} mb-2`}>30</div>
+                <div className={`text-xs sm:text-sm transition-all duration-300 ${isDark ? "text-white/60 group-hover/card:text-blue-400/60" : "text-black/60 group-hover/card:text-blue-600/60"}`}>minute consultation</div>
               </div>
               <Button 
                 onClick={handleScheduleMeeting}
-                className={`w-full ${isDark ? "bg-white text-black hover:bg-white/90" : "bg-black text-white hover:bg-black/90"} transition-all duration-300 h-12 sm:h-14 text-sm sm:text-base font-medium rounded-xl`}
+                className={`w-full group/btn transition-all duration-300 h-12 sm:h-14 text-sm sm:text-base font-medium rounded-xl ${isDark ? "bg-white text-black hover:bg-blue-500 hover:text-white" : "bg-black text-white hover:bg-blue-600 hover:text-white"}`}
               >
-                <CalendarDays className="mr-2 h-4 w-4" />
+                <CalendarDays className="mr-2 h-4 w-4 transition-all duration-300 group-hover/btn:scale-110" />
                 Book Meeting
               </Button>
             </div>

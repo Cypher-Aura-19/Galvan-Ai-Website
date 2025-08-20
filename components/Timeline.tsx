@@ -121,13 +121,12 @@ const Timeline: React.FC = () => {
         </div>
 
         {/* Start Dot */}
-        <div className={`absolute left-1/2 transform -translate-x-1/2 -translate-y-2 w-3 h-3 sm:w-4 sm:h-4 ${startDotBg} rounded-full border-2 sm:border-4 ${startDotBorder} z-20 ${startDotShadow} ${startDotRing}`} />
+        <div className={`absolute left-1/2 transform -translate-x-1/2 -translate-y-2 w-6 h-6 sm:w-8 sm:h-8 ${startDotBg} rounded-full border-2 sm:border-4 ${startDotBorder} z-20 ${startDotShadow} ${startDotRing}`} />
 
         {/* Project Cards */}
         <div className="space-y-24 sm:space-y-32 md:space-y-40 lg:space-y-48 pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-12 sm:pb-16 md:pb-20 lg:pb-24">
           {bestProjects.map((project, index) => (
             <div key={project.id || index} className="relative">
-              <div className={`absolute left-1/2 transform -translate-x-1/2 -translate-y-6 w-6 h-6 sm:w-8 sm:h-8 ${nodeBg} rounded-full border-2 sm:border-4 ${nodeBorder} z-20 ${nodeShadow} ${nodeRing}`} />
               <div className="z-20 lg:z-0 relative">
                 <ProjectCard 
                   project={project} 
@@ -140,7 +139,7 @@ const Timeline: React.FC = () => {
         </div>
 
         {/* End Dot */}
-        <div className={`absolute left-1/2 transform -translate-x-1/2 translate-y-8 sm:translate-y-10 w-4 h-4 sm:w-5 sm:h-5 ${endDotBg} rounded-full border-2 sm:border-4 ${endDotBorder} z-20 ${endDotShadow} ${endDotRing}`} />
+        <div className={`absolute left-1/2 transform -translate-x-1/2 translate-y-8 sm:translate-y-10 w-6 h-6 sm:w-8 sm:h-8 ${endDotBg} rounded-full border-2 sm:border-4 ${endDotBorder} z-20 ${endDotShadow} ${endDotRing}`} />
       </div>
       
       {/* View More Button */}
