@@ -71,6 +71,14 @@ def migrate_job_applications():
         if updated_time_count > 0:
             print(f"✓ Updated {updated_time_count} existing records with current timestamp")
         
+        # Create unique index for (applicant_email, job_id) to prevent duplicates
+        try:
+            print("Ensuring unique index on (applicant_email, job_id)...")
+            cursor.execute("CREATE UNIQUE INDEX IF NOT EXISTS uq_jobapp_email_job ON job_applications(applicant_email, job_id)")
+            print("✓ Unique index ensured")
+        except sqlite3.Error as e:
+            print(f"! Could not create unique index: {e}")
+
         # Commit changes
         conn.commit()
         print("\n✓ Migration completed successfully!")

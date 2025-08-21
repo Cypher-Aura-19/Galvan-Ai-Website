@@ -30,8 +30,10 @@ def check_database_schema():
             print(f"\n📋 Table: {table_name}")
             print("-" * 30)
             
+            # Quote identifier to prevent injection and handle special chars
+            safe_table = '"' + str(table_name).replace('"', '""') + '"'
             # Get table schema
-            cursor.execute(f"PRAGMA table_info({table_name})")
+            cursor.execute(f"PRAGMA table_info({safe_table})")
             columns = cursor.fetchall()
             
             for col in columns:
@@ -43,7 +45,7 @@ def check_database_schema():
                 print(f"  {col_name}: {col_type} {nullable}{default}{primary_key}")
             
             # Get row count
-            cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
+            cursor.execute(f"SELECT COUNT(*) FROM {safe_table}")
             count = cursor.fetchone()[0]
             print(f"  📈 Rows: {count}")
         

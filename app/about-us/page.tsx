@@ -290,7 +290,7 @@ const AboutUsPage = () => {
         <Navbar />
         <main>
       {/* Header Section */}
-          <section className="about-header w-full pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative pt-20 lg:pt-24">
+          <section className="about-header w-full pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative lg:pt-24">
         <div className="w-full max-w-[1700px] mx-auto text-center relative">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none"></div>
           <h1 className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold mb-8 sm:mb-10 tracking-tight font-barlow ${isDark ? "text-white" : "text-black"} leading-tight`}>
@@ -430,7 +430,7 @@ const AboutUsPage = () => {
               <div className={`relative overflow-hidden rounded-3xl p-8 lg:p-10 border transition-all duration-500 hover:scale-[1.02] ${
                 isDark 
                   ? 'bg-black/40 backdrop-blur-xl border-blue-500/20 hover:border-blue-400/40 hover:shadow-2xl hover:shadow-blue-500/20' 
-                  : 'bg-black/5 backdrop-blur-sm border-blue-500/20 hover:border-blue-400/40 hover:shadow-2xl hover:shadow-blue-500/20'
+                  : 'bg-black/5 backdrop-blur-xl border-blue-500/20 hover:border-blue-400/40 hover:shadow-2xl hover:shadow-blue-500/20'
               }`}>
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
@@ -479,7 +479,7 @@ const AboutUsPage = () => {
               <div className={`relative overflow-hidden rounded-3xl p-8 lg:p-10 border transition-all duration-500 hover:scale-[1.02] ${
                 isDark 
                   ? 'bg-black/40 backdrop-blur-xl border-blue-500/20 hover:border-blue-400/40 hover:shadow-2xl hover:shadow-blue-500/20' 
-                  : 'bg-black/5 backdrop-blur-sm border-blue-500/20 hover:border-blue-400/40 hover:shadow-2xl hover:shadow-blue-500/20'
+                  : 'bg-black/5 backdrop-blur-xl border-blue-500/20 hover:border-blue-400/40 hover:shadow-2xl hover:shadow-blue-500/20'
               }`}>
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
@@ -529,7 +529,7 @@ const AboutUsPage = () => {
       {/* Core Values Section */}
       <section className="about-section w-full py-20 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-[1700px] mx-auto">
-          <div className="text-center mb-20">
+          <div className={`text-center mb-20 rounded-3xl p-8 ${isDark ? 'bg-black/40' : 'bg-black/5'} backdrop-blur-xl border border-blue-500/20`}>
             <div className="inline-flex items-center space-x-3 mb-6">
               <div className={`w-2 h-2 rounded-full ${isDark ? 'bg-blue-400' : 'bg-blue-500'}`}></div>
               <span className={`text-sm font-medium uppercase tracking-wider ${isDark ? 'text-white/60' : 'text-black/60'}`}>
@@ -552,7 +552,7 @@ const AboutUsPage = () => {
                 className={`about-element group relative overflow-hidden ${
                   isDark 
                     ? 'bg-black/40 backdrop-blur-xl border-blue-500/20 hover:border-blue-400/40' 
-                    : 'bg-black/5 backdrop-blur-sm border-blue-500/20 hover:border-blue-400/40'
+                    : 'bg-black/5 backdrop-blur-xl border-blue-500/20 hover:border-blue-400/40'
                 } border rounded-3xl p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20`}
               >
                 {/* Background Pattern */}
@@ -594,7 +594,7 @@ const AboutUsPage = () => {
       {/* Process Section */}
       <section className="about-section w-full py-20 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-[1700px] mx-auto">
-          <div className="text-center mb-20">
+          <div className={`text-center mb-20 rounded-3xl p-8 ${isDark ? 'bg-black/40' : 'bg-black/5'} backdrop-blur-xl border border-blue-500/20`}>
             <div className="inline-flex items-center space-x-3 mb-6">
               <div className={`w-2 h-2 rounded-full ${isDark ? 'bg-blue-400' : 'bg-blue-500'}`}></div>
               <span className={`text-sm font-medium uppercase tracking-wider ${isDark ? 'text-white/60' : 'text-black/60'}`}>
@@ -646,7 +646,7 @@ const AboutUsPage = () => {
       {/* Achievements Section */}
       <section className="about-section w-full py-20 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-[1700px] mx-auto">
-          <div className="text-center mb-20">
+          <div className={`text-center mb-20 rounded-3xl p-8 ${isDark ? 'bg-black/40' : 'bg-black/5'} backdrop-blur-xl border border-blue-500/20`}>
             <div className="inline-flex items-center space-x-3 mb-6">
               <div className={`w-2 h-2 rounded-full ${isDark ? 'bg-blue-400' : 'bg-blue-500'}`}></div>
               <span className={`text-sm font-medium uppercase tracking-wider ${isDark ? 'text-white/60' : 'text-black/60'}`}>
@@ -669,7 +669,7 @@ const AboutUsPage = () => {
                 className={`about-element group relative overflow-hidden ${
                   isDark 
                     ? 'bg-black/40 backdrop-blur-xl border-blue-500/20 hover:border-blue-400/40' 
-                    : 'bg-black/5 backdrop-blur-sm border-blue-500/20 hover:border-blue-400/40'
+                    : 'bg-black/5 backdrop-blur-xl border-blue-500/20 hover:border-blue-400/40'
                 } border rounded-3xl p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20`}
               >
                 {/* Background Pattern */}

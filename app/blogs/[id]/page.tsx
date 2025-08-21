@@ -51,18 +51,26 @@ export default function BlogDetailPage() {
     async function fetchPostAndRelated() {
       setLoading(true);
       try {
-        const res = await fetch("/api/blog-posts");
-        const data = await res.json();
-        const found = data.find((p: any) => p._id === id || p.id == id);
-        setPost(found || null);
-        setRelatedPosts(data.filter((p: any) => (p._id || p.id) !== (found?._id || found?.id)).slice(0, 3));
+        // Fetch single post fast
+        const res = await fetch(`/api/blog-posts/${id}`);
+        if (!res.ok) throw new Error('Failed to fetch post');
+        const single = await res.json();
+        setPost(single);
+
+        // Fetch minimal list for related
+        const listRes = await fetch('/api/blog-posts');
+        const all = listRes.ok ? await listRes.json() : [];
+        const related = Array.isArray(all)
+          ? all.filter((p: any) => (p._id || p.id) !== (single?._id || single?.id)).slice(0, 3)
+          : [];
+        setRelatedPosts(related);
       } catch {
         setPost(null);
         setRelatedPosts([]);
       }
       setLoading(false);
     }
-    fetchPostAndRelated();
+    if (id) fetchPostAndRelated();
   }, [id]);
 
   useEffect(() => {

@@ -563,7 +563,21 @@ export default function JobsManagementPage() {
                 </div>
               </form>
             </div>
-          ) : (
+          ) : null}
+
+          {view === "get" && loading && (
+            <div className="w-full max-w-[1700px] mx-auto flex items-center justify-center min-h-[300px]">
+              <div className="flex flex-col items-center text-white">
+                <svg className="animate-spin h-8 w-8 mb-4 text-blue-400" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                </svg>
+                <p className="text-zinc-400">Loading jobs...</p>
+              </div>
+            </div>
+          )}
+
+          {view === "get" && !loading && jobs.length === 0 && (
             <div className="w-full max-w-[1700px] mx-auto flex items-center justify-center min-h-[400px]">
               <div className="bg-black border border-zinc-800 rounded-3xl shadow-2xl p-16 flex flex-col items-center w-full">
                 <img src="/galvan-logo.svg" alt="Galvan AI Logo" className="h-24 mb-8 drop-shadow-xl" />
@@ -572,7 +586,7 @@ export default function JobsManagementPage() {
               </div>
             </div>
           )}
-          {view === "get" && jobs.length > 0 && (
+          {view === "get" && !loading && jobs.length > 0 && (
             <div className="bg-zinc-900/90 rounded-3xl shadow-2xl border border-zinc-800 max-w-full mb-12">
               {/* Table Header */}
               <div className="bg-gradient-to-r from-zinc-950 to-zinc-900 px-8 py-6 border-b border-zinc-800">

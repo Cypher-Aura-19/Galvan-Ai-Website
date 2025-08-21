@@ -354,14 +354,28 @@ export default function Component() {
                   <span className={`font-medium font-sans`}>{post.publishDate}</span>
                 </div>
               </div>
-              <Link href={`/blogs/${post._id || post.id}`}>
-                <Button className={`${isDark ? "bg-white hover:bg-white/90 text-black" : "bg-black hover:bg-black/90 text-white"} border-0 rounded-xl px-8 sm:px-10 py-2 sm:py-3 font-semibold text-base sm:text-lg transition-all duration-300 font-barlow min-w-[160px] sm:min-w-[180px] hover:scale-105 hover:shadow-xl`}>
+              <Button
+                asChild
+                className={`${isDark ? "bg-white hover:bg-white/90 text-black" : "bg-black hover:bg-black/90 text-white"} border-0 rounded-xl px-8 sm:px-10 py-2 sm:py-3 font-semibold text-base sm:text-lg transition-all duration-300 font-barlow min-w-[160px] sm:min-w-[180px] hover:scale-105 hover:shadow-xl`}
+              >
+                <Link
+                  href={`/blogs/${post._id || post.id}`}
+                  prefetch
+                  onMouseEnter={() => {
+                    const pid = post._id || post.id;
+                    if (pid) fetch(`/api/blog-posts/${pid}`).catch(() => {});
+                  }}
+                  onFocus={() => {
+                    const pid = post._id || post.id;
+                    if (pid) fetch(`/api/blog-posts/${pid}`).catch(() => {});
+                  }}
+                >
                   <span className="flex items-center justify-center w-full">
                     Read Article
                     <ArrowUpRight className="h-5 w-5 ml-2 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </span>
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
         </div>

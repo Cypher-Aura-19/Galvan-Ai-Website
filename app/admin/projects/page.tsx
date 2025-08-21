@@ -628,31 +628,57 @@ export default function ProjectsManagementPage() {
                       </button>
                     </div>
                     <div className="space-y-4">
-                    {form.team.map((member, i) => (
-                        <div key={i} className="flex flex-col sm:flex-row gap-3 items-start p-4 bg-zinc-700/50 rounded-xl border border-zinc-600">
-                          <input value={member.name} onChange={e => handleTeamChange(i, "name", e.target.value)} placeholder="Name" className="flex-1 px-3 py-2 rounded-lg bg-zinc-700 border border-zinc-600 text-white text-sm" />
-                          <input value={member.role} onChange={e => handleTeamChange(i, "role", e.target.value)} placeholder="Role" className="flex-1 px-3 py-2 rounded-lg bg-zinc-700 border border-zinc-600 text-white text-sm" />
-                          <div className="flex items-center gap-2">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={e => {
-                            const file = e.target.files?.[0];
-                            if (!file) return;
-                            const reader = new FileReader();
-                            reader.onload = () => setForm(f => ({ ...f, team: f.team.map((m, idx) => idx === i ? { ...m, avatar: reader.result as string } : m) }));
-                            reader.readAsDataURL(file);
-                          }}
-                              className="px-3 py-2 rounded-lg bg-zinc-700 border border-zinc-600 text-white text-sm file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-                        />
-                        {member.avatar && (
-                              <img src={member.avatar} alt={member.name} className="h-8 w-8 rounded-full object-cover border border-zinc-600" />
-                        )}
+                      {form.team.map((member, i) => (
+                        <div key={i} className="p-4 bg-zinc-700/50 rounded-xl border border-zinc-600">
+                          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-start">
+                            <div className="md:col-span-3">
+                              <input
+                                value={member.name}
+                                onChange={e => handleTeamChange(i, "name", e.target.value)}
+                                placeholder="Name"
+                                className="w-full px-3 py-2 rounded-lg bg-zinc-700 border border-zinc-600 text-white text-sm"
+                              />
+                            </div>
+                            <div className="md:col-span-3">
+                              <input
+                                value={member.role}
+                                onChange={e => handleTeamChange(i, "role", e.target.value)}
+                                placeholder="Role"
+                                className="w-full px-3 py-2 rounded-lg bg-zinc-700 border border-zinc-600 text-white text-sm"
+                              />
+                            </div>
+                            <div className="md:col-span-4">
+                              <div className="flex items-center gap-3 flex-wrap">
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={e => {
+                                    const file = e.target.files?.[0];
+                                    if (!file) return;
+                                    const reader = new FileReader();
+                                    reader.onload = () => setForm(f => ({ ...f, team: f.team.map((m, idx) => idx === i ? { ...m, avatar: reader.result as string } : m) }));
+                                    reader.readAsDataURL(file);
+                                  }}
+                                  className="w-full md:w-auto px-3 py-2 rounded-lg bg-zinc-700 border border-zinc-600 text-white text-sm file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                                />
+                                {member.avatar && (
+                                  <img src={member.avatar} alt={member.name} className="h-10 w-10 rounded-full object-cover border border-zinc-600" />
+                                )}
+                              </div>
+                            </div>
+                            <div className="md:col-span-2 flex md:justify-end">
+                              <button
+                                type="button"
+                                onClick={() => removeTeamMember(i)}
+                                className="w-full md:w-auto px-3 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white font-semibold text-sm transition-all"
+                              >
+                                Remove
+                              </button>
+                            </div>
                           </div>
-                          <button type="button" onClick={() => removeTeamMember(i)} className="px-3 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white font-semibold text-sm transition-all">Remove</button>
-                      </div>
-                    ))}
-                  </div>
+                        </div>
+                      ))}
+                    </div>
                 </div>
 
                   {/* Timeline Section */}

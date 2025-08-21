@@ -4,6 +4,9 @@ import json
 
 class JobApplication(db.Model):
     __tablename__ = 'job_applications'
+    __table_args__ = (
+        db.UniqueConstraint('applicant_email', 'job_id', name='uq_jobapp_email_job'),
+    )
     id = db.Column(db.Integer, primary_key=True)
     job_id = db.Column(db.String(255), nullable=False)
     job_title = db.Column(db.String(255), nullable=False)

@@ -49,7 +49,7 @@ function ProjectCard({ project }: { project: Project }) {
   const cardImage = project.hero?.banner || project.image || '';
   // Guard: Only render the View Details button if project.id is defined
   return (
-    <div className="group relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl md:rounded-3xl overflow-hidden flex flex-col h-full min-h-[420px] max-h-[420px] transition-colors duration-300 z-20">
+    <div className="group relative rounded-2xl md:rounded-3xl overflow-hidden flex flex-col h-full min-h-[420px] max-h-[420px] transition-all duration-300 z-10 bg-black/5 dark:bg-black/40 backdrop-blur-xl border border-blue-500/20 hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/20">
       {/* Image Section */}
       <div className="relative h-40 md:h-48 xl:h-56 overflow-hidden">
         <img 
@@ -73,7 +73,7 @@ function ProjectCard({ project }: { project: Project }) {
             </div>
           </div>
           {project.bestProject && (
-            <div className="flex items-center gap-1 bg-yellow-100 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 px-2 py-1 rounded-full text-xs font-bold">
+            <div className="flex items-center gap-1 bg-yellow-100 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 px-2 py-1 rounded-full text-xs font-bold relative z-30">
               <Star className="w-3 h-3" />
               Best
             </div>
@@ -99,11 +99,9 @@ function ProjectCard({ project }: { project: Project }) {
         </div>
         {/* Action Button */}
         {project.id !== undefined && project.id !== null ? (
-          <Link href={`/projects/${String(project.id)}`} passHref legacyBehavior>
-            <a className="mt-auto group/btn inline-flex items-center justify-center gap-2 bg-black dark:bg-white text-white dark:text-black font-semibold py-2.5 md:py-3 px-4 md:px-6 rounded-xl md:rounded-2xl transition-all duration-300 hover:bg-zinc-900 dark:hover:bg-zinc-100 hover:shadow-lg group-hover:transform group-hover:translate-y-[-2px] font-barlow text-sm md:text-base">
-              <span>View Details</span>
-              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover/btn:translate-x-1 transition-transform duration-300" />
-            </a>
+          <Link href={`/projects/${String(project.id)}`} prefetch className="mt-auto group/btn inline-flex items-center justify-center gap-2 bg-black dark:bg-white text-white dark:text-black font-semibold py-2.5 md:py-3 px-4 md:px-6 rounded-xl md:rounded-2xl transition-all duration-300 hover:bg-zinc-900 dark:hover:bg-zinc-100 hover:shadow-lg group-hover:transform group-hover:translate-y-[-2px] font-barlow text-sm md:text-base">
+            <span>View Details</span>
+            <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover/btn:translate-x-1 transition-transform duration-300" />
           </Link>
         ) : (
           <div className="mt-auto">
@@ -118,24 +116,7 @@ function ProjectCard({ project }: { project: Project }) {
   );
 }
 
-function TechnologyFilter({ selected, onSelect, allTechnologies }: { selected: string | null, onSelect: (tech: string | null) => void, allTechnologies: string[] }) {
-  return (
-    <div className="flex items-center justify-center py-6 relative z-20">
-      <label htmlFor="tech-filter" className="mr-3 text-base font-semibold font-barlow text-black dark:text-white">Filter by Technology:</label>
-      <select
-        id="tech-filter"
-        value={selected || ''}
-        onChange={e => onSelect(e.target.value === '' ? null : e.target.value)}
-        className="px-5 py-2 rounded-full border text-base font-semibold transition-all duration-200 bg-white dark:bg-zinc-900 text-black dark:text-white border-zinc-200 dark:border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-      >
-        <option value="">All Technologies</option>
-        {allTechnologies.map((tech: string) => (
-          <option key={tech} value={tech}>{tech}</option>
-        ))}
-      </select>
-    </div>
-  );
-}
+// Removed TechnologyFilter per request
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -163,8 +144,8 @@ export default function ProjectsPage() {
       });
   }, []);
 
-  const allTechnologies = Array.from(new Set(projects.flatMap(p => p.technologies)));
-  const filteredProjects = selectedTech ? projects.filter(p => p.technologies.includes(selectedTech)) : projects;
+  const allTechnologies: string[] = Array.from(new Set(projects.flatMap(p => p.technologies)));
+  const filteredProjects = projects;
 
   if (loading) {
     return (
@@ -262,10 +243,7 @@ export default function ProjectsPage() {
         </div>
       </section>
       
-      {/* Technology Filter Bar */}
-      <div className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800/50 transition-colors duration-300 relative z-10">
-        <TechnologyFilter selected={selectedTech} onSelect={setSelectedTech} allTechnologies={allTechnologies} />
-      </div>
+      {/* Filter by Technology removed */}
       
       {/* Best Projects Section */}
       {!loading && !error && projects.filter(p => p.bestProject).length > 0 && (
@@ -286,7 +264,7 @@ export default function ProjectsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-12">
               {projects.filter(p => p.bestProject).map((project) => (
                 <div key={project.id} className="relative">
-                  <div className="absolute -top-3 -right-3 z-10">
+                  <div className="absolute -top-3 -right-3 z-30">
                     <div className="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                       <Star className="w-3 h-3" />
                       Best

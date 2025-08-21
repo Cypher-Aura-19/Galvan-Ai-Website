@@ -609,10 +609,14 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ job, onClose, i
           }));
       }
 
+      const idempotencyKey = (typeof crypto !== 'undefined' && 'randomUUID' in crypto)
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
       const response = await fetch('/api/job-applications', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Idempotency-Key': idempotencyKey,
         },
         body: JSON.stringify(applicationData),
       });

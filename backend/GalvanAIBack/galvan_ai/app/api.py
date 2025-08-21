@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, make_response
 from flask_login import login_required, current_user
 from app import db
 from app.models.project import Project
@@ -10,6 +10,96 @@ from app.models.questionnaire import Questionnaire
 from app.models.contact_quote import ContactQuote
 from app.models.job_application import JobApplication
 import json
+import os
+import time
+try:
+    import redis
+    _redis_available = True
+except Exception:
+    _redis_available = False
+
+_redis_client = None
+if _redis_available:
+    try:
+        _redis_client = redis.Redis(
+            host=os.environ.get('REDIS_HOST', 'localhost'),
+            port=int(os.environ.get('REDIS_PORT', '6379')),
+            db=int(os.environ.get('REDIS_DB', '1')),
+            socket_connect_timeout=1,
+            socket_timeout=1,
+        )
+        # Ping to ensure connection if server exists
+        _redis_client.ping()
+    except Exception:
+        _redis_client = None
+
+def idempotent(ttl_seconds: int = 600):
+    def decorator(fn):
+        def wrapper(*args, **kwargs):
+            key = request.headers.get('Idempotency-Key')
+            if not key:
+                return jsonify({'error': 'Missing Idempotency-Key'}), 409
+            if _redis_client is None:
+                # Fallback: accept request without cache if redis not available
+                return fn(*args, **kwargs)
+            cache_key = f"idemp:{request.path}:{key}"
+            cached = _redis_client.get(cache_key)
+            if cached:
+                try:
+                    body, status, headers = json.loads(cached)
+                    return make_response(body, status, headers)
+                except Exception:
+                    pass
+            response = fn(*args, **kwargs)
+            try:
+                body = response.get_json() if hasattr(response, 'get_json') else None
+                status = response.status_code if hasattr(response, 'status_code') else 200
+                headers = dict(response.headers) if hasattr(response, 'headers') else {}
+                _redis_client.setex(cache_key, ttl_seconds, json.dumps([body, status, headers]))
+            except Exception:
+                pass
+            return response
+        wrapper.__name__ = fn.__name__
+        return wrapper
+    return decorator
+
+def _client_ip() -> str:
+    try:
+        return request.headers.get('X-Forwarded-For', '').split(',')[0].strip() or request.remote_addr or 'unknown'
+    except Exception:
+        return 'unknown'
+
+def _captcha_key(prefix: str, identifier: str) -> str:
+    return f"captcha:{prefix}:{identifier}"
+
+def captcha_should_challenge(prefix: str, identifier: str, threshold: int = 3) -> bool:
+    if _redis_client is None:
+        return False
+    try:
+        current = _redis_client.get(_captcha_key(prefix, identifier))
+        return int(current or 0) >= threshold
+    except Exception:
+        return False
+
+def captcha_record_failure(prefix: str, identifier: str, ttl_seconds: int = 600) -> None:
+    if _redis_client is None:
+        return
+    try:
+        key = _captcha_key(prefix, identifier)
+        pipe = _redis_client.pipeline()
+        pipe.incr(key)
+        pipe.expire(key, ttl_seconds)
+        pipe.execute()
+    except Exception:
+        pass
+
+def captcha_reset(prefix: str, identifier: str) -> None:
+    if _redis_client is None:
+        return
+    try:
+        _redis_client.delete(_captcha_key(prefix, identifier))
+    except Exception:
+        pass
 
 api = Blueprint('api', __name__)
 
@@ -1240,29 +1330,42 @@ def get_contact_quotes():
         return jsonify({'error': str(e)}), 500
 
 @api.route('/api/contact-quotes', methods=['POST'])
+@idempotent(ttl_seconds=600)
 def create_contact_quote():
     """Submit a new contact/project quote"""
     try:
         data = request.get_json()
+        # Adaptive CAPTCHA gate
+        ip = _client_ip()
+        email_key = (data.get('email') if isinstance(data, dict) else '') or ''
+        identifier = f"{ip}:{email_key.lower()}"
+        if captcha_should_challenge('contact', identifier) and not request.headers.get('X-Captcha-Token'):
+            return jsonify({'error': 'Captcha required'}), 429
         if not data:
             return jsonify({'error': 'No data provided'}), 400
         # Validation
         if not data.get('name') or not isinstance(data['name'], str) or not data['name'].strip():
+            captcha_record_failure('contact', identifier)
             return jsonify({'error': 'Name is required'}), 400
         if not data.get('email') or not isinstance(data['email'], str) or not data['email'].strip():
+            captcha_record_failure('contact', identifier)
             return jsonify({'error': 'Email is required'}), 400
         import re
         email_regex = r'^[^\s@]+@[^\s@]+\.[^\s@]+$'
         if not re.match(email_regex, data['email']):
+            captcha_record_failure('contact', identifier)
             return jsonify({'error': 'Invalid email format'}), 400
         if not data.get('company') or not isinstance(data['company'], str) or not data['company'].strip():
+            captcha_record_failure('contact', identifier)
             return jsonify({'error': 'Company is required'}), 400
         if not data.get('projectDetails') or not isinstance(data['projectDetails'], str) or not data['projectDetails'].strip():
+            captcha_record_failure('contact', identifier)
             return jsonify({'error': 'Project details are required'}), 400
         # Create and save
         quote = ContactQuote.from_dict(data)
         db.session.add(quote)
         db.session.commit()
+        captcha_reset('contact', identifier)
         return jsonify({'success': True, 'message': 'Contact form submitted successfully', 'insertedId': quote.id})
     except Exception as e:
         db.session.rollback()
@@ -1299,35 +1402,51 @@ def get_job_applications():
         return jsonify({'error': str(e)}), 500
 
 @api.route('/api/job-applications', methods=['POST'])
+@idempotent(ttl_seconds=600)
 def create_job_application():
     try:
         data = request.get_json()
+        # Adaptive CAPTCHA gate
+        ip = _client_ip()
+        email_key = (data.get('applicantEmail') if isinstance(data, dict) else '') or ''
+        identifier = f"{ip}:{email_key.lower()}"
+        if captcha_should_challenge('jobapp', identifier) and not request.headers.get('X-Captcha-Token'):
+            return jsonify({'error': 'Captcha required'}), 429
         if not data:
             return jsonify({'error': 'No data provided'}), 400
         # Validation
         required_fields = ['jobId', 'jobTitle', 'applicantName', 'applicantEmail', 'applicantPhone', 'coverLetter']
         for field in required_fields:
             if not data.get(field) or not isinstance(data[field], str) or not data[field].strip():
+                captcha_record_failure('jobapp', identifier)
                 return jsonify({'error': f'{field} is required'}), 400
         # Email validation
         import re
         email_regex = r'^[^\s@]+@[^\s@]+\.[^\s@]+$'
         if not re.match(email_regex, data['applicantEmail']):
+            captcha_record_failure('jobapp', identifier)
             return jsonify({'error': 'Invalid email format'}), 400
         # Resume validation (optional)
         if data.get('resume') and not isinstance(data['resume'], dict):
+            captcha_record_failure('jobapp', identifier)
             return jsonify({'error': 'Resume must be an object'}), 400
         # Responses validation (optional)
         if data.get('responses') and not isinstance(data['responses'], list):
+            captcha_record_failure('jobapp', identifier)
             return jsonify({'error': 'Responses must be a list'}), 400
         # Create and save
         application = JobApplication.from_dict(data)
         db.session.add(application)
         db.session.commit()
+        captcha_reset('jobapp', identifier)
         return jsonify({'success': True, 'message': 'Application submitted successfully', 'applicationId': application.id})
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500
+        # Handle uniqueness violations gracefully
+        message = str(e)
+        if 'uq_jobapp_email_job' in message or 'UNIQUE constraint failed' in message or 'unique constraint' in message.lower():
+            return jsonify({'error': 'You have already submitted an application for this job.'}), 409
+        return jsonify({'error': message}), 500
 
 from flask_login import login_required
 @api.route('/api/job-applications/<int:application_id>', methods=['PUT'])

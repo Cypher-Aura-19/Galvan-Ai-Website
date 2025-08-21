@@ -19,7 +19,8 @@ import {
   Loader2,
   Filter,
   FileDown,
-  Search
+  Search,
+  Trash2
 } from "lucide-react";
 
 type ApplicationResponse = {
@@ -72,6 +73,7 @@ export default function ApplicationsManagementPage() {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const [statusError, setStatusError] = useState<string | null>(null);
+  const availableStatuses: JobApplication['status'][] = ['pending', 'reviewed', 'shortlisted', 'rejected', 'hired'];
   
   // Filter states
   const [selectedJob, setSelectedJob] = useState<string>("all");
@@ -185,19 +187,39 @@ export default function ApplicationsManagementPage() {
       'Status',
       'Submitted Date',
       'Cover Letter',
-      'Resume File'
+      'Resume File Name',
+      'Resume File URL',
+      'Questionnaire File URLs' // Comma-separated if multiple
     ];
 
-    const csvData = filteredApplications.map(app => [
-      app.applicantName,
-      app.applicantEmail,
-      app.applicantPhone || '',
-      app.jobTitle,
-      app.status,
-      formatDate(app.submittedAt),
-      app.coverLetter || '',
-      app.resume ? app.resume.fileName : ''
-    ]);
+    const csvData = filteredApplications.map(app => {
+      const resumeFileName = app.resume ? app.resume.fileName : '';
+      const resumeFileUrl = app.resume ? app.resume.fileUrl : '';
+
+      // Collect any file URLs included in questionnaire responses
+      const questionnaireFileUrls: string[] = [];
+      if (Array.isArray(app.responses)) {
+        for (const resp of app.responses) {
+          const ans: any = (resp as any).answer;
+          if (ans && typeof ans === 'object' && 'fileUrl' in ans && ans.fileUrl) {
+            questionnaireFileUrls.push(ans.fileUrl as string);
+          }
+        }
+      }
+
+      return [
+        app.applicantName,
+        app.applicantEmail,
+        app.applicantPhone || '',
+        app.jobTitle,
+        app.status,
+        formatDate(app.submittedAt),
+        app.coverLetter || '',
+        resumeFileName,
+        resumeFileUrl,
+        questionnaireFileUrls.join('; ')
+      ];
+    });
 
     // Create CSV content
     const csvContent = [
@@ -234,6 +256,36 @@ export default function ApplicationsManagementPage() {
       }
     } catch (error) {
       setStatusError('Error updating status');
+    } finally {
+      setUpdatingStatus(null);
+    }
+  };
+
+  const deleteApplication = async (applicationId: string) => {
+    const confirmed = window.confirm('Are you sure you want to delete this application? This action cannot be undone.');
+    if (!confirmed) return;
+
+    setUpdatingStatus(applicationId);
+    setStatusError(null);
+    try {
+      const response = await fetch('/api/job-applications', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ _id: applicationId }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        fetchApplications();
+        // Close modal if the deleted one is open
+        if (selectedApplication && selectedApplication._id === applicationId) {
+          setShowDetailModal(false);
+          setSelectedApplication(null);
+        }
+      } else {
+        setStatusError(result.error || 'Failed to delete application');
+      }
+    } catch (error) {
+      setStatusError('Error deleting application');
     } finally {
       setUpdatingStatus(null);
     }
@@ -502,7 +554,19 @@ export default function ApplicationsManagementPage() {
                         </span>
                       </td>
                       <td className="py-3 px-4">
-                        <div className="flex gap-2 items-center">
+                        <div className="flex gap-3 items-center">
+                          <select
+                            value={application.status}
+                            onChange={(e) => updateApplicationStatus(application._id, e.target.value)}
+                            disabled={updatingStatus === application._id}
+                            className="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 focus:outline-none focus:border-blue-500 text-xs"
+                            title="Change status"
+                          >
+                            {availableStatuses.map((s) => (
+                              <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+                            ))}
+                          </select>
+
                           <button
                             onClick={e => {
                               e.stopPropagation();
@@ -513,6 +577,18 @@ export default function ApplicationsManagementPage() {
                             title="View Details"
                           >
                             <Eye className="w-4 h-4" />
+                          </button>
+
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteApplication(application._id);
+                            }}
+                            disabled={updatingStatus === application._id}
+                            className="p-2 bg-zinc-800 hover:bg-red-700 rounded-xl text-red-400 hover:text-white transition-all disabled:opacity-50"
+                            title="Delete Application"
+                          >
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
                       </td>
@@ -573,10 +649,27 @@ export default function ApplicationsManagementPage() {
                     </div>
                     <div>
                       <span className="text-zinc-400 text-sm">Status</span>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusColor(selectedApplication.status)} flex items-center gap-1 w-fit`}>
-                        {getStatusIcon(selectedApplication.status)}
-                        {selectedApplication.status.charAt(0).toUpperCase() + selectedApplication.status.slice(1)}
-                      </span>
+                      <div className="flex items-center gap-3">
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusColor(selectedApplication.status)} flex items-center gap-1 w-fit`}>
+                          {getStatusIcon(selectedApplication.status)}
+                          {selectedApplication.status.charAt(0).toUpperCase() + selectedApplication.status.slice(1)}
+                        </span>
+                        <select
+                          value={selectedApplication.status}
+                          onChange={async (e) => {
+                            const newStatus = e.target.value;
+                            await updateApplicationStatus(selectedApplication._id, newStatus);
+                            // reflect optimistic change locally while list refreshes
+                            setSelectedApplication({ ...selectedApplication, status: newStatus as JobApplication['status'] });
+                          }}
+                          disabled={updatingStatus === selectedApplication._id}
+                          className="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 focus:outline-none focus:border-blue-500 text-xs"
+                        >
+                          {availableStatuses.map((s) => (
+                            <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -607,6 +700,23 @@ export default function ApplicationsManagementPage() {
                     </div>
                   </div>
                 )}
+
+                {/* Danger zone actions */}
+                <div className="bg-zinc-800/50 rounded-2xl p-6 border border-red-900/40">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-red-300 mb-0 flex items-center gap-2">
+                      <Trash2 className="w-5 h-5" />
+                      Danger Zone
+                    </h3>
+                    <button
+                      onClick={() => deleteApplication(selectedApplication._id)}
+                      disabled={updatingStatus === selectedApplication._id}
+                      className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-xl text-white font-bold transition-all disabled:opacity-50 flex items-center gap-2"
+                    >
+                      <Trash2 className="w-4 h-4" /> Delete Application
+                    </button>
+                  </div>
+                </div>
 
                 {/* Cover Letter */}
                 {selectedApplication.coverLetter && (

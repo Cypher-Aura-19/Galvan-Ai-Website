@@ -3,6 +3,9 @@ from datetime import datetime
 
 class ContactQuote(db.Model):
     __tablename__ = 'contact_quotes'
+    __table_args__ = (
+        db.Index('ix_contact_created_at', 'created_at'),
+    )
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)

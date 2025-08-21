@@ -42,9 +42,16 @@ export default function Navbar() {
             <span className={`text-2xl font-extrabold tracking-tight font-barlow ${isDark ? 'text-white' : 'text-black'}`}>Galvan AI</span>
           </Link>
           <nav className="hidden lg:flex items-center space-x-10">
-            {['Projects','Services','Blogs','Team','Testimonials','Contact','Newsletter','Careers'].map((item, idx) => (
-              <a key={idx} href={`#${item.toLowerCase()}`} className={`text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`}>{item}</a>
-            ))}
+            {['Projects','Services','Blogs','Team','Testimonials','Contact','Newsletter','Careers'].map((item, idx) => {
+              const isRoute = item === 'Projects' || item === 'Careers';
+              const href = isRoute ? `/${item.toLowerCase()}` : `#${item.toLowerCase()}`;
+              const className = `text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'} transition-colors whitespace-nowrap`;
+              return isRoute ? (
+                <Link key={idx} href={href} prefetch={false} className={className}>{item}</Link>
+              ) : (
+                <a key={idx} href={href} className={className}>{item}</a>
+              );
+            })}
           </nav>
           <div className="hidden lg:flex items-center space-x-4">
             <a href="#contact">
@@ -72,9 +79,16 @@ export default function Navbar() {
               </SheetTrigger>
               <SheetContent side="left" className={`${isDark ? 'bg-black bg-opacity-90 text-white border-r border-gray-800' : 'bg-white bg-opacity-95 text-black border-r border-gray-200'} backdrop-blur-lg shadow-2xl`}>
                 <nav className="flex flex-col space-y-2 p-6">
-                  {['Projects','Services','Blogs','Team','Testimonials','Contact','Newsletter','Careers'].map((item, idx) => (
-                    <a key={idx} href={`#${item.toLowerCase()}`} className={`py-2 text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`} onClick={() => setMobileNavOpen(false)}>{item}</a>
-                  ))}
+                  {['Projects','Services','Blogs','Team','Testimonials','Contact','Newsletter','Careers'].map((item, idx) => {
+                    const isRoute = item === 'Projects' || item === 'Careers';
+                    const href = isRoute ? `/${item.toLowerCase()}` : `#${item.toLowerCase()}`;
+                    const className = `py-2 text-lg font-light font-barlow ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-black'}`;
+                    return isRoute ? (
+                      <Link key={idx} href={href} prefetch={false} className={className} onClick={() => setMobileNavOpen(false)}>{item}</Link>
+                    ) : (
+                      <a key={idx} href={href} className={className} onClick={() => setMobileNavOpen(false)}>{item}</a>
+                    );
+                  })}
                 </nav>
                 <div className="flex flex-col gap-3 p-6">
                   <a href="#contact">

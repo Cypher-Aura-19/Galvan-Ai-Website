@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Idempotency-Key": req.headers.get("idempotency-key") || "",
       },
       body: JSON.stringify(data),
     });
